@@ -1,0 +1,38 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+*.h text
+*.idl text
+*.odl text
+*.rc text
+*.txt text
+*.TXT text
+
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ini text eol=crlf
+*.INI text eol=crlf
+*.manifest text eol=crlf
+*.rgs text eol=crlf
+*.xml text eol=crlf
+
+*.avi binary
+*.bmp binary
+*.BMP binary
+*.chm binary
+*.ctx binary
+*.cur binary
+*.dll binary
+*.frx binary
+*.gif binary
+*.ico binary
+*.jpg binary
+*.pgx binary
+*.png binary
+*.res binary
+*.tlb binary
+*.ttf binary
+
+# All other extensions not explicitly mentioned here are left for Git to
+# handle automatically.
+# You must not rely on them having a particular line ending style!
