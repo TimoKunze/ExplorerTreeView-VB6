@@ -1,0 +1,382 @@
+Version 1.15.3 - DD/MM/YYYY
+===========================
+- Bugfix: AutoUpdate could crash.
+
+Version 1.15.2 - 08/11/2011
+===========================
+- Bugfix: AutoUpdate could crash.
+
+Version 1.15.1 - 10/07/2010
+===========================
+- Bugfix: On Windows Vista and newer, folder info tips got cut.
+- Bugfix: AutoUpdate could crash.
+
+Version 1.15.0 - 31/01/2010
+===========================
+- New feature: Use the "UseStandardIconsForSlowItems" property to increase performance by displaying default icons for network and other slow items.
+- Count zip archives as slow items.
+- Bugfix: AutoUpdate could crash.
+- Deploy (stripped) symbols with the binaries to make debugging easier. This are the pdb files in case you wonder.
+
+Version 1.14.1 - 19/10/2007
+===========================
+- New feature: Use the "FastInfoTipsOnly" property to increase performance by not displaying info tips whose generation is time-consuming.
+- Bugfix: The control had sizing problems on systems with non-default DPI settings. Thanks to Donald Lessau (http://www.xyplorer.com/) and Olaf Schmidt for their help with fixing this bug.
+- Bugfix: Root items could be displayed with the wrong icons.
+
+Version 1.14.0 - 24/07/2007
+===========================
+- New feature: Use the "UseStandardIcons" property to increase performance by choosing the displayed icon based on the file type.
+- Bugfix: Items sometimes didn't get resorted during AutoUpdate.
+- Bugfix: "ItemIsLink()" failed to retrieve the link target for Vista's directory links (which actually are reparse points).
+- Bugfix: The "Erweitert" property page messed up "DontCheckFolderExpandibility" and "FavoritesStyle".
+
+Version 1.13.3 - 01/06/2007
+===========================
+- Bugfix: AutoUpdate could crash.
+- Bugfix: The control could crash if it was destroyed from within an event handler.
+
+Version 1.13.2 - 20/02/2007
+===========================
+- Bugfix: The shell context menu could crash on Windows Vista.
+
+Version 1.13.1 - 05/02/2007
+===========================
+- Bugfix: The control didn't run on Windows 98 anymore.
+
+Version 1.13.0 - 26/01/2007
+===========================
+- Improved compatibility with Windows Vista.
+- Some internal changes to drag'n'drop.
+- Made "ReloadItems()" and "ReloadSubItems()" remember the selected item's expansion state.
+- Bugfix: AutoUpdate could crash.
+- Bugfix: AutoUpdate accidently applied some filters to the root item.
+- Bugfix: The "ExpandArchives" property wasn't working as expected.
+- Performance improvements, especially for folders containing many files.
+
+Version 1.12.1 - 02/09/2006
+===========================
+- Bugfix: Auto-scrolling during drag'n'drop and probably some other things didn't work correctly.
+
+Version 1.12.0 - 12/08/2006
+===========================
+- Added Windows Vista support including the following new features:
+	- "AutoHScroll" scrolls the control automatically in horizontal direction to display as much of the selected item as possible.
+	- "FadeExpandos" fades the item buttons in, if the user moves the mouse cursor over the control, and out, if he moves it out of the control.
+- New feature: Use the property "DontCheckFolderExpandibility" to tell the control to make all folders expandable without searching for real sub-items (which can be very time-consuming).
+- New feature: Use the property "hWndShellUIParentWindow" to specify a window that will be used as parent window for any UI that will be displayed by the Windows Shell. If set to 0, many messages won't be displayed at all.
+- Rewrote the "DimSelectedItemsIcon" feature (Backport from ExplorerTreeView 2.0). Now it's a little bit more performant and works correctly on Windows Vista. However, you can't use it together with CheckBoxes anymore.
+- Rewrote the "FavoritesStyle" feature. It's working perfectly now.
+- Deactivated BkImage support. It caused too many problems and according to the vote, noone uses it anyway.
+- Bugfix: Icons of selected files could be wrong.
+- Bugfix: The control could crash mysteriously if multiple control instances were used on multiple forms. This bug existed since version 1.0.0!
+- Bugfix: There was another strange bug, that crashed the control if the RootPath property was changed while AutoUpdate was updating the tree.
+- Windows Vista compatibility fixes.
+
+Version 1.11.1 - 26/01/2006
+===========================
+- Bugfix: AutoUpdate could crash the control if a document was sent to the printer.
+
+Version 1.11.0 - 19/01/2006
+===========================
+- New feature: The event "CompleteDrag" is raised after a drag'n'drop-operation. The parameter "PerformedEffect" will be invalid if the drop target doesn't set it.
+- New feature: The event "ItemCompleteDrag" is raised after a drag'n'drop-operation. NOTE: If the dragged item was moved, the parameter "hItem" will be -1. The parameter "PerformedEffect" will be invalid if the drop target doesn't set it.
+- Rewrote big parts of the control fixing several bugs and memleaks, increasing performance and improving auto-update.
+
+Version 1.10.4 - 18/12/2005
+===========================
+- Bugfix: There was a memleak in a (very widely used) internal function.
+- Bugfix: Path strings weren't always parsed as expected.
+- Bugfix: Calling "ReloadItems" or "ReloadSubItems" could trigger the "SelChanged" event although the Path didn't change.
+
+Version 1.10.3 - 13/11/2005
+===========================
+- Bugfix: The control crashed if the "CheckBoxes" property was set to "True".
+
+Version 1.10.2 - 07/09/2005
+===========================
+- Bugfix: The binary is no longer compressed (using UPX), because this caused problems on Windows NT 4.0.
+- Bugfix: The control crashed on Windows NT 4.0.
+
+Version 1.10.1 - 01/09/2005
+===========================
+- Bugfix: The displayed icons could be wrong.
+- Bugfix: Loading a settings file while being on the "Filter" property page sometimes didn't update the "FolderAttributes" listbox.
+
+Version 1.10.0 - 13/06/2005
+===========================
+- New feature: "UseCustomIcons" allows the usage of a custom imagelist.
+- New feature: "ItemOverlayIndex" retrieves or sets an item's overlay index in the control's imagelist.
+- The properties "ItemIconIndex" and "hImageList" can be set now.
+- AutoUpdate no longer wastes time with updating collapsed sub-trees. Instead it simply removes those items.
+- Now some of an item's properties get loaded when they are required for the first time (usually when it's displayed for the first time) instead of when the item is inserted. This reduces sub-items loading time, but results in a small performance penalty when the sub-items are displayed for the first time. This way the control feels a little bit faster.
+- Improved general performance.
+
+Version 1.9.1 - 15/05/2005
+==========================
+- Bugfix: The properties "ArchiveItemBackColor", "ArchiveItemForeColor", "CompressedBackColor", "CompressedForeColor", "EncryptedBackColor", "EncryptedForeColor", "HotBackColor", "HotForeColor", "SelectedItemBackColor", "SelectedItemForeColor", "DimSelectedItemsIcon", "BkImage" and "FavoritesStyle" didn't work anymore.
+
+Version 1.9.0 - 12/05/2005
+==========================
+- New feature: "ItemHandleToAddressBarText" returns a text that may be used to represent an item in an address combobox.
+- New feature: "ItemIconIndex" returns an item's icon index in the control's imagelist.
+- Bugfix: The "FolderAttributes" property could affect items it shouldn't affect.
+- Bugfix: "RTLReading" did not work as expected. Bidirectional systems should be fully supported now.
+- Bugfix: The "hStateImageList" property couldn't be retrieved.
+- Bugfix: Use GetDC(0) instead of CreateIC("DISPLAY").
+- Icon loading should be somewhat faster now.
+- Minor performance tweaks.
+
+Version 1.8.8 - 26/01/2005
+==========================
+- Bugfix: The events "ItemBeforeStateIconChange" and "ItemStateIconChanged" didn't get fired if the state image was changed using the mouse.
+- Updated the About dialog.
+
+Version 1.8.7 - 14/10/2004
+==========================
+- (Un-)Sharing an item now gets recognized by AutoUpdate.
+- Bugfix: The control crashed on Windows 95 (and probably also on Windows 98/Me) while enumerating the content of the control panel.
+- Bugfix: Code which decides whether an item is part of the recycle bin was buggy. This caused crashes on Windows 95 (and probably also on Windows 98/Me) related to AutoUpdate.
+- Bugfix: The control crashed on Windows NT 4.0 while enumerating the content of My Computer.
+- Bugfix: Activating "DrivesOnly" produced garbage.
+
+Version 1.8.6 - 13/09/2004
+==========================
+- Massively improved the performance of AutoUpdate.
+
+Version 1.8.5 - 09/09/2004
+==========================
+- Bugfix: The method "PathToItemHandle" returned 0 most times.
+- Improved the performance of AutoUpdate.
+
+Version 1.8.4 - 31/08/2004
+==========================
+- Bugfix: The "seWinXPStyle" mode of the "SingleExpand" property didn't behave fully like XP's Windows Explorer.
+
+Version 1.8.3 - 21/07/2004
+==========================
+- Bugfix: The properties "FileFilters" and "FolderFilters" had problems with negated filters.
+- Bugfix: Binary compatibility didn't work because of UPX. Starting with this release, all releases will be binary compatible to version 1.8.2 and still be compressed using UPX.
+
+Version 1.8.2 - 25/06/2004
+==========================
+- New feature: Setting "Path" to an existing item, that isn't usually displayed, causes the item to be explicitly inserted.
+- Bugfix: Under certain circumstances AutoUpdate caused infinite loops of SHCNE_UPDATEITEM shell-events.
+- Bugfix: There were unnecessary accesses to removable drives Under Windows 95/98/Me.
+- Bugfix: Collapsing an item could change the state-icon of its parent item.
+- Rewrote the method "pIDLToItemHandle". This affects many of the control's features.
+- Strongly improved AutoUpdate.
+
+Version 1.8.1 - 13/06/2004
+==========================
+- Bugfix: Some folders were recognized as files.
+
+Version 1.8.0 - 10/06/2004
+==========================
+- New feature: Use "FireBeforeItemInsert" and the event "BeforeItemInsert" to decide whether to display an item or not on a per-item basis (except for archive-items).
+- New feature: Use "SelChangedDelayTime" to delay the event "SelChanged", if the event was caused by keyboard input.
+- Bugfix: The AutoUpdate code had a memory leak.
+- Bugfix: There was a very complex bug that could cause context menus to be displayed twice (the 1st time at the wrong position and for the wrong item). This bug occured for AllowDragDrop = True only.
+- Bugfix: Zip-archives were read with errors.
+- Bugfix: The properties "ExpandArchives" and "ArchivesAfterFolders" caused errors with zip files on Windows Me/XP.
+- Bugfix: The properties "FileAttributes" and "FolderAttributes" were still buggy.
+- Bugfix: There existed some problems on systems with swapped mouse buttons.
+- Bugfix: The property "ItemHeight" was placed on the property pages 2 times.
+- From now on all releases will be binary compatible to version 1.7.3.
+- some internal optimizations
+
+Version 1.7.3 - 19/05/2004
+==========================
+- Bugfix: Sometimes AutoUpdate ignored the filter options.
+- Bugfix: The properties "FileAttributes" and "FolderAttributes" didn't work.
+- Bugfix: Changing the effects in a Drag'n'Drop event didn't work.
+- Bugfix: Pressing the Shift/Ctrl/Alt-keys during Drag'n'Drop didn't have any effect.
+- Bugfix: Pressing the Alt-key didn't fire any Key-events.
+- The code for getting the icon-indices was changed.
+
+Version 1.7.2 - 15/05/2004
+==========================
+- New feature: "ItemIsLink" checks, whether an item is a link and (if it is one) returns the target.
+- Bugfix: Folder links were handled as files on Windows Me/XP/2003.
+- Updated the About-dialog. It now contains a button for making donations via Paypal.
+
+Version 1.7.1 - 05/05/2004
+==========================
+- Bugfix: Some context menu extensions like TortoiseSVN didn't work.
+- Bugfix: Sorting of items had a bug that could lead to wrong sortings on older versions of Windows.
+
+Version 1.7.0 - 01/03/2004
+==========================
+- New feature: ExplorerTreeView is supporting FTP-paths now.
+- New feature: "AddFTPPath" allows inserting FTP-folders below the Internet Explorer.
+- New feature: "ExpandArchives" is supporting BIN- and ISO-files now.
+- New feature: Added option "3D Light" to the Appearance property.
+- Bugfix: Using "FavoritesStyle" together with a BkImage caused drawing bugs.
+- Bugfix: There were problems with the codepage used for the names of files and folders in archives.
+- Performance: Accelerated the AutoUpdate handler for changed icons.
+- The property "ShowFocusRect" won't be applied anymore, because it caused to many problems. From now on only the operating system decides whether to show a focus rectangle or not.
+- ExplorerTreeView now gets compressed using UPX.
+
+Version 1.6.0 - 01/12/2003
+==========================
+- New feature: "FavoritesStyle" allows you to imitate Windows' "Manage favorites"-dialog.
+- New features: "ArchiveItemBackColor", "CompressedBackColor", "EncryptedBackColor", "HotBackColor", "SelectedItemBackColor", "SelectedItemForeColor"
+- Bugfix: "SaveSettingsToFile" could produce corrupt exctlsf-files.
+- Performance: Item-drawing is faster now.
+
+Version 1.5.4 - 16/11/2003
+==========================
+- Bugfix: The tooltips weren't shown, if the control was part of another UserControl.
+
+Version 1.5.3 - 12/08/2003
+==========================
+- New feature: "ReloadSubItems" forces a reload of a single branch.
+- Bugfix: The control crashed on all versions of Windows before XP when the user started renaming an item.
+- Bugfix: The control sometimes crashed when moving the mouse over it.
+
+Version 1.5.2 - 27/02/2003
+==========================
+- Now all subitems of network neighbourhood are marked as a slow item.
+- Bugfix: Filters were used for the root item, too.
+- Bugfix: Improved AutoUpdate.
+
+Version 1.5.1 - 01/02/2003
+==========================
+- New feature: "BkImageFixed" sets whether background textures are fixed or scrollable.
+- New feature: "LimitEditInput" allows checking for illegal file names while the item still gets edited.
+
+Version 1.5.0 - 13/01/2003
+==========================
+- The members of "AppearanceConstants", "AttributesConstants", "BorderStyleConstants" and "LineStyleConstants" got renamed. Maybe your sourcecode needs an update.
+- "GetFirstVisibleItem()" and "SetFirstVisibleItem()" got replaced with "FirstVisibleItem". Maybe your sourcecode needs an update.
+- "Ghosted" got renamed to "ItemGhosted". Maybe your sourcecode needs an update.
+- "CollapseItem()" got renamed to "ItemCollapse()". Maybe your sourcecode needs an update.
+- "CreateNewFolder()" got renamed to "ItemCreateNewFolder()". Maybe your sourcecode needs an update.
+- "DoesItemExist()" got renamed to "ItemDoesExist()". Maybe your sourcecode needs an update.
+- "DoesItemHaveChildren()" got renamed to "ItemHasChildren()". Maybe your sourcecode needs an update.
+- "EnsureVisible()" got renamed to "ItemEnsureVisible()". Maybe your sourcecode needs an update.
+- "ExecuteDefaultCommand()" got renamed to "ItemExecuteDefaultCommand()". Maybe your sourcecode needs an update.
+- "ExpandItem()" got renamed to "ItemExpand()". Maybe your sourcecode needs an update.
+- "GetFirstSubItem()" got renamed to "ItemGetFirstSubItem()". Maybe your sourcecode needs an update.
+- "GetItemInfoTip()" got renamed to "ItemGetInfoTip()". Maybe your sourcecode needs an update.
+- "GetItemLevel()" got renamed to "ItemGetLevel()". Maybe your sourcecode needs an update.
+- "GetItempIDL()" got renamed to "ItemGetpIDL()". Maybe your sourcecode needs an update.
+- "GetItemRectangle()" got renamed to "ItemGetRectangle()". Maybe your sourcecode needs an update.
+- "GetItemType()" got renamed to "ItemGetType()". Maybe your sourcecode needs an update.
+- "GetNextItem()" got renamed to "ItemGetNextItem()". Maybe your sourcecode needs an update.
+- "GetNextVisibleItem()" got renamed to "ItemGetNextVisibleItem()". Maybe your sourcecode needs an update.
+- "GetParentItem()" got renamed to "ItemGetParentItem()". Maybe your sourcecode needs an update.
+- "GetPreviousItem()" got renamed to "ItemGetPreviousItem()". Maybe your sourcecode needs an update.
+- "GetPreviousVisibleItem()" got renamed to "ItemGetPreviousVisibleItem()". Maybe your sourcecode needs an update.
+- "GetSubItemCount()" got renamed to "ItemGetSubItemCount()". Maybe your sourcecode needs an update.
+- "GetVisibleCount()" got renamed to "GetVisibleItemCount()". Maybe your sourcecode needs an update.
+- "LoadSubItems()" got renamed to "ItemLoadSubItems()". Maybe your sourcecode needs an update.
+- "ShowShellContextMenu()" got renamed to "ItemShowShellContextMenu()". Maybe your sourcecode needs an update.
+- "StartRenaming()" got renamed to "ItemStartRenaming()". Maybe your sourcecode needs an update.
+- "SupportsNewFolder()" got renamed to "ItemSupportsNewFolder()". Maybe your sourcecode needs an update.
+- "ItemGetFirstSubItem()", "ItemGetNextItem()", "ItemGetNextVisibleItem()", "ItemGetParentItem()", "ItemGetPreviousItem()" and "ItemGetPreviousVisibleItem()" now allow filtering using the state icon.
+- Bugfix: On Windows XP ZIP-archives were marked as folders depending on the system settings.
+- some internal optimizations
+
+Version 1.4.4 - 04/01/2003
+==========================
+- New feature: "Align" allows the alignment of the control within its container.
+- Bugfix: The events of the LabelEdit control were fired wrong.
+- some internal optimizations
+
+Version 1.4.3 - 03/01/2003
+==========================
+- New feature: "pIDLToItemHandle()" searches an item using its fully qualified pIDL.
+- Performance: Loading of the icons got optimized. This increases speed by up to 70 %.
+- Performance: The use of memory got decreased to up to 50 %.
+- All pIDLs, that get returned by "GetItempIDL()" must be freed now. You can use "FreepIDLMem()". Maybe your sourcecode needs an update..
+- The events "ItemLoadingSubItems" and "ItemLoadedSubItems" now get fired for the root item, too.
+- "GetItemCount()" and "GetSubItemCount()" now allow filtering using the state icon.
+- Bugfix: For "CollapseItem()", "DeleteSubItems" didn't work.
+- ExplorerTreeView now gets compiled to native code and then compressed using PECompact.
+- some internal optimizations
+
+Version 1.4.2 - 24/12/2002
+==========================
+- Performance: Redrawing the control while moving the containing window was very slow.
+- Performance: The use of memory got decreased by 10 to 30 %.
+- Bugfix: The arrow keys didn't work.
+- Bugfix: The reaction to changed system settings was wrong.
+- Bugfix: "GetItempIDL()" retrieved the wrong pIDL for ptToRoot.
+- some internal optimizations
+
+Version 1.4.1 - 22/12/2002
+==========================
+- Performance: Loading the items sometimes took very much time.
+
+Version 1.4.0 - 14/12/2002
+==========================
+- New feature: "Margin" sets the width of the control's left and right margin.
+- New feature: The event MouseHover overtakes the functionality of MouseEnter, which now gets fired, when the mouse enters the control. MouseMove and so on may get fired before MouseHover. Maybe your sourcecode needs an update.
+- New feature: The event EditMouseHover overtakes the functionality of EditMouseEnter, which now gets fired, when the mouse enters the control. EditMouseMove and so on may get fired before EditMouseHover. Maybe your sourcecode needs an update.
+- New features: The events MClick, MDblClick, ItemMClick and ItemMDblClick allow reactions to clicking and double clicking the middle mouse button.
+- "ContextMenuConstants" got renamed to "ShellContextMenuConstants". Maybe your sourcecode needs an update. The constants got renamed, too.
+- "hContextMenu" got renamed to "hShellContextMenu". Maybe your sourcecode needs an update.
+- "ItemBeforeExecuteContextMenuItem" got renamed to "ItemBeforeExecuteShellContextMenuItem". Maybe your sourcecode needs an update.
+- "ItemBeforeInitContextMenu" got renamed to "ItemBeforeInitShellContextMenu". Maybe your sourcecode needs an update.
+- "ItemBeforeShowContextMenu" got renamed to "ItemBeforeShowShellContextMenu". Maybe your sourcecode needs an update.
+- "ItemContextMenuItemEnter" got renamed to "ItemShellContextMenuItemEnter". Maybe your sourcecode needs an update.
+- "ItemContextMenuItemLeave" got renamed to "ItemShellContextMenuItemLeave". Maybe your sourcecode needs an update.
+- "ItemDestroyContextMenu" got renamed to "ItemDestroyShellContextMenu". Maybe your sourcecode needs an update.
+- "ItemExecutedContextMenuItem" got renamed to "ItemExecutedShellContextMenuItem". Maybe your sourcecode needs an update.
+- "ItemInitContextMenu" got renamed to "ItemInitShellContextMenu". Maybe your sourcecode needs an update.
+- "ShowContextMenu()" got renamed to "ShowShellContextMenu()". Maybe your sourcecode needs an update.
+- "ShowContextMenus" got renamed to "ShowShellContextMenus". Maybe your sourcecode needs an update.
+- The properties' default values don't get saved anymore.
+- Recoded many events.
+- Bugfix: MouseEnter and MouseLeave could get fired wrong.
+- Bugfix: The LabelEdit control's mouse pointer was wrong if ReplaceHandCursor was activated.
+- Bugfix: When doing drag'n'drop with the right mouse button, the context menu was displayed at the wrong position.
+- Bugfix: The control's background color affected the system imagelist.
+
+Version 1.3.1 - 09/09/2002
+==========================
+- Bugfix: If you placed more than one ExplorerTreeViews on one form, other controls' events could get fired several times.
+
+Version 1.3.0 - 03/09/2002
+==========================
+- New feature: "DrivesOnly" makes My Computer contain drives only.
+- New feature: Use "FileContainsValidSettings()" to check whether a file contains valid data for a call of "LoadSettingsFromFile()".
+- New feature: "SupportsNewFolder()" checks whether an item supports the "New folder" command.
+- "DimSelectedItemIcons" got renamed to "DimSelectedItemsIcon". Maybe your sourcecode needs an update.
+- "DontCheckSlowItemsForSubItems" got renamed to "CheckSlowItemsForSubItems". Maybe your sourcecode needs an update. Please note the inversed logic.
+- "ShowIcons" got replaced with "TreeViewStyle/Pictures". Maybe your sourcecode needs an update.
+- "GetSelectedItem()" got removed, because "SelectedItem" does the same job. Maybe your sourcecode needs an update.
+- The *.exctlsf format is at version 2.0 now. Please note, that older versions of ExplorerTreeView won't be able to read the new format.
+- "LoadSettingsFromFile()" and "SaveSettingsToFile()" got completely recoded. Maybe your sourcecode needs an update.
+- All property pages got updated.
+- Bugfix: Removed some drawing bugs.
+- Bugfix: "FileFilters" and "FolderFilters had failures.
+- Bugfix: Removed a memory leak in "ItemHandleToFSPath()".
+
+Version 1.2.1 - 08/08/2002
+==========================
+- Bugfix: The control's scrollbars didn't work.
+
+Version 1.2.0 - 07/08/2002
+==========================
+- If you set "HoverTime" to -1, the control will use the system setting.
+- Bugfixes: The events "MouseEnter" and "MouseLeave" were completely reworked.
+
+Version 1.1.0
+=============
+- New feature: "ArchivesAfterFolders" allows inserting archives just behind folders.
+- New feature: "SortingCriteria" allows sorting using some special properties like file size.
+- New feature: "SortOrder" allows sorting in descending order.
+- Bugfix: Now items won't load before the window is visible. This increases felt speed. Also "ItemLoadingSubItems" and "ItemLoadedSubItems" now get fired when the control gets filled for the first time.
+- Bugfix: "MaxScrollTime" wasn't set when creating the treeview.
+- Bugfix: On older versions of Windows, the items were read in wrong.
+- some internal optimizations
+
+Version 1.0.1
+=============
+- Bugfix: Archives could get the wrong icon and type when expanding them. This also caused the Path property to work wrong.
+
+Version 1.0.0
+=============
+This is the 1st release.
