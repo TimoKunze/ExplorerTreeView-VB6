@@ -1,0 +1,3030 @@
+[
+  uuid(8F20FF30-ABD6-4FD4-A63E-50EC2D38B741),
+  helpstring("TimoSoft Shell-Interfaces for ExplorerTreeView"),
+  version(1.16)
+]
+library ExTvwInterfaces
+{
+  #define FolderTasks
+  #define ShellMenus
+
+  importlib("stdole2.tlb");
+
+  interface IVBOleInPlaceUIWindow;
+  interface IVBShellFolder;
+  interface IVBShellFolderViewCB;
+  interface IVBShellView;
+  #ifdef FolderTasks
+    interface IVBPreview3;
+  #endif
+  #ifdef ShellMenus
+    interface IVBUnknown;
+  #endif
+
+
+  // enums
+  typedef enum APPDOCLISTTYPEConstants
+  {
+    ADLT_RECENT = 0x0,
+    ADLT_FREQUENT = 0x1
+  } APPDOCLISTTYPEConstants;
+
+  typedef enum ASSOCDATAConstants
+  {
+    ASSOCDATA_MSIDESCRIPTOR = 1,
+    ASSOCDATA_NOACTIVATEHANDLER,
+    ASSOCDATA_QUERYCLASSSTORE,
+    ASSOCDATA_HASPERUSERASSOC,
+    ASSOCDATA_EDITFLAGS,
+    ASSOCDATA_MAX
+  } ASSOCDATAConstants;
+
+  typedef enum ASSOCENUMConstants
+  {
+    ASSOCENUM_NONE
+  } ASSOCENUMConstants;
+
+  typedef enum ASSOCFConstants
+  {
+    ASSOCF_INIT_NOREMAPCLSID = 0x00000001,
+    ASSOCF_INIT_BYEXENAME = 0x00000002,
+    ASSOCF_OPEN_BYEXENAME = 0x00000002,
+    ASSOCF_INIT_DEFAULTTOSTAR = 0x00000004,
+    ASSOCF_INIT_DEFAULTTOFOLDER = 0x00000008,
+    ASSOCF_NOUSERSETTINGS = 0x00000010,
+    ASSOCF_NOTRUNCATE = 0x00000020,
+    ASSOCF_VERIFY = 0x00000040,
+    ASSOCF_REMAPRUNDLL = 0x00000080,
+    ASSOCF_NOFIXUPS = 0x00000100,
+    ASSOCF_IGNOREBASECLASS = 0x00000200,
+  } ASSOCFConstants;
+
+  typedef enum ASSOCKEYConstants
+  {
+    ASSOCKEY_SHELLEXECCLASS = 1,
+    ASSOCKEY_APP,
+    ASSOCKEY_CLASS,
+    ASSOCKEY_BASECLASS,
+    ASSOCKEY_MAX
+  } ASSOCKEYConstants;
+
+  typedef enum ASSOCSTRConstants
+  {
+    ASSOCSTR_COMMAND = 1,
+    ASSOCSTR_EXECUTABLE,
+    ASSOCSTR_FRIENDLYDOCNAME,
+    ASSOCSTR_FRIENDLYAPPNAME,
+    ASSOCSTR_NOOPEN,
+    ASSOCSTR_SHELLNEWVALUE,
+    ASSOCSTR_DDECOMMAND,
+    ASSOCSTR_DDEIFEXEC,
+    ASSOCSTR_DDEAPPLICATION,
+    ASSOCSTR_DDETOPIC,
+    ASSOCSTR_INFOTIP,
+    ASSOCSTR_QUICKTIP,
+    ASSOCSTR_TILEINFO,
+    ASSOCSTR_CONTENTTYPE,
+    ASSOCSTR_DEFAULTICON,
+    ASSOCSTR_SHELLEXTENSION,
+    ASSOCSTR_MAX
+  } ASSOCSTRConstants;
+
+  typedef enum CATEGORYINFO_FLAGSConstants
+  {
+    CATINFO_NORMAL = 0,
+    CATINFO_COLLAPSED = 0x1,
+    CATINFO_HIDDEN = 0x2,
+    CATINFO_EXPANDED = 0x4,
+    CATINFO_NOHEADER = 0x8,
+    CATINFO_NOTCOLLAPSIBLE = 0x10,
+    CATINFO_NOHEADERCOUNT = 0x20
+  } CATEGORYINFO_FLAGSConstants;
+
+  typedef enum CATSORT_FLAGSConstants
+  {
+    CATSORT_DEFAULT = 0x00000000,
+    CATSORT_NAME = 0x00000001,
+  } CATSORT_FLAGSConstants;
+
+  typedef enum CMFConstants
+  {
+    CMF_NORMAL = 0x00000000,
+    CMF_DEFAULTONLY = 0x00000001,
+    CMF_VERBSONLY = 0x00000002,
+    CMF_EXPLORE = 0x00000004,
+    CMF_NOVERBS = 0x00000008,
+    CMF_CANRENAME = 0x00000010,
+    CMF_NODEFAULT = 0x00000020,
+    CMF_INCLUDESTATIC = 0x00000040,
+    CMF_ITEMMENU = 0x00000080,
+    CMF_EXTENDEDVERBS = 0x00000100,
+    CMF_DISABLEDVERBS = 0x00000200,
+    CMF_RESERVED = 0xFFFF0000
+  } CMFConstants;
+
+  typedef enum CMIC_MASKConstants
+  {
+    CMIC_MASK_HOTKEY = 0x00000020,
+    CMIC_MASK_ICON = 0x00000010,
+    CMIC_MASK_FLAG_NO_UI = 0x00000400,
+    CMIC_MASK_UNICODE = 0x00004000,
+    CMIC_MASK_NO_CONSOLE = 0x00008000,
+    CMIC_MASK_ASYNCOK = 0x00100000,
+    //CMIC_MASK_HASLINKNAME = SEE_MASK_HASLINKNAME,
+    //CMIC_MASK_FLAG_SEP_VDM = SEE_MASK_FLAG_SEPVDM,
+    //CMIC_MASK_HASTITLE = SEE_MASK_HASTITLE,
+    CMIC_MASK_NOASYNC = 0x00000100,
+    CMIC_MASK_SHIFT_DOWN = 0x10000000,
+    CMIC_MASK_CONTROL_DOWN = 0x40000000,
+    CMIC_MASK_FLAG_LOG_USAGE = 0x04000000,
+    CMIC_MASK_NOZONECHECKS = 0x00800000,
+    CMIC_MASK_PTINVOKE = 0x20000000,
+  } CMIC_MASKConstants;
+
+  typedef enum CONDITION_OPERATIONConstants
+  {
+		COP_IMPLICIT = 0,
+		COP_EQUAL	= 1,
+		COP_NOTEQUAL	= 2,
+		COP_LESSTHAN	= 3,
+		COP_GREATERTHAN	= 4,
+		COP_LESSTHANOREQUAL	= 5,
+		COP_GREATERTHANOREQUAL	= 6,
+		COP_VALUE_STARTSWITH	= 7,
+		COP_VALUE_ENDSWITH	= 8,
+		COP_VALUE_CONTAINS	= 9,
+		COP_VALUE_NOTCONTAINS	= 10,
+		COP_DOSWILDCARDS	= 11,
+		COP_WORD_EQUAL	= 12,
+		COP_WORD_STARTSWITH	= 13,
+		COP_APPLICATION_SPECIFIC	= 14
+  } CONDITION_OPERATIONConstants;
+
+  typedef enum DATADIRConstants
+  {
+    DATADIR_GET = 1,
+    DATADIR_SET = 2
+  } DATADIRConstants;
+
+  typedef enum DEFAULTSAVEFOLDERTYPEConstants
+  {
+    DSFT_DETECT = 1,
+    DSFT_PRIVATE = 2,
+    DSFT_PUBLIC = 3
+  } DEFAULTSAVEFOLDERTYPEConstants;
+
+  typedef enum DROPEFFECTConstants
+  {
+    DROPEFFECT_NONE = 0,
+    DROPEFFECT_COPY = 1,
+    DROPEFFECT_MOVE = 2,
+    DROPEFFECT_LINK = 4,
+    DROPEFFECT_SCROLL = 0x80000000
+  } DROPEFFECTConstants;
+
+  typedef enum DSH_FLAGSConstants
+  {
+    DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001
+  } DSH_FLAGSConstants;
+
+  typedef enum DVASPECTConstants
+  {
+    DVASPECT_CONTENT = 1,
+    DVASPECT_THUMBNAIL = 2,
+    DVASPECT_ICON = 4,
+    DVASPECT_DOCPRINT = 8,
+    DVASPECT_OPAQUE = 16,
+    DVASPECT_TRANSPARENT = 32
+  } DVASPECTConstants;
+
+  typedef enum FOLDERFLAGSConstants
+  {
+    FWF_AUTOARRANGE = 0x0001,
+    FWF_ABBREVIATEDNAMES = 0x0002,
+    FWF_SNAPTOGRID = 0x0004,
+    FWF_OWNERDATA = 0x0008,
+    FWF_BESTFITWINDOW = 0x0010,
+    FWF_DESKTOP = 0x0020,
+    FWF_SINGLESEL = 0x0040,
+    FWF_NOSUBFOLDERS = 0x0080,
+    FWF_TRANSPARENT = 0x0100,
+    FWF_NOCLIENTEDGE = 0x0200,
+    FWF_NOSCROLL = 0x0400,
+    FWF_ALIGNLEFT = 0x0800,
+    FWF_NOICONS = 0x1000,
+    FWF_SHOWSELALWAYS = 0x2000,
+    FWF_NOVISIBLE = 0x4000,
+    FWF_SINGLECLICKACTIVATE = 0x8000,
+    FWF_NOWEBVIEW = 0x10000,
+    FWF_HIDEFILENAMES = 0x20000,
+    FWF_CHECKSELECT = 0x40000,
+    FWF_NOENUMREFRESH = 0x80000,
+    FWF_NOGROUPING = 0x100000,
+    FWF_FULLROWSELECT = 0x200000,
+    FWF_NOFILTERS = 0x400000,
+    FWF_NOCOLUMNHEADER = 0x800000,
+    FWF_NOHEADERINALLVIEWS = 0x1000000,
+    FWF_EXTENDEDTILES = 0x2000000,
+    FWF_TRICHECKSELECT = 0x4000000,
+    FWF_AUTOCHECKSELECT = 0x8000000,
+    FWF_NOBROWSERVIEWSTATE = 0x10000000,
+    FWF_SUBSETGROUPS = 0x20000000,
+    FWF_USESEARCHFOLDER = 0x40000000,
+    FWF_ALLOWRTLREADING = 0x80000000
+  } FOLDERFLAGSConstants;
+
+  typedef enum FOLDERVIEWMODEConstants
+  {
+    FVM_AUTO = -1,
+    FVM_FIRST = 1,
+    FVM_ICON = 1,
+    FVM_SMALLICON = 2,
+    FVM_LIST = 3,
+    FVM_DETAILS = 4,
+    FVM_THUMBNAIL = 5,
+    FVM_TILE = 6,
+    FVM_THUMBSTRIP = 7,
+    FVM_LAST = 7
+  } FOLDERVIEWMODEConstants;
+
+  typedef enum GCSConstants
+  {
+    #ifdef UNICODE
+      GCS_VERB = 0x00000004,
+      GCS_HELPTEXT = 0x00000005,
+      GCS_VALIDATE = 0x00000006,
+      GCS_VERBICON = 0x00000014,
+    #else
+      GCS_VERB = 0x00000000,
+      GCS_HELPTEXT = 0x00000001,
+      GCS_VALIDATE = 0x00000002,
+    #endif
+    GCS_UNICODE = 0x00000004
+  } GCSConstants;
+
+  typedef enum GETPROPERTYSTOREFLAGSConstants
+  {
+    GPS_DEFAULT = 0,
+    GPS_HANDLERPROPERTIESONLY = 0x1,
+    GPS_READWRITE = 0x2,
+    GPS_TEMPORARY = 0x4,
+    GPS_FASTPROPERTIESONLY = 0x8,
+    GPS_OPENSLOWITEM = 0x10,
+    GPS_DELAYCREATION = 0x20,
+    GPS_BESTEFFORT = 0x40,
+    GPS_MASK_VALID = 0x7f
+  } GETPROPERTYSTOREFLAGSConstants;
+
+  typedef enum GILConstants
+  {
+    GIL_OPENICON = 0x0001,
+    GIL_FORSHELL = 0x0002,
+    GIL_ASYNC = 0x0020,
+    GIL_DEFAULTICON = 0x0040,
+    GIL_FORSHORTCUT = 0x0080,
+    GIL_CHECKSHIELD = 0x0200
+  } GILConstants;
+
+  typedef enum GILReturnConstants
+  {
+    GIL_SIMULATEDOC = 0x0001,
+    GIL_PERINSTANCE = 0x0002,
+    GIL_PERCLASS = 0x0004,
+    GIL_NOTFILENAME = 0x0008,
+    GIL_DONTCACHE = 0x0010,
+    GIL_SHIELD = 0x0200,
+    GIL_FORCENOSHIELD = 0x0400
+  } GILReturnConstants;
+
+  typedef enum IEIConstants
+  {
+    IEI_PRIORITY_MAX = 0x7fffffff,
+    IEI_PRIORITY_MIN = 0x00000000,
+    IEI_PRIORITY_NORMAL = 0x10000000
+  } IEIConstants;
+
+  typedef enum IEIFLAGConstants
+  {
+    IEIFLAG_ASYNC = 0x0001,
+    IEIFLAG_CACHE = 0x0002,
+    IEIFLAG_ASPECT = 0x0004,
+    IEIFLAG_OFFLINE = 0x0008,
+    IEIFLAG_GLEAM = 0x0010,
+    IEIFLAG_SCREEN = 0x0020,
+    IEIFLAG_ORIGSIZE = 0x0040,
+    IEIFLAG_NOSTAMP = 0x0080,
+    IEIFLAG_NOBORDER = 0x0100,
+    IEIFLAG_QUALITY = 0x0200,
+    IEIFLAG_REFRESH = 0x0400
+  } IEIFLAGConstants;
+ 
+  typedef enum KNOWNDESTCATEGORYConstants
+  {
+    KDC_FREQUENT = 0x1,
+    KDC_RECENT = 0x2
+  } KNOWNDESTCATEGORYConstants;
+ 
+  typedef enum LIBRARYFOLDERFILTERConstants
+  {
+    LFF_FORCEFILESYSTEM = 1,
+    LFF_STORAGEITEMS = 2,
+    LFF_ALLITEMS = 3
+  } LIBRARYFOLDERFILTERConstants;
+ 
+  typedef enum LIBRARYOPTIONFLAGSConstants
+  {
+    LOF_DEFAULT = 0,
+    LOF_PINNEDTONAVPANE = 0x1,
+    LOF_MASK_ALL = 0x1
+  } LIBRARYOPTIONFLAGSConstants;
+ 
+  typedef enum LIBRARYSAVEFLAGSConstants
+  {
+    LSF_FAILIFTHERE = 0,
+    LSF_OVERRIDEEXISTING = 0x1,
+    LSF_MAKEUNIQUENAME = 0x2
+  } LIBRARYSAVEFLAGSConstants;
+
+  typedef enum LVCFMTConstants
+  {
+    LVCFMT_LEFT = 0x0000,
+    LVCFMT_RIGHT = 0x0001,
+    LVCFMT_CENTER = 0x0002,
+    LVCFMT_JUSTIFYMASK = 0x0003,
+    LVCFMT_IMAGE = 0x0800,
+    LVCFMT_BITMAP_ON_RIGHT = 0x1000,
+    LVCFMT_COL_HAS_IMAGES = 0x8000,
+    LVCFMT_FIXED_WIDTH = 0x00100,
+    LVCFMT_NO_DPI_SCALE = 0x40000,
+    LVCFMT_FIXED_RATIO = 0x80000,
+    LVCFMT_LINE_BREAK = 0x100000,
+    LVCFMT_FILL = 0x200000,
+    LVCFMT_WRAP = 0x400000,
+    LVCFMT_NO_TITLE = 0x800000,
+    LVCFMT_TILE_PLACEMENTMASK = 0x300000,
+    LVCFMT_SPLITBUTTON = 0x1000000
+  } LVCFMTConstants;
+
+  typedef enum MUTZConstants
+  {
+    MUTZ_NOSAVEDFILECHECK = 0x00000001,
+    MUTZ_ISFILE = 0x00000002,
+    MUTZ_ACCEPT_WILDCARD_SCHEME = 0x00000080,
+    MUTZ_ENFORCERESTRICTED = 0x00000100,
+    MUTZ_RESERVED = 0x00000200,
+    MUTZ_REQUIRESAVEDFILECHECK = 0x00000400,
+    MUTZ_DONT_UNESCAPE = 0x00000800,
+    MUTZ_DONT_USE_CACHE = 0x00001000,
+    MUTZ_FORCE_INTRANET_FLAGS = 0x00002000,
+    MUTZ_IGNORE_ZONE_MAPPINGS = 0x00004000
+  } MUTZConstants;
+
+  typedef enum OLECMDEXECOPTConstants
+  {
+    OLECMDEXECOPT_DODEFAULT = 0,
+    OLECMDEXECOPT_PROMPTUSER = 1,
+    OLECMDEXECOPT_DONTPROMPTUSER = 2,
+    OLECMDEXECOPT_SHOWHELP = 3
+  } OLECMDEXECOPTConstants;
+
+  typedef enum OLECMDFConstants
+  {
+    OLECMDF_SUPPORTED = 0x00000001,
+    OLECMDF_ENABLED = 0x00000002,
+    OLECMDF_LATCHED = 0x00000004,
+    OLECMDF_NINCHED = 0x00000008,
+    OLECMDF_INVISIBLE = 0x00000010,
+    OLECMDF_DEFHIDEONCTXTMENU = 0x00000020
+  } OLECMDFConstants;
+
+  typedef enum OLECMDIDConstants
+  {
+    OLECMDID_OPEN = 1,
+    OLECMDID_NEW = 2,
+    OLECMDID_SAVE = 3,
+    OLECMDID_SAVEAS = 4,
+    OLECMDID_SAVECOPYAS = 5,
+    OLECMDID_PRINT = 6,
+    OLECMDID_PRINTPREVIEW = 7,
+    OLECMDID_PAGESETUP = 8,
+    OLECMDID_SPELL = 9,
+    OLECMDID_PROPERTIES = 10,
+    OLECMDID_CUT = 11,
+    OLECMDID_COPY = 12,
+    OLECMDID_PASTE = 13,
+    OLECMDID_PASTESPECIAL = 14,
+    OLECMDID_UNDO = 15,
+    OLECMDID_REDO = 16,
+    OLECMDID_SELECTALL = 17,
+    OLECMDID_CLEARSELECTION = 18,
+    OLECMDID_ZOOM = 19,
+    OLECMDID_GETZOOMRANGE = 20,
+    OLECMDID_UPDATECOMMANDS = 21,
+    OLECMDID_REFRESH = 22,
+    OLECMDID_STOP = 23,
+    OLECMDID_HIDETOOLBARS = 24,
+    OLECMDID_SETPROGRESSMAX = 25,
+    OLECMDID_SETPROGRESSPOS = 26,
+    OLECMDID_SETPROGRESSTEXT = 27,
+    OLECMDID_SETTITLE = 28,
+    OLECMDID_SETDOWNLOADSTATE = 29,
+    OLECMDID_STOPDOWNLOAD = 30,
+    OLECMDID_ONTOOLBARACTIVATED = 31,
+    OLECMDID_FIND = 32,
+    OLECMDID_DELETE = 33,
+    OLECMDID_HTTPEQUIV = 34,
+    OLECMDID_HTTPEQUIV_DONE = 35,
+    OLECMDID_ENABLE_INTERACTION = 36,
+    OLECMDID_ONUNLOAD = 37,
+    OLECMDID_PROPERTYBAG2 = 38,
+    OLECMDID_PREREFRESH = 39,
+    OLECMDID_SHOWSCRIPTERROR = 40,
+    OLECMDID_SHOWMESSAGE = 41,
+    OLECMDID_SHOWFIND = 42,
+    OLECMDID_SHOWPAGESETUP = 43,
+    OLECMDID_SHOWPRINT = 44,
+    OLECMDID_CLOSE = 45,
+    OLECMDID_ALLOWUILESSSAVEAS = 46,
+    OLECMDID_DONTDOWNLOADCSS = 47,
+    OLECMDID_UPDATEPAGESTATUS = 48,
+    OLECMDID_PRINT2 = 49,
+    OLECMDID_PRINTPREVIEW2 = 50,
+    OLECMDID_SETPRINTTEMPLATE = 51,
+    OLECMDID_GETPRINTTEMPLATE = 52,
+    OLECMDID_PAGEACTIONBLOCKED = 55,
+    OLECMDID_PAGEACTIONUIQUERY = 56,
+    OLECMDID_FOCUSVIEWCONTROLS = 57,
+    OLECMDID_FOCUSVIEWCONTROLSQUERY = 58,
+    OLECMDID_SHOWPAGEACTIONMENU = 59,
+    OLECMDID_ADDTRAVELENTRY = 60,
+    OLECMDID_UPDATETRAVELENTRY = 61,
+    OLECMDID_UPDATEBACKFORWARDSTATE = 62,
+    OLECMDID_OPTICAL_ZOOM = 63,
+    OLECMDID_OPTICAL_GETZOOMRANGE = 64,
+    OLECMDID_WINDOWSTATECHANGED = 65
+  } OLECMDIDConstants;
+
+  typedef enum OLECMDTEXTFConstants
+  {
+    OLECMDTEXTF_NONE = 0,
+    OLECMDTEXTF_NAME = 1,
+    OLECMDTEXTF_STATUS = 2
+  } OLECMDTEXTFConstants;
+
+  typedef enum PDMODEConstants
+  {
+    PDM_RUN = 0x1,
+    PDM_PREFLIGHT = 0x2,
+    PDM_UNDOING = 0x4,
+    PDM_ERRORSBLOCKING = 0x8,
+    PDM_INDETERMINATE = 0x10
+  } PDMODEConstants;
+
+  typedef enum PDOPSTATUSConstants
+  {
+    PDOPS_RUNNING = 0x1,
+    PDOPS_PAUSED = 0x2,
+    PDOPS_CANCELLED = 0x3,
+    PDOPS_STOPPED = 0x4,
+    PDOPS_ERRORS = 0x5
+  } PDOPSTATUSConstants;
+
+  typedef enum PROPBAG2_TYPEConstants
+  {
+    PROPBAG2_TYPE_UNDEFINED = 0,
+    PROPBAG2_TYPE_DATA = 1,
+    PROPBAG2_TYPE_URL = 2,
+    PROPBAG2_TYPE_OBJECT = 3,
+    PROPBAG2_TYPE_STREAM = 4,
+    PROPBAG2_TYPE_STORAGE = 5,
+    PROPBAG2_TYPE_MONIKER = 6
+  } PROPBAG2_TYPEConstants;
+
+  typedef enum PROPDESC_AGGREGATION_TYPEConstants
+  {
+		PDAT_DEFAULT = 0,
+		PDAT_FIRST	= 1,
+		PDAT_SUM	= 2,
+		PDAT_AVERAGE	= 3,
+		PDAT_DATERANGE	= 4,
+		PDAT_UNION	= 5,
+		PDAT_MAX	= 6,
+		PDAT_MIN	= 7
+  } PROPDESC_AGGREGATION_TYPEConstants;
+
+  typedef enum PROPDESC_CONDITION_TYPEConstants
+  {
+		PDCOT_NONE = 0,
+		PDCOT_STRING	= 1,
+		PDCOT_SIZE	= 2,
+		PDCOT_DATETIME	= 3,
+		PDCOT_BOOLEAN	= 4,
+		PDCOT_NUMBER	= 5
+  } PROPDESC_CONDITION_TYPEConstants;
+
+  typedef enum PROPDESC_DISPLAYTYPEConstants
+  {
+		PDDT_STRING = 0,
+		PDDT_NUMBER	= 1,
+		PDDT_BOOLEAN	= 2,
+		PDDT_DATETIME	= 3,
+		PDDT_ENUMERATED	= 4
+  } PROPDESC_DISPLAYTYPEConstants;
+
+  typedef enum PROPDESC_FORMAT_FLAGSConstants
+  {
+		PDFF_DEFAULT = 0x0,
+		PDFF_PREFIXNAME	= 0x1,
+		PDFF_FILENAME	= 0x2,
+		PDFF_ALWAYSKB	= 0x4,
+		PDFF_RESERVED_RIGHTTOLEFT	= 0x8,
+		PDFF_SHORTTIME	= 0x10,
+		PDFF_LONGTIME	= 0x20,
+		PDFF_HIDETIME	= 0x40,
+		PDFF_SHORTDATE	= 0x80,
+		PDFF_LONGDATE	= 0x100,
+		PDFF_HIDEDATE	= 0x200,
+		PDFF_RELATIVEDATE	= 0x400,
+		PDFF_USEEDITINVITATION	= 0x800,
+		PDFF_READONLY	= 0x1000,
+		PDFF_NOAUTOREADINGORDER	= 0x2000
+  } PROPDESC_FORMAT_FLAGSConstants;
+
+  typedef enum PROPDESC_GROUPING_RANGEConstants
+  {
+		PDGR_DISCRETE = 0,
+		PDGR_ALPHANUMERIC	= 1,
+		PDGR_SIZE	= 2,
+		PDGR_DYNAMIC	= 3,
+		PDGR_DATE	= 4,
+		PDGR_PERCENT	= 5,
+		PDGR_ENUMERATED	= 6
+  } PROPDESC_GROUPING_RANGEConstants;
+
+  typedef enum PROPDESC_RELATIVEDESCRIPTION_TYPEConstants
+  {
+		PDRDT_GENERAL = 0,
+		PDRDT_DATE	= 1,
+		PDRDT_SIZE	= 2,
+		PDRDT_COUNT	= 3,
+		PDRDT_REVISION	= 4,
+		PDRDT_LENGTH	= 5,
+		PDRDT_DURATION	= 6,
+		PDRDT_SPEED	= 7,
+		PDRDT_RATE	= 8,
+		PDRDT_RATING	= 9,
+		PDRDT_PRIORITY	= 10
+  } PROPDESC_RELATIVEDESCRIPTION_TYPEConstants;
+
+  typedef enum PROPDESC_SORTDESCRIPTIONConstants
+  {
+		PDSD_GENERAL = 0,
+		PDSD_A_Z	= 1,
+		PDSD_LOWEST_HIGHEST	= 2,
+		PDSD_SMALLEST_BIGGEST	= 3,
+		PDSD_OLDEST_NEWEST	= 4
+  } PROPDESC_SORTDESCRIPTIONConstants;
+
+  typedef enum PROPDESC_TYPE_FLAGSConstants
+  {
+		PDTF_DEFAULT = 0x0,
+		PDTF_MULTIPLEVALUES	= 0x1,
+		PDTF_ISINNATE	= 0x2,
+		PDTF_ISGROUP	= 0x4,
+		PDTF_CANGROUPBY	= 0x8,
+		PDTF_CANSTACKBY	= 0x10,
+		PDTF_ISTREEPROPERTY	= 0x20,
+		PDTF_INCLUDEINFULLTEXTQUERY	= 0x40,
+		PDTF_ISVIEWABLE	= 0x80,
+		PDTF_ISQUERYABLE	= 0x100,
+		PDTF_CANBEPURGED	= 0x200,
+		PDTF_SEARCHRAWVALUE	= 0x400,
+		PDTF_ISSYSTEMPROPERTY	= 0x80000000,
+		PDTF_MASK_ALL	= 0x800007ff
+  } PROPDESC_TYPE_FLAGSConstants;
+
+  typedef enum PROPDESC_VIEW_FLAGSConstants
+  {
+		PDVF_DEFAULT = 0x0,
+		PDVF_CENTERALIGN	= 0x1,
+		PDVF_RIGHTALIGN	= 0x2,
+		PDVF_BEGINNEWGROUP	= 0x4,
+		PDVF_FILLAREA	= 0x8,
+		PDVF_SORTDESCENDING	= 0x10,
+		PDVF_SHOWONLYIFPRESENT	= 0x20,
+		PDVF_SHOWBYDEFAULT	= 0x40,
+		PDVF_SHOWINPRIMARYLIST	= 0x80,
+		PDVF_SHOWINSECONDARYLIST	= 0x100,
+		PDVF_HIDELABEL	= 0x200,
+		PDVF_HIDDEN	= 0x800,
+		PDVF_CANWRAP	= 0x1000,
+		PDVF_MASK_ALL	= 0x1bff
+  } PROPDESC_VIEW_FLAGSConstants;
+
+  typedef enum PROPERTYUI_FORMAT_FLAGS
+  {
+    PUIFFDF_DEFAULT = 0x00000000,
+    PUIFFDF_RIGHTTOLEFT = 0x00000001,
+    PUIFFDF_SHORTFORMAT = 0x00000002,
+    PUIFFDF_NOTIME = 0x00000004,
+    PUIFFDF_FRIENDLYDATE = 0x00000008
+  } PROPERTYUI_FORMAT_FLAGS;
+
+  typedef enum PROPERTYUI_NAME_FLAGS
+  {
+    PUIFNF_DEFAULT = 0x00000000,
+    PUIFNF_MNEMONIC = 0x00000001,
+  } PROPERTYUI_NAME_FLAGS;
+
+  typedef enum PROPERTYUI_FLAGS
+  {
+    PUIF_DEFAULT = 0x00000000,
+    PUIF_RIGHTALIGN = 0x00000001,
+    PUIF_NOLABELININFOTIP = 0x00000002,
+  } PROPERTYUI_FLAGS;
+
+  typedef enum PROPSETFLAGConstants
+  {
+    PROPSETFLAG_DEFAULT = 0,
+    PROPSETFLAG_NONSIMPLE = 1,
+    PROPSETFLAG_ANSI = 2,
+    PROPSETFLAG_UNBUFFERED = 4,
+    PROPSETFLAG_CASE_SENSITIVE = 8
+  } PROPSETFLAGConstants;
+
+  typedef enum PRSPECConstants
+  {
+    PRSPEC_INVALID = -1,
+    PRSPEC_LPWSTR = 0,
+    PRSPEC_PROPID = 1
+  } PRSPECConstants;
+
+  typedef enum PUAFConstants
+  {
+    PUAF_DEFAULT = 0,
+    PUAF_NOUI = 0x1,
+    PUAF_ISFILE = 0x2,
+    PUAF_WARN_IF_DENIED = 0x4,
+    PUAF_FORCEUI_FOREGROUND = 0x8,
+    PUAF_CHECK_TIFS = 0x10,
+    PUAF_DONTCHECKBOXINDIALOG = 0x20,
+    PUAF_TRUSTED = 0x40,
+    PUAF_ACCEPT_WILDCARD_SCHEME = 0x80,
+    PUAF_ENFORCERESTRICTED = 0x100,
+    PUAF_NOSAVEDFILECHECK = 0x200,
+    PUAF_REQUIRESAVEDFILECHECK = 0x400,
+    PUAF_DONT_USE_CACHE = 0x1000,
+    PUAF_RESERVED1 = 0x2000,
+    PUAF_RESERVED2 = 0x4000,
+    PUAF_LMZ_UNLOCKED = 0x10000,
+    PUAF_LMZ_LOCKED = 0x20000,
+    PUAF_DEFAULTZONEPOL = 0x40000,
+    PUAF_NPL_USE_LOCKED_IF_RESTRICTED = 0x80000,
+    PUAF_NOUIIFLOCKED = 0x100000,
+    PUAF_DRAGPROTOCOLCHECK = 0x200000
+  } PUAFConstants;
+
+  typedef enum QIFlags
+  {
+    QIF_CACHED = 0x00000001,
+    QIF_DONTEXPANDFOLDER = 0x00000002,
+  } QIFlags;
+
+  typedef enum QITipFlags
+  {
+    QITIPF_DEFAULT = 0x00000000,
+    QITIPF_USENAME = 0x00000001,
+    QITIPF_LINKNOTARGET = 0x00000002,
+    QITIPF_LINKUSETARGET = 0x00000004,
+    QITIPF_USESLOWTIP = 0x00000008,
+    QITIPF_SINGLELINE = 0x00000010
+  } QITipFlags;
+
+  typedef enum SFGAOConstants
+  {
+    SFGAO_CANCOPY = 0x00000001,
+    SFGAO_CANMOVE = 0x00000002,
+    SFGAO_CANLINK = 0x00000004,
+    SFGAO_STORAGE = 0x00000008,
+    SFGAO_CANRENAME = 0x00000010,
+    SFGAO_CANDELETE = 0x00000020,
+    SFGAO_HASPROPSHEET = 0x00000040,
+    SFGAO_DROPTARGET = 0x00000100,
+    SFGAO_CAPABILITYMASK = 0x00000177,
+    SFGAO_ENCRYPTED = 0x00002000,
+    SFGAO_ISSLOW = 0x00004000,
+    SFGAO_LINK = 0x00010000,
+    SFGAO_SHARE = 0x00020000,
+    SFGAO_READONLY = 0x00040000,
+    SFGAO_GHOSTED = 0x00080000,
+    SFGAO_HIDDEN = 0x00080000,
+    SFGAO_DISPLAYATTRMASK = 0x000FC000,
+    SFGAO_NONENUMERATED = 0x00100000,
+    SFGAO_NEWCONTENT = 0x00200000,
+    SFGAO_CANMONIKER = 0x00400000,
+    SFGAO_HASSTORAGE = 0x00400000,
+    SFGAO_STREAM = 0x00400000,
+    SFGAO_VALIDATE = 0x01000000,
+    SFGAO_REMOVABLE = 0x02000000,
+    SFGAO_COMPRESSED = 0x04000000,
+    SFGAO_BROWSABLE = 0x08000000,
+    SFGAO_FILESYSANCESTOR = 0x10000000,
+    SFGAO_STORAGEANCESTOR = 0x10000000,
+    SFGAO_FOLDER = 0x20000000,
+    SFGAO_FILESYSTEM = 0x40000000,
+    SFGAO_HASSUBFOLDER = 0x80000000,
+    SFGAO_CONTENTSMASK = 0x80000000,
+    SFGAO_STORAGECAPMASK = 0x70C50008,
+    SFGAO_PKEYSFGAOMASK = 0x81044010
+  } SFGAOConstants;
+
+  typedef enum SIATTRIBFLAGSConstants
+  {
+    SIATTRIBFLAGS_AND = 0x1,
+    SIATTRIBFLAGS_OR = 0x2,
+    SIATTRIBFLAGS_APPCOMPAT = 0x3,
+    SIATTRIBFLAGS_MASK = 0x3
+  } SIATTRIBFLAGSConstants;
+
+  typedef enum SVGIOConstants
+  {
+    SVGIO_BACKGROUND = 0x00000000,
+    SVGIO_SELECTION = 0x00000001,
+    SVGIO_ALLVIEW = 0x00000002,
+    SVGIO_CHECKED = 0x00000003,
+    SVGIO_TYPE_MASK = 0x0000000F,
+    SVGIO_FLAG_VIEWORDER = 0x80000000
+  } SVGIOConstants;
+
+  typedef enum SHCIDSConstants
+  {
+    SHCIDS_ALLFIELDS = 0x80000000,
+    SHCIDS_CANONICALONLY = 0x10000000,
+    SHCIDS_BITMASK = 0xFFFF0000,
+    SHCIDS_COLUMNMASK = 0x0000FFFF,
+  } SHCIDSConstants;
+
+  typedef enum SHCOLSTATEConstants
+  {
+    SHCOLSTATE_DEFAULT = 0x0,
+    SHCOLSTATE_TYPE_STR = 0x1,
+    SHCOLSTATE_TYPE_INT = 0x2,
+    SHCOLSTATE_TYPE_DATE = 0x3,
+    SHCOLSTATE_TYPEMASK = 0xf,
+    SHCOLSTATE_ONBYDEFAULT = 0x10,
+    SHCOLSTATE_SLOW = 0x20,
+    SHCOLSTATE_EXTENDED = 0x40,
+    SHCOLSTATE_SECONDARYUI = 0x80,
+    SHCOLSTATE_HIDDEN = 0x100,
+    SHCOLSTATE_PREFER_VARCMP = 0x200,
+    SHCOLSTATE_PREFER_FMTCMP = 0x400,
+    SHCOLSTATE_NOSORTBYFOLDERNESS = 0x800,
+    SHCOLSTATE_VIEWONLY = 0x10000,
+    SHCOLSTATE_BATCHREAD = 0x20000,
+    SHCOLSTATE_NO_GROUPBY = 0x40000,
+    SHCOLSTATE_FIXED_WIDTH = 0x1000,
+    SHCOLSTATE_NODPISCALE = 0x2000,
+    SHCOLSTATE_FIXED_RATIO = 0x4000,
+    SHCOLSTATE_DISPLAYMASK = 0xf000
+  } SHCOLSTATEConstants;
+
+  typedef enum SHCONTFConstants
+  {
+    SHCONTF_DRIVES = 0x0010,
+    SHCONTF_FOLDERS = 0x0020,
+    SHCONTF_NONFOLDERS = 0x0040,
+    SHCONTF_INCLUDEHIDDEN = 0x0080,
+    SHCONTF_INIT_ON_FIRST_NEXT = 0x0100,
+    SHCONTF_NETPRINTERSRCH = 0x0200,
+    SHCONTF_SHAREABLE = 0x0400,
+    SHCONTF_STORAGE = 0x0800,
+    SHCONTF_FASTITEMS = 0x2000,
+    SHCONTF_FLATLIST = 0x4000,
+    SHCONTF_ENABLE_ASYNC = 0x8000
+  } SHCONTFConstants;
+
+  typedef enum SHGDNConstants
+  {
+    SHGDN_NORMAL = 0x0000,
+    SHGDN_INFOLDER = 0x0001,
+    SHGDN_FOREDITING = 0x1000,
+    SHGDN_INCLUDE_NONFILESYS = 0x2000,
+    SHGDN_FORADDRESSBAR = 0x4000,
+    SHGDN_FORPARSING = 0x8000,
+  } SHGDNConstants;
+
+  typedef enum SHIMSTCAPFLAGConstants
+  {
+    SHIMSTCAPFLAG_LOCKABLE = 0x0001,
+    SHIMSTCAPFLAG_PURGEABLE = 0x0002
+  } SHIMSTCAPFLAGConstants;
+
+  typedef enum SICHINTConstants
+  {
+    SICHINT_DISPLAY = 0x00000000,
+    SICHINT_ALLFIELDS = 0x80000000,
+    SICHINT_CANONICAL = 0x10000000,
+  } SICHINTConstants;
+
+  typedef enum SIGDNConstants
+  {
+    SIGDN_NORMALDISPLAY = 0x00000000,
+    SIGDN_PARENTRELATIVEPARSING = 0x80018001,
+    SIGDN_PARENTRELATIVEFORADDRESSBAR = 0x8001c001,
+    SIGDN_DESKTOPABSOLUTEPARSING = 0x80028000,
+    SIGDN_PARENTRELATIVEEDITING = 0x80031001,
+    SIGDN_DESKTOPABSOLUTEEDITING = 0x8004c000,
+    SIGDN_FILESYSPATH = 0x80058000,
+    SIGDN_URL = 0x80068000,
+    SIGDN_PARENTRELATIVE = 0x80080001
+  } SIGDNConstants;
+
+  typedef enum SLGPConstants
+  {
+    SLGP_SHORTPATH = 0x1,
+    SLGP_UNCPRIORITY = 0x2,
+    SLGP_RAWPATH = 0x4,
+    SLGP_RELATIVEPRIORITY = 0x8
+  } SLGPConstants;
+
+  typedef enum SLRConstants
+  {
+    SLR_NO_UI = 0x0001,
+    SLR_UPDATE = 0x0004,
+    SLR_NOUPDATE = 0x0008,
+    SLR_NOSEARCH = 0x0010,
+    SLR_NOTRACK = 0x0020,
+    SLR_NOLINKINFO = 0x0040,
+    SLR_INVOKE_MSI = 0x0080,
+    SLR_NO_UI_WITH_MSG_PUMP = 0x0101,
+  } SLRConstants;
+
+  typedef enum SPACTIONConstants
+  {
+    SPACTION_NONE = 0,
+    SPACTION_MOVING,
+    SPACTION_COPYING,
+    SPACTION_RECYCLING,
+    SPACTION_APPLYINGATTRIBS,
+    SPACTION_DOWNLOADING,
+    SPACTION_SEARCHING_INTERNET,
+    SPACTION_CALCULATING,
+    SPACTION_UPLOADING,
+    SPACTION_SEARCHING_FILES,
+    SPACTION_DELETING,
+    SPACTION_RENAMING,
+    SPACTION_FORMATTING
+  } SPACTIONConstants;
+
+  #ifdef ShellMenus
+    typedef enum SMINITConstants
+    {
+      SMINIT_DEFAULT = 0x00000000,
+      SMINIT_RESTRICT_DRAGDROP = 0x00000002,
+      SMINIT_TOPLEVEL = 0x00000004,
+      SMINIT_CACHED = 0x00000010,
+      SMINIT_AUTOEXPAND = 0x00000100,
+      SMINIT_AUTOTOOLTIP = 0x00000200,
+      SMINIT_DROPONCONTAINER = 0x00000400,
+      SMINIT_VERTICAL = 0x10000000,
+      SMINIT_HORIZONTAL = 0x20000000
+    } SMINITConstants;
+
+    typedef enum SMINVConstants
+    {
+      SMINV_REFRESH = 0x00000001,
+      SMINV_ID = 0x00000008
+    } SMINVConstants;
+
+    typedef enum SMSETConstants
+    {
+      SMSET_TOP = 0x10000000,
+      SMSET_BOTTOM = 0x20000000,
+      SMSET_DONTOWN = 0x00000001
+    } SMSETConstants;
+  #endif
+
+  typedef enum STATFLAGConstants
+  {
+    STATFLAG_DEFAULT = 0,
+    STATFLAG_NONAME = 1,
+    STATFLAG_NOOPEN = 2
+  } STATFLAGConstants;
+
+  typedef enum STGCConstants
+  {
+    STGC_DEFAULT = 0,
+    STGC_OVERWRITE = 1,
+    STGC_ONLYIFCURRENT = 2,
+    STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE = 4,
+    STGC_CONSOLIDATE = 8
+  } STGCConstants;
+
+  typedef enum STGMConstants
+  {
+    STGM_READ = 0x00000000,
+    STGM_WRITE = 0x00000001,
+    STGM_READWRITE = 0x00000002,
+    STGM_SHARE_DENY_NONE = 0x00000040,
+    STGM_SHARE_DENY_READ = 0x00000030,
+    STGM_SHARE_DENY_WRITE = 0x00000020,
+    STGM_SHARE_EXCLUSIVE = 0x00000010,
+    STGM_PRIORITY = 0x00040000,
+    STGM_CREATE = 0x00001000,
+    STGM_CONVERT = 0x00020000,
+    STGM_FAILIFTHERE = 0x00000000,
+    STGM_DIRECT = 0x00000000,
+    STGM_TRANSACTED = 0x00010000,
+    STGM_NOSCRATCH = 0x00100000,
+    STGM_NOSNAPSHOT = 0x00200000,
+    STGM_SIMPLE = 0x08000000,
+    STGM_DIRECT_SWMR = 0x00400000,
+    STGM_DELETEONRELEASE = 0x04000000
+  } STGMConstants;
+
+  typedef enum STREAM_SEEKConstants
+  {
+    STREAM_SEEK_SET = 0,
+    STREAM_SEEK_CUR = 1,
+    STREAM_SEEK_END = 2
+  } STREAM_SEEKConstants;
+
+  typedef enum STRRETConstants
+  {
+    STRRET_WSTR = 0x0000,
+    STRRET_OFFSET = 0x0001,
+    STRRET_CSTR = 0x0002
+  } STRRETConstants;
+
+  typedef enum SV2GVConstants
+  {
+    SV2GV_CURRENTVIEW = -1,
+    SV2GV_DEFAULTVIEW = -2
+  } SV2GVConstants;
+
+  typedef enum SV3CVW3Constants
+  {
+    SV3CVW3_DEFAULT = 0,
+    SV3CVW3_NONINTERACTIVE = 0x1,
+    SV3CVW3_FORCEVIEWMODE = 0x2,
+    SV3CVW3_FORCEFOLDERFLAGS = 0x4
+  } SV3CVW3Constants;
+
+  typedef enum SVUIAConstants
+  {
+    SVUIA_DEACTIVATE = 0,
+    SVUIA_ACTIVATE_NOFOCUS = 1,
+    SVUIA_ACTIVATE_FOCUS = 2,
+    SVUIA_INPLACEACTIVATE = 3
+  } SVUIAConstants;
+
+  typedef enum SZM_FLAGSConstants
+  {
+    SZM_CREATE = 0,
+    SZM_DELETE = 1
+  } SZM_FLAGSConstants;
+
+  typedef enum TYMEDConstants
+  {
+    TYMED_HGLOBAL = 1,
+    TYMED_FILE = 2,
+    TYMED_ISTREAM = 4,
+    TYMED_ISTORAGE = 8,
+    TYMED_GDI = 16,
+    TYMED_MFPICT = 32,
+    TYMED_ENHMF = 64,
+    TYMED_NULL = 0
+  } TYMEDConstants;
+
+  #ifdef FolderTasks
+    typedef enum UISTATEConstants
+    {
+      UISTATE_SHOWN = 0,
+      UISTATE_HIDDEN = 1,
+    } UISTATEConstants;
+  #endif
+
+  typedef enum URLTEMPLATEConstants
+  {
+    URLTEMPLATE_CUSTOM = 0,
+    URLTEMPLATE_PREDEFINED_MIN = 0x10000,
+    URLTEMPLATE_LOW = 0x10000,
+    URLTEMPLATE_MEDLOW = 0x10500,
+    URLTEMPLATE_MEDIUM = 0x11000,
+    URLTEMPLATE_MEDHIGH = 0x11500,
+    URLTEMPLATE_HIGH = 0x12000,
+    URLTEMPLATE_PREDEFINED_MAX = 0x20000
+  } URLTEMPLATEConstants;
+
+  typedef enum URLZONEConstants
+  {
+    URLZONE_INVALID = -1,
+    URLZONE_PREDEFINED_MIN = 0,
+    URLZONE_LOCAL_MACHINE = 0,
+    URLZONE_INTRANET = 1,
+    URLZONE_TRUSTED = 2,
+    URLZONE_INTERNET = 3,
+    URLZONE_UNTRUSTED = 4,
+    URLZONE_PREDEFINED_MAX = 999,
+    URLZONE_USER_MIN = 1000,
+    URLZONE_USER_MAX = 10000
+  } URLZONEConstants;
+
+  typedef enum URLZONEREGConstants
+  {
+    URLZONEREG_DEFAULT = 0,
+    URLZONEREG_HKLM = 1,
+    URLZONEREG_HKCU = 2
+  } URLZONEREGConstants;
+
+  typedef enum WTS_ALPHATYPEConstants
+  {
+    WTSAT_UNKNOWN = 0x00,
+    WTSAT_RGB = 0x01,
+    WTSAT_ARGB = 0x02
+  } WTS_ALPHATYPEConstants;
+
+  typedef enum ZAFLAGSConstants
+  {
+    ZAFLAGS_CUSTOM_EDIT = 0x1,
+    ZAFLAGS_ADD_SITES = 0x2,
+    ZAFLAGS_REQUIRE_VERIFICATION = 0x4,
+    ZAFLAGS_INCLUDE_PROXY_OVERRIDE = 0x8,
+    ZAFLAGS_INCLUDE_INTRANET_SITES = 0x10,
+    ZAFLAGS_NO_UI = 0x20,
+    ZAFLAGS_SUPPORTS_VERIFICATION = 0x40,
+    ZAFLAGS_UNC_AS_INTRANET = 0x80,
+    ZAFLAGS_DETECT_INTRANET = 0x100,
+    ZAFLAGS_USE_LOCKED_ZONES = 0x10000,
+    ZAFLAGS_VERIFY_TEMPLATE_SETTINGS = 0x20000,
+    ZAFLAGS_NO_CACHE = 0x40000
+  } ZAFLAGSConstants;
+
+
+  // structs
+
+  typedef struct UUID
+  {
+    long Data1;
+    short Data2;
+    short Data3;
+    unsigned char Data4[8];
+  } UUID;
+  typedef UUID *REFGUID;
+  typedef [public] UUID IID;
+  typedef UUID *REFIID;
+  typedef [public] UUID CLSID;
+  typedef UUID *REFCLSID;
+  typedef [public] UUID GUID;
+  typedef [public] GUID KNOWNFOLDERID;
+  typedef [public] GUID FOLDERTYPEID;
+
+  typedef struct POINT
+  {
+    long x;
+    long y;
+  } POINT;
+
+  typedef struct PROPERTYKEY
+  {
+    UUID fmtid;
+    long pid;
+  } PROPERTYKEY;
+
+  typedef struct STRRET
+  {
+    STRRETConstants uType;
+    unsigned char Data[520];
+  } STRRET;
+
+  typedef struct CATEGORY_INFO
+  {
+    CATEGORYINFO_FLAGSConstants cif;
+    unsigned char wszName[520];
+  } CATEGORY_INFO;
+
+  typedef struct CMINVOKECOMMANDINFOEX
+  {
+    long StructSize;
+    CMIC_MASKConstants Mask;
+    long hWnd;
+    long Verb;
+    long Parameters;
+    long Directory;
+    int Showflags;
+    long HotKey;
+    long hIcon;
+    long Title;
+    long VerbW;
+    long ParametersW;
+    long DirectoryW;
+    long TitleW;
+    POINT ptInvoke;
+  } CMINVOKECOMMANDINFOEX;
+
+  #ifdef FolderTasks
+    typedef struct CSFV
+    {
+      long cbSize;
+      IVBShellFolder* pshf;
+      IVBShellView* psvOuter;
+      long pidl;
+      long iEvents;
+      long pfnCallback;
+      FOLDERVIEWMODEConstants fvm;
+    } CSFV;
+
+    typedef struct CSFVLong
+    {
+      long cbSize;
+      long pshf;
+      long psvOuter;
+      long pidl;
+      long iEvents;
+      long pfnCallback;
+      FOLDERVIEWMODEConstants fvm;
+    } CSFVLong;
+  #endif
+
+  typedef struct EXTRASEARCH
+  {
+    UUID guidSearch;
+    unsigned char wszFriendlyName[160];
+    unsigned char wszUrl[4096];
+  } EXTRASEARCH;
+
+  typedef struct FILETIME
+  {
+    long LowDateTime;
+    long HighDateTime;
+  } FILETIME;
+
+  typedef struct ENUMSHELLIMAGESTOREDATA
+  {
+    unsigned char szPath[520];
+    FILETIME ftTimeStamp;
+  } ENUMSHELLIMAGESTOREDATA;
+
+  typedef struct FOLDERSETTINGS
+  {
+    FOLDERVIEWMODEConstants ViewMode;
+    FOLDERFLAGSConstants fFlags;
+  } FOLDERSETTINGS;
+
+  typedef struct FORMATETC
+  {
+    short cfFormat;
+    long pDVTARGETDEVICE;
+    DVASPECTConstants dwAspect;
+    long lindex;
+    TYMEDConstants TYMED;
+  } FORMATETC;
+
+  typedef struct LARGE_INTEGER
+  {
+    long LowPart;
+    long HighPart;
+  } LARGE_INTEGER;
+
+  typedef struct MSG
+  {
+    long hWnd;
+    long Message;
+    long wParam;
+    long lParam;
+    long time;
+    POINT pt;
+  } MSG;
+
+  typedef struct OLECMD
+  {
+    OLECMDIDConstants cmdID;
+    OLECMDFConstants cmdf;
+  } OLECMD;
+
+  typedef struct OLECMDTEXT
+  {
+    OLECMDTEXTFConstants cmdtextf;
+    long cwActual;
+    long cwBuf;
+    unsigned char Data[512];    
+  } OLECMDTEXT;
+
+  typedef struct OLEINPLACEFRAMEINFO
+  {
+    long Structsize;
+    long fMDIApp;
+    OLE_HANDLE hWndFrame;
+    OLE_HANDLE hAccel;
+    long cAccelEntries;
+  } OLEINPLACEFRAMEINFO;
+
+  typedef struct OLEMENUGROUPWIDTHS
+  {
+    long Width[6];
+  } OLEMENUGROUPWIDTHS;
+
+  typedef struct PROPBAG2
+  {
+    PROPBAG2_TYPEConstants dwType;
+    short vt;
+    short cfType;
+    long dwHint;
+    long pstrName;
+    UUID clsid;
+  } PROPBAG2;
+
+  typedef struct PERSIST_FOLDER_TARGET_INFO
+  {
+    long pidlTargetFolder;
+    unsigned char szTargetParsingName[520];
+    unsigned char szNetworkProvider[520];
+    long dwAttributes;
+    long csidl;
+  } PERSIST_FOLDER_TARGET_INFO;
+
+  typedef struct PROPSPEC
+  {
+    PRSPECConstants ulKind;
+    long propidOrLpwstr;
+  } PROPSPEC;
+
+	typedef struct PROPVARIANT
+	{
+		short vt;
+		short wReserved1;
+		short wReserved2;
+		short wReserved3;
+		long Data1;
+		long Data2;
+	} PROPVARIANT;
+
+  typedef struct RECT
+  {
+    long Left;
+    long Top;
+    long Right;
+    long Bottom;
+  } RECT;
+  typedef [public] RECT BORDERWIDTHS;
+
+  #ifdef FolderTasks
+    typedef struct SFV_CREATE
+    {
+      long cbSize;
+      IVBShellFolder* pshf;
+      IVBShellView* psvOuter;
+      long psfvcb;
+    } SFV_CREATE;
+  #endif
+
+  typedef struct SHCOLUMNID
+  {
+    UUID fmtid;
+    long pid;
+  } SHCOLUMNID;
+
+  typedef struct SHELLDETAILS
+  {
+    LVCFMTConstants fmt;
+    int cxChar;
+    STRRET str;
+  } SHELLDETAILS;
+
+  typedef struct SIZE
+  {
+    long cx;
+    long cy;
+  } SIZE;
+
+  typedef struct SHDRAGIMAGE
+  {
+    SIZE DragImageSize;
+    POINT ptCursorOffset;
+    long hBMPDragImage;
+    long BackClr;
+  } SHDRAGIMAGE;
+
+  #ifdef ShellMenus
+    typedef struct SMDATA
+    {
+      long dwMask;
+      long dwFlags;
+      long hmenu;
+      long hwnd;
+      long uId;
+      long uIdParent;
+      long uIdAncestor;
+      IVBUnknown* punk;
+      long pidlFolder;
+      long pidlItem;
+      IVBShellFolder* psf;
+      long pvUserData;
+    } SMDATA;
+  #endif
+
+  typedef struct STATPROPSETSTG
+  {
+    CLSID fmtid;
+    CLSID clsid;
+    PROPSETFLAGConstants grfFlags;
+    FILETIME mtime;
+    FILETIME ctime;
+    FILETIME atime;
+    long dwOSVersion;
+  } STATPROPSETSTG;
+
+  typedef struct STATPROPSTG
+  {
+    long lpwstrName;
+    long propid;
+    short vt;
+  } STATPROPSTG;
+
+  typedef struct STATSTG
+  {
+    long pwcsName;
+    long type;
+    LARGE_INTEGER cbSize;
+    FILETIME mtime;
+    FILETIME ctime;
+    FILETIME atime;
+    long grfMode;
+    long grfLocksSupported;
+    UUID clsid;
+    long grfStateBits;
+    long reserved;
+  } STATSTG;
+
+  typedef struct STGMEDIUM
+  {
+    TYMEDConstants TYMED;
+    long data;
+    long pUnkForRelease;
+  } STGMEDIUM;
+
+  typedef struct SV2CVW2_PARAMS
+  {
+    long cbSize;
+    IVBShellView* psvPrev;
+    long pfs;
+    long psbOwner;
+    long prcView;
+    long pvid;
+    long hwndView;
+  } SV2CVW2_PARAMS;
+
+  typedef struct WIN32_FIND_DATAA
+  {
+    long FileAttributes;
+    FILETIME CreationTime;
+    FILETIME LastAccessTime;
+    FILETIME LastWriteTime;
+    long FileSizeHigh;
+    long FileSizeLow;
+    long Reserved0;
+    long Reserved1;
+    unsigned char FileName[260];
+    unsigned char AlternateFileName[14];
+  } WIN32_FIND_DATAA;
+
+  typedef struct WIN32_FIND_DATAW
+  {
+    long FileAttributes;
+    FILETIME CreationTime;
+    FILETIME LastAccessTime;
+    FILETIME LastWriteTime;
+    long FileSizeHigh;
+    long FileSizeLow;
+    long Reserved0;
+    long Reserved1;
+    unsigned char FileName[520];
+    unsigned char AlternateFileName[28];
+  } WIN32_FIND_DATAW;
+
+  typedef struct ZONEATTRIBUTES
+  {
+    long cbSize;
+    unsigned char szDisplayName[520];
+    unsigned char szDescription[400];
+    unsigned char szIconPath[520];
+    long dwTemplateMinLevel;
+    long dwTemplateRecommended;
+    long dwTemplateCurrentLevel;
+    ZAFLAGSConstants dwFlags;
+  } ZONEATTRIBUTES;
+
+
+  // interfaces
+
+  [
+    uuid(00000000-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IUnknown-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBUnknown
+  {
+    long __stdcall QueryInterface([in] UUID* IID, [in,out] void* pObject);
+    long __stdcall AddRef();
+    long __stdcall Release();
+  };
+
+  [
+    uuid(0002E000-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IEnumGUID-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBEnumGUID : IVBUnknown
+  {
+    long __stdcall Next([in] long Count, [in,out] UUID *pData, [in,out] long *Copied);
+    long __stdcall Skip([in] long Count);
+    long __stdcall Reset();
+    long __stdcall Clone([out] IVBEnumGUID **pReturn);
+  };
+
+  [
+    uuid(0000000d-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IEnumSTATSTG-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBEnumSTATSTG : IVBUnknown
+  {
+    long __stdcall Next([in] long celt, [in,out] STATSTG* rgelt, [in,out] long* pceltFetched);
+    long __stdcall Skip([in] long celt);
+    long __stdcall Reset(void);
+    long __stdcall Clone([out] IVBEnumSTATSTG** ppenum);
+  };
+
+  [
+    uuid(A3B14589-9174-49A8-89A3-06A1AE2B9BA7),
+    version(1.0),
+    helpstring("ICategorizer-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBCategorizer : IVBUnknown
+  {
+    long __stdcall GetDescription([in,out] LPWSTR Buffer, [in] long Buffersize);
+    long __stdcall GetCategory([in] long Count, [in] long pIDLs, [in,out] long *CategoryIDs);
+    long __stdcall GetCategoryInfo([in] long CategoryID, [in,out] CATEGORY_INFO *CategoryInfo);
+    long __stdcall CompareCategory([in] CATSORT_FLAGSConstants Flags, [in] long CategoryID1, [in] long CategoryID2);
+  };
+
+  [
+    uuid(9AF64809-5864-4C26-A720-C1F78C086EE3),
+    version(1.0),
+    helpstring("ICategoryProvider-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBCategoryProvider : IVBUnknown
+  {
+    long __stdcall CanCategorizeOnSCID([in] SHCOLUMNID *SHColID);
+    long __stdcall GetDefaultCategory([in,out] UUID *CategoryGUID, [in,out] SHCOLUMNID *SHColID);
+    long __stdcall GetCategoryForSCID([in] SHCOLUMNID *SHColID, [in,out] UUID *CategoryGUID);
+    long __stdcall EnumCategories([in,out] IVBEnumGUID **EnumGUID);
+    long __stdcall GetCategoryName([in] UUID *CategoryGUID, [in,out] LPWSTR Buffer, [in] long Buffersize);
+    long __stdcall CreateCategory([in] UUID *CategoryGUID, [in] UUID *IID, [in,out] void *pReturn);
+  };
+
+  [
+    uuid(0c733a30-2a1c-11ce-ade5-00aa0044773d),
+    version(1.0),
+    helpstring("ISequentialStream-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBSequentialStream : IVBUnknown
+  {
+    long __stdcall Read([in,out] void *pv, [in] long cb, [in,out] long *pcbRead);
+    long __stdcall Write([in] void *pv, [in] long cb, [in,out] long *pcbWritten);
+  };
+
+  [
+    uuid(0000000c-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IStream-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBStream : IVBSequentialStream
+  {
+    long __stdcall Seek([in] LARGE_INTEGER *dlibMove, [in] STREAM_SEEKConstants dwOrigin, [in,out] long *plibNewPosition);
+    long __stdcall SetSize([in] LARGE_INTEGER *libNewSize);
+    long __stdcall CopyTo([in] IVBStream *pstm, [in] LARGE_INTEGER *cb, [in,out] LARGE_INTEGER *pcbRead, [in,out] LARGE_INTEGER *pcbWritten);
+    long __stdcall Commit([in] STGCConstants grfCommitFlags);
+    long __stdcall Revert();
+    long __stdcall LockRegion([in] LARGE_INTEGER *libOffset, [in] LARGE_INTEGER *cb, [in] long dwLockType);
+    long __stdcall UnlockRegion([in] LARGE_INTEGER *libOffset, [in] LARGE_INTEGER *cb, [in] long dwLockType);
+    long __stdcall Stat([in] STATSTG *pstatstg, [in] STATFLAGConstants grfStatFlag);
+    long __stdcall Clone([in,out] IVBStream** ppstm);
+  };
+
+  [
+    uuid(0000000b-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IStorage-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBStorage : IVBUnknown
+  {
+    long __stdcall CreateStream([in] BSTR pwcsName, [in] long grfMode, [in] long reserved1, [in] long reserved2, [in,out] IVBStream** ppstm);
+    long __stdcall OpenStream([in] BSTR pwcsName, [in] long reserved1, [in] long grfMode, [in] long reserved2, [in,out] IVBStream** ppstm);
+    long __stdcall CreateStorage([in] BSTR pwcsName, [in] long grfMode, [in] long reserved1, [in] long reserved2, [in,out] IVBStorage** ppstg);
+    long __stdcall OpenStorage([in] BSTR pwcsName, [in] IVBStorage* pstgPriority, [in] long snbExclude, [in] long reserved, [in,out] IVBStorage** ppstg);
+    long __stdcall CopyTo([in] long ciidExclude, [in] UUID* rgiidExclude, [in] long snbExclude, [in] IVBStorage* pstgDest);
+    long __stdcall MoveElementTo([in] BSTR pwcsName, [in] IVBStorage* pstgDest, [in] BSTR pwcsNewName, [in] long grfFlags);
+    long __stdcall Commit([in] STGCConstants grfCommitFlags);
+    long __stdcall Revert(void);
+    long __stdcall EnumElements([in] long reserved1, [in] long reserved2, [in] long reserved3, [in,out] IVBEnumSTATSTG** ppenum);
+    long __stdcall DestroyElement([in] BSTR pwcsName);
+    long __stdcall RenameElement([in] BSTR pwcsOldName, [in] BSTR pwcsNewName);
+    long __stdcall SetElementTimes([in] BSTR pwcsName, [in] FILETIME* pctime, [in] FILETIME* patime, [in] FILETIME* pmtime);
+    long __stdcall SetClass([in] CLSID* clsid);
+    long __stdcall SetStateBits([in] long grfStateBits, [in] long grfMask);
+    long __stdcall Stat([out] STATSTG* pstatstg, [in] long grfStatFlag);
+  };
+
+  [
+    uuid(3127CA40-446E-11CE-8135-00AA004BB851),
+    version(1.0),
+    helpstring("IErrorLog-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBErrorLog : IVBUnknown
+  {
+    long __stdcall AddError([in] LPWSTR pszPropName, [in] EXCEPINFO *pExcepInfo);
+  }
+
+  [
+    uuid(55272A00-42CB-11CE-8135-00AA004BB851),
+    version(1.0),
+    helpstring("IPropertyBag-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBPropertyBag : IVBUnknown
+  {
+    long __stdcall Read([in] long pszPropName, [in] long pVar, [in] IVBErrorLog* pErrorLog);
+    long __stdcall Write([in] long pszPropName, [in] long pVar);
+  };
+
+  [
+    uuid(22F55882-280B-11d0-A8A9-00A0C90C2004),
+    version(1.0),
+    helpstring("IPropertyBag2-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBPropertyBag2 : IVBUnknown
+  {
+    long __stdcall Read([in] long cProperties, [in] long pPropBag, [in] IVBErrorLog *pErrLog, [in] long pvarValue, [in] long phrError);
+    long __stdcall Write([in] long cProperties, [in] long pPropBag, [in] long pvarValue);
+    long __stdcall CountProperties([in,out] long *pcProperties);
+    long __stdcall GetPropertyInfo([in] long iProperty, [in] long cProperties, [in] long pPropBag, [in,out] long *pcProperties);
+    long __stdcall LoadObject([in] long pstrName, [in] long dwHint, [in] IVBUnknown *pUnkObject, [in] IVBErrorLog *pErrLog);
+  };
+
+  [
+    uuid(0000013B-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IEnumSTATPROPSETSTG-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBEnumSTATPROPSETSTG : IVBUnknown
+  {
+    long __stdcall Next([in] long celt, [in,out] STATPROPSETSTG* rgelt, [in,out] long* pceltFetched);
+    long __stdcall Skip([in] long celt);
+    long __stdcall Reset();
+    long __stdcall Clone([in,out] IVBEnumSTATPROPSETSTG** ppenum);
+  };
+
+  [
+    uuid(00000139-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IEnumSTATPROPSTG-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBEnumSTATPROPSTG : IVBUnknown
+  {
+    long __stdcall Next([in] long celt, [in,out] STATPROPSTG* rgelt, [in,out] long* pceltFetched);
+    long __stdcall Skip([in] long celt);
+    long __stdcall Reset();
+    long __stdcall Clone([in,out] IVBEnumSTATPROPSTG** ppenum);
+  };
+
+  [
+    uuid(00000138-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IPropertyStorage-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBPropertyStorage : IVBUnknown
+  {
+    long __stdcall ReadMultiple([in] long cpspec, [in] long rgpspec, [in] long rgpropvar);
+    long __stdcall WriteMultiple([in] long cpspec, [in] long rgpspec, [in] long rgpropvar, [in] long propidNameFirst);
+    long __stdcall DeleteMultiple([in] long cpspec, [in] long rgpspec);
+    long __stdcall ReadPropertyNames([in] long cpropid, [in] long rgpropid, [in] long rglpwstrName);
+    long __stdcall WritePropertyNames([in] long cpropid, [in] long rgpropid, [in] long rglpwstrName);
+    long __stdcall DeletePropertyNames([in] long cpropid, [in] long rgpropid);
+    long __stdcall Commit([in] long grfCommitFlags);
+    long __stdcall Revert();
+    long __stdcall Enum([in,out] IVBEnumSTATPROPSTG** ppenum);
+    long __stdcall SetTimes([in] FILETIME* pctime, [in] FILETIME* patime, [in] FILETIME* pmtime);
+    long __stdcall SetClass([in] CLSID* clsid);
+    long __stdcall Stat([out] STATPROPSETSTG* pstatpsstg);
+  };
+
+  [
+    uuid(0000013A-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IPropertySetStorage-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBPropertySetStorage : IVBUnknown
+  {
+    long __stdcall Create([in] UUID* rfmtid, [in] CLSID* pclsid, [in] PROPSETFLAGConstants grfFlags, [in] STGMConstants grfMode, [in,out] IVBPropertyStorage** ppPropStg);
+    long __stdcall Open([in] UUID* rfmtid, [in] STGMConstants grfMode, [in,out] IVBPropertyStorage** ppPropStg);
+    long __stdcall Delete([in] UUID* rfmtid);
+    long __stdcall Enum([in,out] IVBEnumSTATPROPSETSTG** ppenum);
+  };
+
+  [
+    uuid(757A7D9F-919A-4118-99D7-DBB208C8CC66),
+    version(1.0),
+    helpstring("IPropertyUI-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBPropertyUI : IVBUnknown
+  {
+    long __stdcall ParsePropertyName([in] LPWSTR pszName, [out] UUID *pfmtid, [in,out] long *ppid, [in,out] long *pchEaten);
+    long __stdcall GetCannonicalName([in] UUID *fmtid, [in] long pid, [out] LPWSTR pwszText, [in] long cchText);
+    long __stdcall GetDisplayName([in] UUID* fmtid, [in] long pid, [in] PROPERTYUI_NAME_FLAGS flags, [out] LPWSTR pwszText, [in] long cchText);
+    long __stdcall GetPropertyDescription([in] UUID *fmtid, [in] long pid, [out] LPWSTR pwszText, [in] long cchText);
+    long __stdcall GetDefaultWidth([in] UUID *fmtid, [in] long pid, [out] long *pcxChars);
+    long __stdcall GetFlags([in] UUID *fmtid, [in] long pid, [out] PROPERTYUI_FLAGS *pFlags);
+    long __stdcall FormatForDisplay([in] UUID *fmtid, [in] long pid, [in] VARIANT *pvar, [in] PROPERTYUI_FORMAT_FLAGS flags, [out] LPWSTR pwszText, [in] long cchText);
+    long __stdcall GetHelpInfo([in] UUID *fmtid, [in] long pid, [out] LPWSTR pwszHelpFile, [in] long cch, [out] long *puHelpID);
+  };
+
+  [
+    uuid(000214E4-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IContextMenu-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBContextMenu : IVBUnknown
+  {
+    long __stdcall QueryContextMenu([in] long hMenu, [in] long Position, [in] long IDCmdFirst, [in] long IDCmdLast, [in] CMFConstants Flags);
+    long __stdcall InvokeCommand([in] CMINVOKECOMMANDINFOEX* Data);
+    long __stdcall GetCommandString([in] long MenuID, [in] GCSConstants Flags, [in] int* reserviert, [in] long Buffer, [in] int Buffersize);
+  };
+
+  [
+    uuid(000214F4-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IContextMenu2-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBContextMenu2 : IVBContextMenu
+  {
+    long __stdcall HandleMenuMsg([in] long Msg, [in] long wParam, [in] long lParam);
+  };
+
+  [
+    uuid(BCFCE0A0-EC17-11D0-8D10-00A0C90F2719),
+    version(1.0),
+    helpstring("IContextMenu3-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBContextMenu3 : IVBContextMenu2
+  {
+    long __stdcall HandleMenuMsg2([in] long Msg, [in] long wParam, [in] long lParam, [in,out] long* pReturn);
+  };
+
+  [
+    uuid(00000103-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IEnumFORMATETC-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBEnumFORMATETC : IVBUnknown
+  {
+    long __stdcall Next([in] long Count, [in,out] FORMATETC* Return, [in,out] long* Copied);
+    long __stdcall Skip([in] long Count);
+    long __stdcall Reset();
+    long __stdcall Clone([in,out] IVBEnumFORMATETC** pReturn);
+  };
+
+  [
+    uuid(0000010E-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IDataObject-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBDataObject : IVBUnknown
+  {
+    long __stdcall GetData([in,out] FORMATETC* DataFormat, [in,out] STGMEDIUM* Data);
+    long __stdcall GetDataHere([in,out] FORMATETC* DataFormat, [in,out] STGMEDIUM* Data);
+    long __stdcall QueryGetData([in,out] FORMATETC* DataFormat);
+    long __stdcall GetCanonicalFormatEtc([in,out] FORMATETC* DataFormatIn, [in,out] FORMATETC* DataFormatOut);
+    long __stdcall SetData([in,out] FORMATETC* DataFormat, [in,out] STGMEDIUM* Data, [in] long ReleaseData);
+    long __stdcall EnumFormatEtc([in] DATADIRConstants Direction, [out] IVBEnumFORMATETC** EnumFORMATETC);
+    long __stdcall DAdvise([in,out] FORMATETC* DataFormat, [in] long Flags, [in] long pIAdviseSink, [in,out] long* pToken);
+    long __stdcall DUnadvise([in] long pToken);
+    long __stdcall EnumDAdvise([in,out] long* pIEnumAdvise);
+  };
+
+  [
+    uuid(00000002-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IMalloc-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBMalloc : IVBUnknown
+  {
+    long __stdcall Alloc([in] long cb);
+    long __stdcall Realloc([in] void* pv, [in] LONG cb);
+    long __stdcall Free([in] long pv);
+    long __stdcall GetSize([in] long pv);
+    long __stdcall DidAlloc([in] long pv);
+    void HeapMinimize(void);
+  };
+
+  [
+    uuid(ADD8BA80-002B-11D0-8F0F-00C04FD7D062),
+    version(1.0),
+    helpstring("TimoSoft IDelegateFolder-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBDelegateFolder : IVBUnknown
+  {
+    long __stdcall SetItemAlloc([in] IVBMalloc* pMalloc);
+  };
+
+  [
+    uuid(DE5BF786-477A-11D2-839D-00C04FD918D0),
+    version(1.0),
+    helpstring("TimoSoft IDragSourceHelper-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBDragSourceHelper : IVBUnknown
+  {
+    long __stdcall InitializeFromBitmap([in] SHDRAGIMAGE* DragImage, [in] IVBDataObject* pDataObject);
+    long __stdcall InitializeFromWindow([in] long hWnd, [in] POINT* ptCursorInImage, [in] IVBDataObject* pDataObject);
+  };
+
+  [
+    uuid(83E07D0D-0C5F-4163-BF1A-60B274051E40),
+    version(1.0),
+    helpstring("TimoSoft IDragSourceHelper2-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBDragSourceHelper2 : IVBDragSourceHelper
+  {
+    long __stdcall SetFlags([in] DSH_FLAGSConstants dwFlags);
+  };
+
+  [
+    uuid(00000121-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IDropSource-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBDropSource : IVBUnknown
+  {
+    long __stdcall QueryContinueDrag([in] long PressedEscape, [in] long KeyState);
+    long __stdcall GiveFeedback([in] DROPEFFECTConstants Effects);
+  };
+
+  [
+    uuid(00000122-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IDropTarget-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBDropTarget : IVBUnknown
+  {
+    long __stdcall DragEnter([in] IVBDataObject* pDataObject, [in] long KeyState, [in] long x, [in] long y, [in,out] DROPEFFECTConstants* Effects);
+    long __stdcall DragOver([in] long KeyState, [in] long x, [in] long y, [in,out] DROPEFFECTConstants* Effects);
+    long __stdcall DragLeave();
+    long __stdcall Drop([in] IVBDataObject* pDataObject, [in] long KeyState, [in] long x, [in] long y, [in,out] DROPEFFECTConstants* Effects);
+  };
+
+  [
+    uuid(4657278B-411B-11D2-839A-00C04FD918D0),
+    version(1.0),
+    helpstring("TimoSoft IDropTargetHelper-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBDropTargetHelper : IVBUnknown
+  {
+    long __stdcall DragEnter([in] long hWndTarget, [in] IVBDataObject* pDataObject, [in] POINT* pt, [in,out] DROPEFFECTConstants* Effects);
+    long __stdcall DragLeave();
+    long __stdcall DragOver([in] POINT* pt, [in,out] DROPEFFECTConstants* Effects);
+    long __stdcall Drop([in] IVBDataObject* pDataObject, [in] POINT* pt, [in,out] DROPEFFECTConstants* Effects);
+    long __stdcall Show([in] long ShowIt);
+  };
+
+  [
+    uuid(0E700BE1-9DB6-11D1-A1CE-00C04FD75D13),
+    version(1.0),
+    helpstring("IEnumExtraSearch-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBEnumExtraSearch : IVBUnknown
+  {
+    long __stdcall Next([in] long Count, [out] long* pData, [in,out] long* Copied);
+    long __stdcall Skip([in] long Count);
+    long __stdcall Reset();
+    long __stdcall Clone([out] IVBEnumExtraSearch** pReturn);
+  };
+
+  [
+    uuid(000214F2-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IEnumIDList-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBEnumIDList : IVBUnknown
+  {
+    long __stdcall Next([in] long Count, [in,out] long* Return, [in,out] long* Copied);
+    long __stdcall Skip([in] long Count);
+    long __stdcall Reset();
+    long __stdcall Clone([in,out] IVBEnumIDList** pReturn);
+  };
+
+  [
+    uuid(000214EB-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IExtractIconA-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBExtractIconA : IVBUnknown
+  {
+    long __stdcall GetIconLocation([in] GILConstants uFlags, [in,out] LPSTR szIconFile, [in] long cchMax, [in,out] int *piIndex, [in,out] GILReturnConstants *pwFlags);
+    long __stdcall Extract([in] LPSTR pszFile, [in] long nIconIndex, [in,out] long *phiconLarge, [in,out] long *phiconSmall, [in] long nIconSize);
+  };
+
+  [
+    uuid(000214FA-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IExtractIconW-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBExtractIconW : IVBUnknown
+  {
+    long __stdcall GetIconLocation([in] GILConstants uFlags, [in,out] LPWSTR szIconFile, [in] long cchMax, [in,out] int *piIndex, [in,out] GILReturnConstants *pwFlags);
+    long __stdcall Extract([in] LPWSTR pszFile, [in] long nIconIndex, [in,out] long *phiconLarge, [in,out] long *phiconSmall, [in] long nIconSize);
+  };
+
+  [
+    uuid(00000118-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IOleClientSite-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBOleClientSite : IVBUnknown
+  {
+  };
+
+  [
+    uuid(00000117-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IOleInPlaceActiveObject-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBOleInPlaceActiveObject : IVBUnknown
+  {
+    long __stdcall GetWindow([out] long* hWnd);
+    long __stdcall ContextSensitiveHelp([in] long Mode);
+    long __stdcall TranslateAccelerator([in] MSG* Message);
+    long __stdcall OnFrameWindowActivate([in] long Mode);
+    long __stdcall OnDocWindowActivate([in] long Mode);
+    long __stdcall ResizeBorder([in] RECT* RectBorder, [in] IVBOleInPlaceUIWindow* ChangedWindow, [in] long CalledFromFrameWindow);
+    long __stdcall EnableModeless([in] long Enable);
+  };
+
+  [
+    uuid(00000114-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IOleWindow-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBOleWindow : IVBUnknown
+  {
+    long __stdcall GetWindow([in,out] long* hWnd);
+    long __stdcall ContextSensitiveHelp([in] long Mode);
+  };
+
+  [
+    uuid(00000115-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IOleInPlaceUIWindow-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBOleInPlaceUIWindow : IVBOleWindow
+  {
+    long __stdcall GetBorder([in] RECT* RectBorder);
+    long __stdcall RequestBorderSpace([in] BORDERWIDTHS* Border);
+    long __stdcall SetBorderSpace([in] BORDERWIDTHS* Border);
+    long __stdcall SetActiveObject([in] IVBOleInPlaceActiveObject* ActiveObject, [in] LPWSTR ObjectName);
+  };
+
+  [
+    uuid(00000116-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IOleInPlaceFrame-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBOleInPlaceFrame : IVBOleInPlaceUIWindow
+  {
+  };
+
+  [
+    uuid(00000119-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IOleInPlaceSite-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBOleInPlaceSite : IVBOleWindow
+  {
+    long __stdcall CanInPlaceActivate();
+    long __stdcall OnInPlaceActivate();
+    long __stdcall OnUIActivate();
+    long __stdcall GetWindowContext([out] IVBOleInPlaceFrame** pFrame, [out] IVBOleInPlaceUIWindow** pDoc, [in] RECT* Position, [in] RECT* Rectangle, [in] OLEINPLACEFRAMEINFO* FrameInfo);
+    long __stdcall Scroll([in] long Pixels);
+    long __stdcall OnUIDeactivate([in] long Undoable);
+    long __stdcall OnInPlaceDeactivate();
+    long __stdcall DiscardUndoState();
+    long __stdcall DeactivateAndUndo();
+    long __stdcall OnPosRectChange([in] RECT* Position);
+  };
+
+  [
+    uuid(00000112-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IOleObject-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBOleObject : IVBUnknown
+  {
+    long __stdcall SetClientSite([in] IVBOleClientSite* pClientSite);
+    long __stdcall GetClientSite([out] IVBOleClientSite** pClientSite);
+  };
+
+  [
+    uuid(0000010c-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IPersist-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBPersist : IVBUnknown
+  {
+    long __stdcall GetClassID([in,out] UUID *pClassID);
+  };
+
+  [
+    uuid(000214EA-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IPersistFolder-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBPersistFolder : IVBPersist
+  {
+    long __stdcall Initialize([in] long pIDL);
+  };
+
+  [
+    uuid(1AC3D9F0-175C-11D1-95BE-00609797EA4F),
+    version(1.0),
+    helpstring("IPersistFolder2-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBPersistFolder2 : IVBPersistFolder
+  {
+    long __stdcall GetCurFolder([out] long *pIDL);
+  };
+
+  [
+    uuid(CEF04FDF-FE72-11d2-87A5-00C04F6837CF),
+    version(1.0),
+    helpstring("IPersistFolder3-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBPersistFolder3 : IVBPersistFolder2
+  {
+    long __stdcall InitializeEx([in] long pbc, [in] long pidlRoot, [in] PERSIST_FOLDER_TARGET_INFO *ppfti);
+    long __stdcall GetFolderTargetInfo([out] PERSIST_FOLDER_TARGET_INFO *ppfti);
+  };
+
+  [
+    uuid(0000010b-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IPersistFile-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBPersistFile : IVBPersist
+  {
+    long __stdcall IsDirty();
+    long __stdcall Load([in] long pszFileName, [in] long dwMode);
+    long __stdcall Save([in] long pszFileName, [in] long fRemember);
+    long __stdcall SaveCompleted([in] long pszFileName);
+    long __stdcall GetCurFile([out] long* ppszFileName);
+  };
+
+  [
+    uuid(C46CA590-3C3F-11D2-BEE6-0000F805CA57),
+    version(1.0),
+    helpstring("IQueryAssociations-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBQueryAssociations : IVBUnknown
+  {
+    long __stdcall Init([in] ASSOCFConstants Flags, [in] LPWSTR strRootKey, [in] long hProgID, [in] long hWnd);
+    long __stdcall GetString([in] ASSOCFConstants Flags, [in] ASSOCSTRConstants StringType, [in] long pStrExtraData, [out] LPWSTR Buffer, [in,out] long *Buffersize);
+    long __stdcall GetKey([in] ASSOCFConstants Flags, [in] ASSOCKEYConstants KeyType, [in] LPWSTR strExtraData, [in,out] long *hKey);
+    long __stdcall GetData([in] ASSOCFConstants Flags, [in] ASSOCDATAConstants DataType, [in] LPWSTR strExtraData, [in] void *Buffer, [in,out] long *Buffersize);
+    long __stdcall GetEnum([in] ASSOCFConstants Flags, [in] ASSOCENUMConstants EnumType, [in] LPWSTR strExtraData, [in] UUID *IID, [in] void *pInterface);
+  };
+
+  [
+    uuid(00021500-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IQueryInfo-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBQueryInfo : IVBUnknown
+  {
+    long __stdcall GetInfoTip([in] QITipFlags Flags, [in,out] long* Tip);
+    long __stdcall GetInfoFlags([in,out] QIFlags* Flags);
+  };
+
+  [
+    uuid(000214EC-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IShellDetails-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellDetails : IVBUnknown
+  {
+    long __stdcall GetDetailsOf([in] long pIDL, [in] long Column, [in,out] SHELLDETAILS* Data);
+    long __stdcall ColumnClick([in] long Column);
+  };
+
+  [
+    uuid(000214E6-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IShellFolder-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellFolder : IVBUnknown
+  {
+    long __stdcall ParseDisplayName([in] long hWndOwner, [in] long pIBindCtx, [in] LPWSTR DisplayName, [in,out] long* DisplayNameSize, [in,out] long* pIDL, [in,out] SFGAOConstants* Attributes);
+    long __stdcall EnumObjects([in] long hWndOwner, [in] SHCONTFConstants Flags, [in,out] IVBEnumIDList** EnumIDList);
+    long __stdcall BindToObject([in] long pIDL, [in] long pIBindCtx, [in] UUID* InterfaceID, [in,out] void* pReturn);
+    long __stdcall BindToStorage([in] long pIDL, [in] long pIBindCtx, [in] UUID* InterfaceID, [in,out] void* pReturn);
+    short __stdcall CompareIDs([in] long Rules, [in] long pIDL1, [in] long pIDL2);
+    long __stdcall CreateViewObject([in] long hWndOwner, [in] UUID* InterfaceID, [in,out] void* pReturn);
+    long __stdcall GetAttributesOf([in] int Count, [in] long* pIDLs, [in,out] SFGAOConstants* Attributes);
+    long __stdcall GetUIObjectOf([in] long hWndOwner, [in] int Count, [in] long* pIDLs, [in] UUID* InterfaceID, [in] int* reserviert, [in,out] void* pReturn);
+    long __stdcall GetDisplayNameOf([in] long pIDL, [in] long Flags, [in,out] STRRET* DisplayName);
+    long __stdcall SetNameOf([in] long hWndOwner, [in] long pIDL, [in] LPSTR DisplayName, [in] long Flags, [in,out] long* pNewIDL);
+  };
+
+  [
+    uuid(93F2F68C-1D1B-11D3-A30E-00C04F79ABD1),
+    version(1.0),
+    helpstring("IShellFolder2-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellFolder2 : IVBShellFolder
+  {
+    long __stdcall GetDefaultSearchGUID([out] UUID* pGUID);
+    long __stdcall EnumSearches([in,out] IVBEnumExtraSearch** EnumExtraSearch);
+    long __stdcall GetDefaultColumn([in] long reserviert, [out] long* pDefSortColumn, [out] long* pDefDisplayColumn);
+    long __stdcall GetDefaultColumnState([in] long Column, [out] SHCOLSTATEConstants* DefColumnState);
+    long __stdcall GetDetailsEx([in] long pIDL, [in] SHCOLUMNID* Column, [out] variant* pData);
+    long __stdcall GetDetailsOf([in] long pIDL, [in] long Column, [out] SHELLDETAILS* Data);
+    long __stdcall MapColumnToSCID([in] long Column, [out] SHCOLUMNID* pData);
+  };
+
+  [
+    uuid(2EC06C64-1296-4F53-89E5-ECCE4EFC2189),
+    version(1.0),
+    helpstring("IShellFolder3-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellFolder3 : IVBShellFolder2
+  {
+  };
+
+  [
+    uuid(053B4A86-0DC9-40A3-B7ED-BC6A2E951F48),
+    version(1.0),
+    helpstring("IFolderType-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBFolderType : IVBUnknown
+  {
+  };
+
+  [
+    uuid(91EA3F8C-C99B-11d0-9815-00C04FD91972),
+    version(1.0),
+    helpstring("IAugmentedShellFolder-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBAugmentedShellFolder : IVBShellFolder
+  {
+    long __stdcall AddNameSpace([in] long pguidObject, [in] IVBShellFolder* psf, [in] long pIDL, [in] long dwFlags);
+    long __stdcall GetNameSpaceID([in] long pIDL, [in,out] UUID* pguidOut);
+    long __stdcall QueryNameSpace([in] long dwID, [in,out] UUID* pguidOut, [in,out] IVBShellFolder** ppsf);
+    long __stdcall EnumNameSpace([in] long uNameSpace, [in,out] long* pdwID);
+  };
+
+  [
+    uuid(8DB3B3F4-6CFE-11d1-8AE9-00C04FD918D0),
+    version(1.0),
+    helpstring("IAugmentedShellFolder2-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBAugmentedShellFolder2 : IVBAugmentedShellFolder
+  {
+    //long __stdcall GetNameSpaceCount([in,out] long* pcNamespaces);
+    //long __stdcall GetIDListWrapCount([in] long pIDLWrap, [in,out] long* pcPidls);
+    long __stdcall UnWrapIDList([in] long pIDLWrap, [in] long cPidls, [in,out] IVBShellFolder** apsf, [in,out] long* aPIDLFolder, [in,out] long* aPIDLItems, [in,out] long* pcFetched);
+  };
+
+  [
+    uuid(000214E5-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IShellIcon-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellIcon : IVBUnknown
+  {
+    long __stdcall GetIconOf([in] long pIDL, [in] GILConstants flags, [in,out] int *lpIconIndex);
+  };
+
+  [
+    uuid(7D688A70-C613-11D0-999B-00C04FD655E1),
+    version(1.0),
+    helpstring("IShellIconOverlay-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellIconOverlay : IVBUnknown
+  {
+    long __stdcall GetOverlayIndex([in] long pIDL, [in,out] long* OverlayIndex);
+    long __stdcall GetOverlayIconIndex([in] long pIDL, [in,out] long* IconIndex);
+  };
+
+  [
+    uuid(000214EE-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IShellLinkA-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellLinkA : IVBUnknown
+  {
+    long __stdcall GetPath([in,out] LPSTR Path, [in] int Pathsize, [in,out] WIN32_FIND_DATAA *FileData, [in] SLGPConstants Flags);
+    long __stdcall GetIDList([in,out] long *pIDL);
+    long __stdcall SetIDList([in] long pIDL);
+    long __stdcall GetDescription([in,out] LPSTR Descr, [in] int Buffersize);
+    long __stdcall SetDescription([in] LPSTR Descr);
+    long __stdcall GetWorkingDirectory([in,out] LPSTR WorkingDir, [in] int Buffersize);
+    long __stdcall SetWorkingDirectory([in] LPSTR WorkingDir);
+    long __stdcall GetArguments([in,out] LPSTR Args, [in] int Buffersize);
+    long __stdcall SetArguments([in] LPSTR Args);
+    long __stdcall GetHotkey([in,out] short *Hotkey);
+    long __stdcall SetHotkey([in] short Hotkey);
+    long __stdcall GetShowCmd([in,out] int *ShowCmd);
+    long __stdcall SetShowCmd([in] int ShowCmd);
+    long __stdcall GetIconLocation([in,out] LPSTR IconPath, [in] int IconPathSize, [in,out] int *iIcon);
+    long __stdcall SetIconLocation([in] LPSTR IconPath, [in] int iIcon);
+    long __stdcall SetRelativePath([in] LPSTR RelPath, [in] long reserviert);
+    long __stdcall Resolve([in] long hWnd, [in] SLRConstants Flags);
+    long __stdcall SetPath([in] LPSTR Path);
+  };
+
+  [
+    uuid(000214F9-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IShellLinkW-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellLinkW : IVBUnknown
+  {
+    long __stdcall GetPath([in,out] LPWSTR Path, [in] int Pathsize, [in,out] WIN32_FIND_DATAW *FileData, [in] SLGPConstants Flags);
+    long __stdcall GetIDList([in,out] long *pIDL);
+    long __stdcall SetIDList([in] long pIDL);
+    long __stdcall GetDescription([in,out] LPWSTR Descr, [in] int Buffersize);
+    long __stdcall SetDescription([in] LPWSTR Descr);
+    long __stdcall GetWorkingDirectory([in,out] LPWSTR WorkingDir, [in] int Buffersize);
+    long __stdcall SetWorkingDirectory([in] LPWSTR WorkingDir);
+    long __stdcall GetArguments([in,out] LPWSTR Args, [in] int Buffersize);
+    long __stdcall SetArguments([in] LPWSTR Args);
+    long __stdcall GetHotkey([in,out] short *Hotkey);
+    long __stdcall SetHotkey([in] short Hotkey);
+    long __stdcall GetShowCmd([in,out] int *ShowCmd);
+    long __stdcall SetShowCmd([in] int ShowCmd);
+    long __stdcall GetIconLocation([in,out] LPWSTR IconPath, [in] int IconPathSize, [in,out] int *iIcon);
+    long __stdcall SetIconLocation([in] LPWSTR IconPath, [in] int iIcon);
+    long __stdcall SetRelativePath([in] LPWSTR RelPath, [in] long reserviert);
+    long __stdcall Resolve([in] long hWnd, [in] SLRConstants Flags);
+    long __stdcall SetPath([in] LPWSTR Path);
+  };
+
+  [
+    uuid(000214E8-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IShellExtInit-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellExtInit : IVBUnknown
+  {
+    long __stdcall Initialize([in] long pIDLFolder, [in] IVBDataObject* pIDataObject, [in] long hkeyProgID);
+  };
+
+  #ifdef ShellMenus
+    [
+      uuid(4CA300A1-9B8D-11d1-8B22-00C04FD918D0),
+      version(1.0),
+      helpstring("IShellMenuCallback-Interface for Visual Basic (by TimoSoft)"),
+      odl
+    ]
+    interface IVBShellMenuCallback : IVBUnknown
+    {
+      long __stdcall CallbackSM([in] long psmd, [in] long uMsg, [in] long wParam, [in] long lParam);
+    }
+
+    [
+      uuid(EE1F7637-E138-11d1-8379-00C04FD918D0),
+      version(1.0),
+      helpstring("IShellMenu-Interface for Visual Basic (by TimoSoft)"),
+      odl
+    ]
+    interface IVBShellMenu : IVBUnknown
+    {
+      long __stdcall Initialize([in] long psmc, [in] long uId, [in] long uIdAncestor, [in] SMINITConstants dwFlags);
+      long __stdcall GetMenuInfo([out] IVBShellMenuCallback** ppsmc, [out] long* puId, [out] long* puIdAncestor, [out] SMINITConstants* pdwFlags);
+      long __stdcall SetShellFolder([in] IVBShellFolder* psf, [in] long pidlFolder, [in] long hKey, [in] SMSETConstants dwFlags);
+      long __stdcall GetShellFolder([out] long* pdwFlags, [out] long* ppidl, [in] UUID* riid, [in,out] void* ppv);
+      long __stdcall SetMenu([in] long hmenu, [in] long hwnd, [in] SMSETConstants dwFlags);
+      long __stdcall GetMenu([out] long* phmenu, [out] long* phwnd, [out] SMSETConstants* pdwFlags);
+      long __stdcall InvalidateItem([in] SMDATA *psmd, [in] SMINVConstants dwFlags);
+      long __stdcall GetState([out] SMDATA *psmd);
+      long __stdcall SetMenuToolbar([in] IVBUnknown* punk, [in] long dwFlags);
+    }
+  #endif
+
+  [
+    uuid(BB2E617C-0920-11D1-9A0B-00C04FC2D6C1),
+    version(1.0),
+    helpstring("IExtractImage-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBExtractImage : IVBUnknown
+  {
+    long __stdcall GetLocation([in] LPWSTR pszPathBuffer, [in] long cch, [in,out] IEIConstants *pdwPriority, [in,out] SIZE *prgSize, [in] long dwRecClrDepth, [in,out] IEIFlagConstants *pdwFlags);
+    long __stdcall Extract([in,out] long *phBmpThumbnail);
+  }
+
+  [
+    uuid(953BB1EE-93B4-11D1-98A3-00C04FB687DA),
+    version(1.0),
+    helpstring("IExtractImage2-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBExtractImage2 : IVBExtractImage
+  {
+    long __stdcall GetDateStamp([in,out] FILETIME *pDateStamp);
+  }
+
+  [
+    uuid(6DFD582B-92E3-11d1-98A3-00C04FB687DA),
+    version(1.0),
+    helpstring("IEnumShellImageStore-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBEnumShellImageStore : IVBUnknown
+  {
+    long __stdcall Next([in] long Count, [out] long* pData, [in,out] long* Copied);
+    long __stdcall Skip([in] long Count);
+    long __stdcall Reset();
+    long __stdcall Clone([in,out] IVBEnumShellImageStore** pReturn);
+  }
+
+  [
+    uuid(48C8118C-B924-11D1-98D5-00C04FB687DA),
+    version(1.0),
+    helpstring("IShellImageStore-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellImageStore : IVBUnknown
+  {
+    long __stdcall Open([in] long dwMode, [in,out] long* pdwLock);
+    long __stdcall Create([in] long dwMode, [in,out] long* pdwLock);
+    long __stdcall Close([in,out] long* pdwLock);
+    long __stdcall Commit([in,out] long* pdwLock);
+    long __stdcall ReleaseLock([in,out] long* pdwLock);
+    long __stdcall IsLocked();
+    long __stdcall GetMode([in,out] long* pdwMode);
+    long __stdcall GetCapabilities([in,out] SHIMSTCAPFLAGConstants* pdwCapMask);
+    long __stdcall AddEntry([in] LPWSTR pszName, [in] FILETIME* pftTimeStamp, [in] long dwMode, [in] long hImage);
+    long __stdcall GetEntry([in] LPWSTR pszName, [in] long dwMode, [in,out] long* phImage);
+    long __stdcall DeleteEntry([in] LPWSTR pszName);
+    long __stdcall IsEntryInStore([in] LPWSTR pszName, [in,out] FILETIME* pftTimeStamp);
+    long __stdcall Enum([in,out] IVBEnumShellImageStore** ppEnum);
+  }
+
+  #ifdef FolderTasks
+    [
+      uuid(497431AD-5481-4DF7-AE5D-130D9CD50DB3),
+      version(1.0),
+      helpstring("IPreview3-Interface for Visual Basic (by TimoSoft, thanks to Henk Devos)"),
+      odl
+    ]
+    interface IVBPreview3 : IVBUnknown
+    {
+      // TODO...
+    }
+  #endif
+
+  [
+    uuid(2047E320-F2A9-11CE-AE65-08002B2E1262),
+    version(1.0),
+    helpstring("IShellFolderViewCB-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellFolderViewCB : IVBUnknown
+  {
+    long __stdcall MessageSFVCB([in] long uMsg, [in] long wParam, [in] long lParam);
+  }
+
+  [
+    uuid(000214E2-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IShellBrowser-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellBrowser : IVBOleWindow
+  {
+    long __stdcall InsertMenusSB([in] long hMenuShared, [in,out] OLEMENUGROUPWIDTHS* lpMenuWidths);
+    long __stdcall SetMenuSB([in] long hMenuShared, [in] long holemenuReserved, [in] long ActiveObject);
+    long __stdcall RemoveMenusSB([in] long hMenuShared);
+    long __stdcall SetStatusTextSB([in] long lpszStatusText);
+    long __stdcall EnableModelessSB([in] long fEnable);
+    long __stdcall TranslateAcceleratorSB([in,out] MSG* lpmsg, [in] short wID);
+    long __stdcall BrowseObject([in] long pidl, [in] long wFlags);
+    long __stdcall GetViewStateStream([in] long grfMode, [in,out] IVBStream** ppStrm);
+    //long __stdcall GetViewStateStream([in] long grfMode, [in] long ppStrm);
+    long __stdcall GetControlWindow([in] long id, [in,out] long* lphWnd);
+    long __stdcall SendControlMsg([in] long id, [in] long uMsg, [in] long wParam, [in] long lParam, [in,out] long* pret);
+    long __stdcall QueryActiveShellView([in,out] IVBShellView** ppshv);
+    long __stdcall OnViewWindowActive([in] IVBShellView* ppshv);
+    long __stdcall SetToolbarItems([in] long lpButtons, [in] long nButtons, [in] long uFlags);
+  };
+
+  [
+    uuid(B722BCCB-4E68-101B-A2BC-00AA00404770),
+    version(1.0),
+    helpstring("TimoSoft IOleCommandTarget-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBOleCommandTarget : IVBUnknown
+  {
+    long __stdcall QueryStatus([in] UUID* pguidCmdGroup, [in] long cCmds, [in] long pprgCmds, [in,out] OLECMDTEXT* pCmdText);
+    long __stdcall Exec([in] UUID* pguidCmdGroup, [in] long nCmdID, [in] OLECMDEXECOPTConstants nCmdexecopt, [in] VARIANT* pvaIn, [in] long pvaOut);
+  };
+
+  [
+    uuid(6D5140C1-7436-11CE-8034-00AA006009FA),
+    version(1.0),
+    helpstring("TimoSoft IServiceProvider-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBServiceProvider : IVBUnknown
+  {
+    long __stdcall QueryService([in] UUID* guidService, [in] UUID* riid, [in,out] void* ppv);
+  };
+
+  [
+    uuid(000214E3-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IShellView-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellView : IVBOleWindow
+  {
+    long __stdcall TranslateAccelerator([in,out] MSG* lpmsg);
+    long __stdcall EnableModelessSV([in] long fEnable);
+    long __stdcall UIActivate([in] SVUIAConstants uState);
+    long __stdcall Refresh();
+    long __stdcall CreateViewWindow([in] IVBShellView* lpPrevView, [in] FOLDERSETTINGS* lpfs, [in] long psb, [in] RECT* prcView, [in,out] long* phWnd);
+    long __stdcall DestroyViewWindow();
+    long __stdcall GetCurrentInfo([in,out] FOLDERSETTINGS* lpfs);
+    long __stdcall AddPropertySheetPages([in] long dwReserved, [in] long lpfn, [in] long lParam);
+    long __stdcall SaveViewState();
+    long __stdcall SelectItem([in] long pidlItem, [in] long uFlags);
+    long __stdcall GetItemObject([in] SVGIOConstants uItem, [in] UUID* riid, [in,out] void* ppvOut);
+  };
+
+  [
+    uuid(88E39E80-3578-11CF-AE69-08002B2E1262),
+    version(1.0),
+    helpstring("IShellView2-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellView2 : IVBShellView
+  {
+    long __stdcall GetView([in,out] UUID* pvid, [in] SV2GVConstants uView);
+    long __stdcall CreateViewWindow2([in] SV2CVW2_PARAMS* lpParams);
+    long __stdcall HandleRename([in] long pidlNew);
+    long __stdcall SelectAndPositionItem([in] long pidlItem, [in] long uFlags, [in] POINT* ppt);
+  };
+
+  [
+    uuid(EC39FA88-F8AF-41C5-8421-38BED28F4673),
+    version(1.0),
+    helpstring("IShellView3-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellView3 : IVBShellView2
+  {
+    long __stdcall CreateViewWindow3([in] long psbOwner, [in] IVBShellView* psvPrev, [in] SV3CVW3Constants* dwViewFlags, [in] FOLDERFLAGSConstants dwMask, [in] FOLDERFLAGSConstants dwFlags, [in] FOLDERVIEWMODEConstants fvMode, [in] long pvid, [in] long prcView, [in,out] long* phwndView);
+  };
+
+  [
+    uuid(43826D1E-E718-42EE-BC55-A1E261C37BFE),
+    version(1.0),
+    helpstring("IShellItem-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBShellItem : IVBUnknown
+  {
+    long __stdcall BindToHandler([in] long pIBindCtx, [in] UUID* rbhid, [in] UUID* riid, [in,out] void* ppvOut);
+    long __stdcall GetParent([in,out] IVBShellItem** ppsi);
+    long __stdcall GetDisplayName([in] SIGDNConstants sigdnName, [in,out] long* ppszName);
+    long __stdcall GetAttributes([in] SFGAOConstants sfgaoMask, [in,out] SFGAOConstants* psfgaoAttribs);
+    long __stdcall Compare([in] IVBShellItem* psi, [in] SICHINTConstants hint, [in,out] int* piOrder);
+  }
+
+  [
+    uuid(70629033-E363-4A28-A567-0DB78006E6D7),
+    version(1.0),
+    helpstring("IEnumShellItems-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBEnumShellItems : IVBUnknown
+  {
+    long __stdcall Next([in] long Count, [in,out] IVBShellItem** Return, [in,out] long* Copied);
+    long __stdcall Skip([in] long Count);
+    long __stdcall Reset();
+    long __stdcall Clone([in,out] IVBEnumShellItems** pReturn);
+  };
+
+  [
+    uuid(787F8E92-9837-4011-9F83-7DE593BDC002),
+    version(1.0),
+    helpstring("IShellItemArray-Interface for Visual Basic (by TimoSoft, thanks to Henk Devos)"),
+    odl
+  ]
+  interface IVBShellItemArray : IVBUnknown
+  {
+    HRESULT __stdcall BindToHandler([in] long pbc, [in] UUID* rbhid, [in] UUID* riid, [in,out] IVBUnknown** ppvOut);
+    HRESULT __stdcall GetAttributes([in] SIATTRIBFLAGSConstants dwAttribFlags, [in] SFGAOConstants sfgaoMask, [in,out] SFGAOConstants* psfgaoAttribs);
+    HRESULT __stdcall GetCount([in,out] long* pdwNumItems);
+    HRESULT __stdcall GetItemAt([in] long dwIndex, [in,out] IVBShellItem** ppsi);
+    HRESULT __stdcall EnumItems([in,out] IVBEnumShellItems** ppenumShellItems);
+  }
+
+  [
+    uuid(b63ea76d-1f85-456f-a19c-48159efa858b),
+    version(1.0),
+    helpstring("IShellItemArray-Interface for Visual Basic (by TimoSoft, thanks to Henk Devos)"),
+    odl
+  ]
+  interface IVBShellItemArrayVista : IVBUnknown
+  {
+    HRESULT __stdcall BindToHandler([in] long pbc, [in] UUID* rbhid, [in] UUID* riid, [in,out] IVBUnknown** ppvOut);
+    HRESULT __stdcall GetPropertyStore([in] GETPROPERTYSTOREFLAGSConstants flags, [in] UUID* riid, [in,out] IVBUnknown** ppv);
+    HRESULT __stdcall GetPropertyDescriptionList([in] PROPERTYKEY* keyType, [in] UUID* riid, [in,out] IVBUnknown** ppv);
+    HRESULT __stdcall GetAttributes([in] SIATTRIBFLAGSConstants dwAttribFlags, [in] SFGAOConstants sfgaoMask, [in,out] SFGAOConstants* psfgaoAttribs);
+    HRESULT __stdcall GetCount([in,out] long* pdwNumItems);
+    HRESULT __stdcall GetItemAt([in] long dwIndex, [in,out] IVBShellItem** ppsi);
+    HRESULT __stdcall EnumItems([in,out] IVBEnumShellItems** ppenumShellItems);
+  }
+
+  [
+    uuid(e357fccd-a995-4576-b01f-234630154e96),
+    version(1.0),
+    helpstring("IThumbnailProvider-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBThumbnailProvider : IVBUnknown
+  {
+    HRESULT __stdcall GetThumbnail([in] long cx, [in,out] long* phbmp, [in,out] WTS_ALPHATYPEConstants* pdwAlpha);
+  }
+
+  [
+    uuid(00000101-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IEnumString-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBEnumString : IVBUnknown
+  {
+    long __stdcall Next([in] long celt, [in] long rgelt, [in,out] long* pceltFetched);
+    long __stdcall Skip([in] long celt);
+    long __stdcall Reset();
+    long __stdcall Clone([in,out] IVBEnumString** ppenum);
+  };
+
+  [
+    uuid(79eac9ed-baf9-11ce-8c82-00aa004ba90b),
+    version(1.0),
+    helpstring("IInternetSecurityMgrSite-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBInternetSecurityMgrSite : IVBUnknown
+  {
+    long __stdcall GetWindow([in,out] long* phwnd);
+    long __stdcall EnableModeless([in] long fEnable);
+  }
+
+  [
+    uuid(79eac9ee-baf9-11ce-8c82-00aa004ba90b),
+    version(1.0),
+    helpstring("IInternetSecurityManager-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBInternetSecurityManager : IVBUnknown
+  {
+    long __stdcall SetSecuritySite([in] IVBInternetSecurityMgrSite* pSite);
+    long __stdcall GetSecuritySite([in,out] IVBInternetSecurityMgrSite** ppSite);
+    long __stdcall MapUrlToZone([in] LPWSTR pwszUrl, [in,out] long* pdwZone, [in] MUTZConstants dwFlags);
+    long __stdcall GetSecurityId([in] LPWSTR pwszUrl, [in,out] unsigned char* pbSecurityId, [in,out] long* pcbSecurityId, [in] long dwReserved);
+    long __stdcall ProcessUrlAction([in] LPWSTR pwszUrl, [in] long dwAction, [in,out] unsigned char* pPolicy, [in] long cbPolicy, [in] long* pContext, [in] long cbContext, [in] PUAFConstants dwFlags, [in] long dwReserved);
+    long __stdcall QueryCustomPolicy([in] LPWSTR pwszUrl, [in] UUID* guidKey, [in,out] unsigned char** ppPolicy, [in,out] long* pcbPolicy, [in] long* pContext, [in] long cbContext, [in] long dwFlags, [in] long dwReserved);
+    long __stdcall SetZoneMapping([in] URLZONEConstants dwZone, [in] LPWSTR lpszPattern, [in] SZM_FLAGSConstants dwFlags);
+    long __stdcall GetZoneMappings([in] long dwZone, [in] LPWSTR lpszPattern, [in,out] IVBEnumString** ppenumString);
+  }
+
+  [
+    uuid(79eac9ef-baf9-11ce-8c82-00aa004ba90b),
+    version(1.0),
+    helpstring("IInternetZoneManager-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBInternetZoneManager : IVBUnknown
+  {
+    long __stdcall GetZoneAttributes([in] long dwZone, [in,out] ZONEATTRIBUTES* pZoneAttributes);
+    long __stdcall SetZoneAttributes([in] long dwZone, [in] ZONEATTRIBUTES* pZoneAttributes);
+    long __stdcall GetZoneCustomPolicy([in] long dwZone, [in] UUID* guidKey, [in,out] unsigned char** ppPolicy, [in,out] long* pcbPolicy, [in] URLZONEREGConstants urlZoneReg);
+    long __stdcall SetZoneCustomPolicy([in] long dwZone, [in] UUID* guidKey, [in] unsigned char* pPolicy, [in] long cbPolicy, [in] URLZONEREGConstants urlZoneReg);
+    long __stdcall GetZoneActionPolicy([in] long dwZone, [in] long dwAction, [in,out] unsigned char* ppPolicy, [in] long cbPolicy, [in] URLZONEREGConstants urlZoneReg);
+    long __stdcall SetZoneActionPolicy([in] long dwZone, [in] long dwAction, [in] unsigned char* ppPolicy, [in] long cbPolicy, [in] URLZONEREGConstants urlZoneReg);
+    long __stdcall PromptAction([in] long dwAction, [in] long hwndParent, [in] LPWSTR pwszUrl, [in] LPWSTR pwszText, [in] long dwPromptFlags);
+    long __stdcall LogAction([in] long dwAction, [in] LPWSTR pwszUrl, [in] LPWSTR pwszText, [in] long dwPromptFlags);
+    long __stdcall CreateZoneEnumerator([in,out] long* pdwEnum, [in,out] long* pdwCount, [in] long dwFlags);
+    long __stdcall GetZoneAt([in] long dwEnum, [in] long dwIndex, [in,out] long* pdwZone);
+    long __stdcall DestroyZoneEnumerator([in] long dwEnum);
+    long __stdcall CopyTemplatePoliciesToZone([in] URLTEMPLATEConstants dwTemplate, [in] URLZONEConstants dwZone, [in] long dwReserved);
+  }
+
+  [
+    uuid(fc0ca0a7-c316-4fd2-9031-3e628e6d4f23),
+    version(1.0),
+    helpstring("IObjectWithPropertyKey-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBObjectWithPropertyKey : IVBUnknown
+  {
+    long __stdcall SetPropertyKey([in] PROPERTYKEY* key);
+    long __stdcall GetPropertyKey([in,out] PROPERTYKEY* key);
+  };
+
+  [
+    uuid(f917bc8a-1bba-4478-a245-1bde03eb9431),
+    version(1.0),
+    helpstring("IPropertyChange-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBPropertyChange : IVBObjectWithPropertyKey
+  {
+    long __stdcall ApplyToPropVariant([in] long* propvarIn, [in,out] long* ppropvarOut);
+  };
+
+  [
+    uuid(380f5cad-1b5e-42f2-805d-637fd392d31e),
+    version(1.0),
+    helpstring("IPropertyChangeArray-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBPropertyChangeArray : IVBUnknown
+  {
+    long __stdcall GetCount([out] long* pcOperations);
+    long __stdcall GetAt([in] long iIndex, [in] UUID* riid, [in,out] void* ppv);
+    long __stdcall InsertAt([in] long iIndex, [in] IVBPropertyChange* ppropChange);
+    long __stdcall Append([in] IVBPropertyChange* ppropChange);
+    long __stdcall AppendOrReplace([in] IVBPropertyChange* ppropChange);
+    long __stdcall RemoveAt([in] long iIndex);
+    long __stdcall IsKeyInArray([in] PROPERTYKEY* key);
+  };
+
+  [
+    uuid(04b0f1a7-9490-44bc-96e1-4296a31252e2),
+    version(1.0),
+    helpstring("IFileOperationProgressSink-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBFileOperationProgressSink : IVBUnknown
+  {
+    long __stdcall StartOperations();
+    long __stdcall FinishOperations([in] long hrResult);
+    long __stdcall PreRenameItem([in] long dwFlags, [in] IVBShellItem* psiItem, [in] long pszNewName);
+    long __stdcall PostRenameItem([in] long dwFlags, [in] IVBShellItem* psiItem, [in] long pszNewName, [in] long hrRename, [in] IVBShellItem* psiNewlyCreated);
+    long __stdcall PreMoveItem([in] long dwFlags, [in] IVBShellItem* psiItem, [in] IVBShellItem* psiDestinationFolder, [in] long pszNewName);
+    long __stdcall PostMoveItem([in] long dwFlags, [in] IVBShellItem* psiItem, [in] IVBShellItem* psiDestinationFolder, [in] long pszNewName, [in] long hrMove, [in] IVBShellItem* psiNewlyCreated);
+    long __stdcall PreCopyItem([in] long dwFlags, [in] IVBShellItem* psiItem, [in] IVBShellItem* psiDestinationFolder, [in] long pszNewName);
+    long __stdcall PostCopyItem([in] long dwFlags, [in] IVBShellItem* psiItem, [in] IVBShellItem* psiDestinationFolder, [in] long pszNewName, [in] long hrCopy, [in] IVBShellItem* psiNewlyCreated);
+    long __stdcall PreDeleteItem([in] long dwFlags, [in] IVBShellItem* psiItem);
+    long __stdcall PostDeleteItem([in] long dwFlags, [in] IVBShellItem* psiItem, [in] long hrDelete, [in] IVBShellItem* psiNewlyCreated);
+    long __stdcall PreNewItem([in] long dwFlags, [in] IVBShellItem* psiDestinationFolder, [in] long pszNewName);
+    long __stdcall PostNewItem([in] long dwFlags, [in] IVBShellItem* psiDestinationFolder, [in] long pszNewName, [in] long pszTemplateName, [in] long dwFileAttributes, [in] long hrNew, [in] IVBShellItem* psiNewItem);
+    long __stdcall UpdateProgress([in] long iWorkTotal, [in] long iWorkSoFar);
+    long __stdcall ResetTimer();
+    long __stdcall PauseTimer();
+    long __stdcall ResumeTimer();
+  };
+
+  [
+    uuid(0C9FB851-E5C9-43EB-A370-F0677B13874C),
+    version(1.0),
+    helpstring("IOperationsProgressDialog-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBOperationsProgressDialog : IVBUnknown
+  {
+    long __stdcall StartProgressDialog([in] long hwndParent, [in] long dwFlags);
+    long __stdcall StopProgressDialog();
+    long __stdcall SetOperation([in] SPACTIONConstants action);
+    long __stdcall SetMode([in] PDMODEConstants mode);
+    long __stdcall UpdateProgress([in] LARGE_INTEGER* ullPointsCurrent, [in] LARGE_INTEGER* ullPointsTotal, [in] LARGE_INTEGER* ullSizeCurrent, [in] LARGE_INTEGER* ullSizeTotal, [in] LARGE_INTEGER* ullItemsCurrent, [in] LARGE_INTEGER* ullItemsTotal);
+    long __stdcall UpdateLocations([in] IVBShellItem* psiSource, [in] IVBShellItem* psiTarget, [in] IVBShellItem* psiItem);
+    long __stdcall ResetTimer();
+    long __stdcall PauseTimer();
+    long __stdcall ResumeTimer();
+    long __stdcall GetMilliseconds([out] LARGE_INTEGER* pullElapsed, [out] LARGE_INTEGER* pullRemaining);
+    long __stdcall GetOperationStatus([out] PDOPSTATUSConstants* popstatus);
+  };
+
+  [
+    uuid(947aab5f-0a5c-4c13-b4d6-4bf7836fc9f8),
+    version(1.0),
+    helpstring("IFileOperation-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBFileOperation : IVBUnknown
+  {
+    long __stdcall Advise([in] IVBFileOperationProgressSink* pfops, [out] long* pdwCookie);
+    long __stdcall Unadvise([in] long dwCookie);
+    long __stdcall SetOperationFlags([in] long dwOperationFlags);
+    long __stdcall SetProgressMessage([in] long pszMessage);
+    long __stdcall SetProgressDialog([in] IVBOperationsProgressDialog* popd);
+    long __stdcall SetProperties([in] IVBPropertyChangeArray* pproparray);
+    long __stdcall SetOwnerWindow([in] long hwndParent);
+    long __stdcall ApplyPropertiesToItem([in] IVBShellItem* psiItem);
+    long __stdcall ApplyPropertiesToItems([in] IVBUnknown* punkItems);
+    long __stdcall RenameItem([in] IVBShellItem* psiItem, [in] long pszNewName, [in] IVBFileOperationProgressSink* pfopsItem);
+    long __stdcall RenameItems([in] IVBUnknown* pUnkItems, [in] long pszNewName);
+    long __stdcall MoveItem([in] IVBShellItem* psiItem, [in] IVBShellItem* psiDestinationFolder, [in] long pszNewName, [in] IVBFileOperationProgressSink* pfopsItem);
+    long __stdcall MoveItems([in] IVBUnknown* punkItems, [in] IVBShellItem* psiDestinationFolder);
+    long __stdcall CopyItem([in] IVBShellItem* psiItem, [in] IVBShellItem* psiDestinationFolder, [in] long pszCopyName, [in] IVBFileOperationProgressSink* pfopsItem);
+    long __stdcall CopyItems([in] IVBUnknown* punkItems, [in] IVBShellItem* psiDestinationFolder);
+    long __stdcall DeleteItem([in] IVBShellItem* psiItem, [in] IVBFileOperationProgressSink* pfopsItem);
+    long __stdcall DeleteItems([in] IVBUnknown* punkItems);
+    long __stdcall NewItem([in] IVBShellItem* psiDestinationFolder, [in] long dwFileAttributes, [in] long pszName, [in] long pszTemplateName, [in] IVBFileOperationProgressSink* pfopsItem);
+    long __stdcall PerformOperations();
+    long __stdcall GetAnyOperationsAborted([out] long* pfAnyOperationsAborted);
+  };
+
+  [
+    uuid(92CA9DCD-5622-4bba-A805-5E9F541BD8C9),
+    version(1.0),
+    helpstring("IObjectArray-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBObjectArray : IVBUnknown
+  {
+    long __stdcall GetCount([out] long* pcObjects);
+    long __stdcall GetAt([in] long uiIndex, [in] UUID* riid, [in,out] void* ppv);
+  };
+
+  [
+    uuid(5632b1a4-e38a-400a-928a-d4cd63230295),
+    version(1.0),
+    helpstring("IObjectCollection-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBObjectCollection : IVBObjectArray
+  {
+    long __stdcall AddObject([in] IVBUnknown* punk);
+    long __stdcall AddFromArray([in] IVBObjectArray* poaSource);
+    long __stdcall RemoveObjectAt([in] long uiIndex);
+    long __stdcall Clear();
+  };
+
+  [
+    uuid(6332debf-87b5-4670-90c0-5e57b408a49e),
+    version(1.0),
+    helpstring("ICustomDestinationList-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBCustomDestinationList : IVBUnknown
+  {
+    long __stdcall SetAppID([in] long pszAppID);
+    long __stdcall BeginList([out] long* pcMinSlots, [in] UUID* riid, [in,out] void* ppv);
+    long __stdcall AppendCategory([in] long pszCategory, [in] IVBObjectArray* poa);
+    long __stdcall AppendKnownCategory([in] KNOWNDESTCATEGORYConstants category);
+    long __stdcall AddUserTasks([in] IVBObjectArray* poa);
+    long __stdcall CommitList();
+    long __stdcall GetRemovedDestinations([in] UUID* riid, [in,out] void* ppv);
+    long __stdcall DeleteList([in] long pszAppID);
+    long __stdcall AbortList();
+  };
+
+  [
+    uuid(12337d35-94c6-48a0-bce7-6a9c69d4d600),
+    version(1.0),
+    helpstring("IApplicationDestinations-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBApplicationDestinations : IVBUnknown
+  {
+    long __stdcall SetAppID([in] long pszAppID);
+    long __stdcall RemoveDestination([in] IVBUnknown* punk);
+    long __stdcall RemoveAllDestinations();
+  };
+
+  [
+    uuid(3c594f9f-9f30-47a1-979a-c9e83d3d0a06),
+    version(1.0),
+    helpstring("IApplicationDocumentLists-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBApplicationDocumentLists : IVBUnknown
+  {
+    long __stdcall SetAppID([in] long pszAppID);
+    long __stdcall GetList([in] APPDOCLISTTYPEConstants listtype, [in] long cItemsDesired, [in] UUID* riid, [in,out] void* ppv);
+  };
+
+	[
+		uuid(886D8EEB-8CF2-4446-8D02-CDBA1DBDCF99),
+		version(1.0),
+		helpstring("IPropertyStore for Visual Basic (by TimoSoft)"),
+		odl
+	]
+	interface IVBPropertyStore : IVBUnknown
+	{
+		long __stdcall GetCount([in] long* cProps);
+		long __stdcall GetAt([in] long iProp, [in] PROPERTYKEY* pKey);
+		long __stdcall GetValue([in] PROPERTYKEY* key, [in,out] PROPVARIANT* pv);
+		long __stdcall SetValue([in] PROPERTYKEY* key, [in] PROPVARIANT* propvar);
+		long __stdcall Commit();
+	};
+
+	[
+		uuid(6f79d558-3e96-4549-a1d1-7d75d2288814),
+		version(1.0),
+		helpstring("IPropertyDescription for Visual Basic (by TimoSoft)"),
+		odl
+	]
+	interface IVBPropertyDescription : IVBUnknown
+	{
+		long __stdcall GetPropertyKey([in] PROPERTYKEY* pkey);
+		long __stdcall GetCanonicalName([in,out] long* ppszName);
+		long __stdcall GetPropertyType([in,out] short* pvartype);
+		long __stdcall GetDisplayName([in,out] long* ppszName);
+		long __stdcall GetEditInvitation([in,out] long* ppszInvite);
+		long __stdcall GetTypeFlags([in] PROPDESC_TYPE_FLAGSConstants mask, [in,out] PROPDESC_TYPE_FLAGSConstants* ppdtFlags);
+		long __stdcall GetViewFlags([in,out] PROPDESC_VIEW_FLAGSConstants* ppdvFlags);
+		long __stdcall GetDefaultColumnWidth([in,out] long* pcxChars);
+		long __stdcall GetDisplayType([in,out] PROPDESC_DISPLAYTYPEConstants* pdisplaytype);
+		long __stdcall GetColumnState([in,out] SHCOLSTATEConstants* pcsFlags);
+		long __stdcall GetGroupingRange([in,out] PROPDESC_GROUPING_RANGEConstants* pgr);
+		long __stdcall GetRelativeDescriptionType([in,out] PROPDESC_RELATIVEDESCRIPTION_TYPEConstants* prdt);
+		long __stdcall GetRelativeDescription([in] PROPVARIANT* propvar1, [in] PROPVARIANT* propvar2, [in,out] long* ppszDesc1, [in,out] long* ppszDesc2);
+		long __stdcall GetSortDescription([in,out] PROPDESC_SORTDESCRIPTIONConstants* psd);
+		long __stdcall GetSortDescriptionLabel([in] long fDescending, [in,out] long* ppszDescription);
+		long __stdcall GetAggregationType([in,out] PROPDESC_AGGREGATION_TYPEConstants* paggtype);
+		long __stdcall GetConditionType([in,out] PROPDESC_CONDITION_TYPEConstants* pcontype, [in,out] CONDITION_OPERATIONConstants* popDefault);
+		long __stdcall GetEnumTypeList([in] UUID* riid, [in,out] void* ppv);
+		long __stdcall CoerceToCanonicalValue([in,out] PROPVARIANT* ppropvar);
+		long __stdcall FormatForDisplay([in] PROPVARIANT* propvar, [in] PROPDESC_FORMAT_FLAGSConstants pdfFlags, [in,out] long* ppszDisplay);
+		long __stdcall IsValueCanonical([in] PROPVARIANT* propvar);
+	};
+
+	[
+		uuid(57d2eded-5062-400e-b107-5dae79fe57a6),
+		version(1.0),
+		helpstring("IPropertyDescription2 for Visual Basic (by TimoSoft)"),
+		odl
+	]
+	interface IVBPropertyDescription2 : IVBPropertyDescription
+	{
+		long __stdcall GetImageReferenceForValue([in] PROPVARIANT* propvar, [in,out] long* ppszImageRes);
+	}
+
+	[
+		uuid(1f9fc1d0-c39b-4b26-817f-011967d3440e),
+		version(1.0),
+		helpstring("IPropertyDescriptionList for Visual Basic (by TimoSoft)"),
+		odl
+	]
+	interface IVBPropertyDescriptionList : IVBUnknown
+	{
+		long __stdcall GetCount([in] long* pcElem);
+		long __stdcall GetAt([in] long iElem, [in] UUID* riid, [in,out] void* ppv);
+	}
+
+	[
+		uuid(11a66efa-382e-451a-9234-1e0e12ef3085),
+		version(1.0),
+		helpstring("IShellLibrary for Visual Basic (by TimoSoft)"),
+		odl
+	]
+	interface IVBShellLibrary : IVBUnknown
+	{
+		long __stdcall LoadLibraryFromItem([in] IVBShellItem* psiLibrary, [in] long grfMode);
+		long __stdcall LoadLibraryFromKnownFolder([in] KNOWNFOLDERID* kfidLibrary, [in] long grfMode);
+		long __stdcall AddFolder([in] IVBShellItem* psiLocation);
+		long __stdcall RemoveFolder([in] IVBShellItem* psiLocation);
+		long __stdcall GetFolders([in] LIBRARYFOLDERFILTERConstants lff, [in] UUID* riid, [in,out] void* ppv);
+		long __stdcall ResolveFolder([in] IVBShellItem* psiFolderToResolve, [in] long dwTimeout, [in] UUID* riid, [in,out] void* ppv);
+		long __stdcall GetDefaultSaveFolder([in] DEFAULTSAVEFOLDERTYPEConstants dsft, [in] UUID* riid, [in,out] void* ppv);
+		long __stdcall SetDefaultSaveFolder([in] DEFAULTSAVEFOLDERTYPEConstants dsft, [in] IVBShellItem* psi);
+		long __stdcall GetOptions([in] LIBRARYOPTIONFLAGSConstants plofOptions);
+		long __stdcall SetOptions([in] LIBRARYOPTIONFLAGSConstants lofMask, [in] LIBRARYOPTIONFLAGSConstants lofOptions);
+		long __stdcall GetFolderType([out] FOLDERTYPEID* pftid);
+		long __stdcall SetFolderType([in] FOLDERTYPEID* ftid);
+		long __stdcall GetIcon([in,out] long* ppszIcon);
+		long __stdcall SetIcon([in] long pszIcon);
+		long __stdcall Commit(void);
+		long __stdcall Save([in] IVBShellItem* psiFolderToSaveIn, [in] long pszLibraryName, [in] LIBRARYSAVEFLAGSConstants lsf, [in,out] IVBShellItem** ppsiSavedTo);
+		long __stdcall SaveInKnownFolder([in] KNOWNFOLDERID* kfidToSaveIn, [in] long pszLibraryName, [in] LIBRARYSAVEFLAGSConstants lsf, [in,out] IVBShellItem** ppsiSavedTo);
+	}
+
+  #ifdef FolderTasks
+    [
+      uuid(EC6FE84F-DC14-4FBB-889F-EA50FE27FE0F),
+      version(1.0),
+      helpstring("IUIElement-Interface for Visual Basic (by TimoSoft, thanks to Henk Devos)"),
+      odl
+    ]
+    interface IVBUIElement : IVBUnknown
+    {
+      long __stdcall GetTitle([in] IVBShellItemArray* pItemArray, [in,out] long* pbstrTitle);
+      long __stdcall GetIcon([in] IVBShellItemArray* pItemArray, [in,out] long* pbstrIcon);
+      long __stdcall GetToolTip([in] IVBShellItemArray* pItemArray, [in,out] long* pbstrToolTip);
+    }
+
+    [
+      uuid(4026DFB9-7691-4142-B71C-DCF08EA4DD9C),
+      version(1.0),
+      helpstring("IUICommand-Interface for Visual Basic (by TimoSoft, thanks to Henk Devos)"),
+      odl
+    ]
+    interface IVBUICommand : IVBUIElement
+    {
+      long __stdcall GetCanonicalName([in] UUID* pGuid);
+      long __stdcall GetState([in] IVBShellItemArray* pItemArray, [in] int nRequested, [in,out] UISTATEConstants* pState);
+      long __stdcall Invoke([in] IVBShellItemArray* pItemArray, [in] long pCtx);
+    }
+
+    [
+      uuid(2CB95001-FC47-4064-89B3-328F2FE60F44),
+      version(1.0),
+      helpstring("IUICommandTarget-Interface for Visual Basic (by TimoSoft, thanks to Henk Devos)"),
+      odl
+    ]
+    interface IVBUICommandTarget : IVBUnknown
+    {
+      // TODO...
+      // 8 Methoden -> 3 von IUnknown, 5 von IUICommandTarget
+    }
+
+    [
+      uuid(869447DA-9F84-4E2A-B92D-00642DC8A911),
+      version(1.0),
+      helpstring("IEnumUICommand-Interface for Visual Basic (by TimoSoft, thanks to Henk Devos)"),
+      odl
+    ]
+    interface IVBEnumUICommand : IVBUnknown
+    {
+      long __stdcall Next([in] long Count, [in,out] IVBUICommand** Return, [in,out] long* Copied);
+      long __stdcall Skip([in] long Count);
+      long __stdcall Reset();
+      long __stdcall Clone([in,out] IVBEnumUICommand** pReturn);
+    };
+
+    [
+      uuid(3B877E3C-67DE-4F9A-B29B-17D0A1521C6A),
+      version(1.0),
+      helpstring("IAssociationArray-Interface for Visual Basic (by TimoSoft)"),
+      odl
+    ]
+    interface IVBAssociationArray : IVBUnknown
+    {
+      // TODO...
+      // Ob es etwas mit den folder tasks zu tun hat, ist ungewiss. Es existiert nur unter WinXP und höher.
+    }
+  #endif
+
+  /*[
+    // CLSID_AlphabeticalCategorizer
+    uuid(3C2654C6-7372-4F6B-B310-55D6128F49D2),
+    version(1.0),
+    helpstring("AlphabeticalCategorizer-Class for Visual Basic (by TimoSoft)")
+  ]
+  coclass AlphabeticalCategorizer
+  {
+    interface IVBCategorizer;
+  }
+
+
+  [
+    // CLSID_DriveSizeCategorizer
+    uuid(94357B53-CA29-4B78-83AE-E8FE7409134F),
+    version(1.0),
+    helpstring("DriveSizeCategorizer-Class for Visual Basic (by TimoSoft)")
+  ]
+  coclass DriveSizeCategorizer
+  {
+    interface IVBCategorizer;
+  }
+
+  [
+    // CLSID_DriveTypeCategorizer
+    uuid(B0A8F3CF-4333-4BAB-8873-1CCB1CADA48B),
+    version(1.0),
+    helpstring("DriveTypeCategorizer-Class for Visual Basic (by TimoSoft)")
+  ]
+  coclass DriveTypeCategorizer
+  {
+    interface IVBCategorizer;
+  }
+
+  [
+    // CLSID_FreeSpaceCategorizer
+    uuid(B5607793-24AC-44C7-82E2-831726AA6CB7),
+    version(1.0),
+    helpstring("FreeSpaceCategorizer-Class for Visual Basic (by TimoSoft)")
+  ]
+  coclass FreeSpaceCategorizer
+  {
+    interface IVBCategorizer;
+  }
+
+  [
+    // CLSID_MergedCategorizer
+    uuid(8E827C11-33E7-4BC1-B242-8CD9A1C2B304),
+    version(1.0),
+    helpstring("MergedCategorizer-Class for Visual Basic (by TimoSoft)")
+  ]
+  coclass MergedCategorizer
+  {
+    interface IVBCategorizer;
+  }
+
+  [
+    // CLSID_SizeCategorizer
+    uuid(55D7B852-F6D1-42F2-AA75-8728A1B2D264),
+    version(1.0),
+    helpstring("SizeCategorizer-Class for Visual Basic (by TimoSoft)")
+  ]
+  coclass SizeCategorizer
+  {
+    interface IVBCategorizer;
+  }
+
+  [
+    // CLSID_TimeCategorizer
+    uuid(3BB4118F-DDFD-4D30-A348-9FB5D6BF1AFE),
+    version(1.0),
+    helpstring("TimeCategorizer-Class for Visual Basic (by TimoSoft)")
+  ]
+  coclass TimeCategorizer
+  {
+    interface IVBCategorizer;
+  };
+
+  [
+    // CLSID_ShellThumbnailDiskCache
+    uuid(1EBDCF80-A200-11d0-A3A4-00C04FD706EC),
+    version(1.0),
+    helpstring("ShellThumbnailDiskCache-Class for Visual Basic (by TimoSoft)")
+  ]
+  coclass ShellThumbnailDiskCache
+  {
+    interface IVBShellImageStore;
+  };*/
+};

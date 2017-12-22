@@ -1,0 +1,187 @@
+[
+  uuid(3FFDD9FD-46EC-4011-87FE-E6933C5F2094),
+  helpstring("TimoSoft OLE-Drag'n'Drop-Interfaces for Visual Basic (Lite-Version)"),
+  version(1.0)
+]
+library OLEDragNDropLiteInterfaces
+{
+  importlib("stdole2.tlb");
+
+
+  // enums
+
+  typedef enum CLSCTXConstants
+  {
+    CLSCTX_INPROC_SERVER = 0x1,
+    CLSCTX_INPROC_HANDLER = 0x2,
+    CLSCTX_LOCAL_SERVER = 0x4,
+    CLSCTX_INPROC_SERVER16 = 0x8,
+    CLSCTX_REMOTE_SERVER = 0x10,
+    CLSCTX_INPROC_HANDLER16 = 0x20,
+    CLSCTX_INPROC_SERVERX86 = 0x40,
+    CLSCTX_INPROC_HANDLERX86 = 0x80,
+    CLSCTX_ESERVER_HANDLER = 0x100,
+    CLSCTX_RESERVED = 0x200,
+    CLSCTX_NO_CODE_DOWNLOAD = 0x400,
+    CLSCTX_NO_WX86_TRANSLATION = 0x800,
+    CLSCTX_NO_CUSTOM_MARSHAL = 0x1000,
+    CLSCTX_ENABLE_CODE_DOWNLOAD = 0x2000,
+    CLSCTX_NO_FAILURE_LOG = 0x4000
+  } CLSCTXConstants;
+
+  typedef enum DATADIRConstants
+  {
+    DATADIR_GET = 1,
+    DATADIR_SET = 2,
+  } DATADIRConstants;
+
+  typedef enum DROPEFFECTConstants
+  {
+    DROPEFFECT_NONE = 0,
+    DROPEFFECT_COPY = 1,
+    DROPEFFECT_MOVE = 2,
+    DROPEFFECT_LINK = 4,
+    DROPEFFECT_SCROLL = 0x80000000
+  } DROPEFFECTConstants;
+
+  typedef enum DVASPECTConstants
+  {
+    DVASPECT_CONTENT = 1,
+    DVASPECT_THUMBNAIL = 2,
+    DVASPECT_ICON = 4,
+    DVASPECT_DOCPRINT = 8,
+    DVASPECT_OPAQUE = 16,
+    DVASPECT_TRANSPARENT = 32
+  } DVASPECTConstants;
+
+  typedef enum TYMEDConstants
+  {
+    TYMED_HGLOBAL = 1,
+    TYMED_FILE = 2,
+    TYMED_ISTREAM = 4,
+    TYMED_ISTORAGE = 8,
+    TYMED_GDI = 16,
+    TYMED_MFPICT = 32,
+    TYMED_ENHMF = 64,
+    TYMED_NULL = 0
+  } TYMEDConstants;
+
+
+  // structs
+
+  typedef struct FORMATETC
+  {
+    short cfFormat;
+    long pDVTARGETDEVICE;
+    DVASPECTConstants dwAspect;
+    long lindex;
+    TYMEDConstants TYMED;
+  } FORMATETC;
+
+  typedef struct STGMEDIUM
+  {
+    TYMEDConstants TYMED;
+    long data;
+    long pUnkForRelease;
+  } STGMEDIUM;
+
+  typedef struct POINT
+  {
+    long x;
+    long y;
+  } POINT;
+
+  typedef struct UUID
+  {
+    long Data1;
+    short Data2;
+    short Data3;
+    unsigned char Data4[8];
+  } UUID;
+  typedef UUID *REFGUID;
+  typedef [public] UUID IID;
+  typedef UUID *REFIID;
+  typedef [public] UUID CLSID;
+  typedef UUID *REFCLSID;
+  typedef [public] UUID GUID;
+
+
+  // interfaces
+
+  [
+    uuid(00000000-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IUnknown-Interface for Visual Basic (© by TimoSoft)"),
+    odl
+  ]
+  interface IVBUnknown
+  {
+    long __stdcall QueryInterface([in] UUID* IID, [in, out] void* pObject);
+    long __stdcall AddRef();
+    long __stdcall Release();
+  };
+
+  [
+    uuid(0000010E-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IDataObject-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBDataObject : IVBUnknown
+  {
+    long __stdcall GetData([in, out] FORMATETC* DataFormat, [in, out] STGMEDIUM* Data);
+    long __stdcall GetDataHere([in, out] FORMATETC* DataFormat, [in, out] STGMEDIUM* Data);
+    long __stdcall QueryGetData([in, out] FORMATETC* DataFormat);
+    long __stdcall GetCanonicalFormatEtc([in, out] FORMATETC* DataFormatIn, [in, out] FORMATETC* DataFormatOut);
+    long __stdcall SetData([in, out] FORMATETC* DataFormat, [in, out] STGMEDIUM* Data, [in] long ReleaseData);
+    long __stdcall EnumFormatEtc([in] DATADIRConstants Direction, [out] void* pEnumFORMATETC);
+    long __stdcall DAdvise([in, out] FORMATETC* DataFormat, [in] long Flags, [in] long pIAdviseSink, [in, out] long* pToken);
+    long __stdcall DUnadvise([in] long pToken);
+    long __stdcall EnumDAdvise([in, out] long* pIEnumAdvise);
+  };
+
+  [
+    uuid(4657278B-411B-11D2-839A-00C04FD918D0),
+    version(1.0),
+    helpstring("TimoSoft IDropTargetHelper-Interface for Visual Basic (by TimoSoft)"),
+    odl
+  ]
+  interface IVBDropTargetHelper : IVBUnknown
+  {
+    long __stdcall DragEnter([in] long hWndTarget, [in] IVBDataObject* pDataObject, [in] POINT* pt, [in, out] DROPEFFECTConstants* Effects);
+    long __stdcall DragLeave();
+    long __stdcall DragOver([in] POINT* pt, [in, out] DROPEFFECTConstants* Effects);
+    long __stdcall Drop([in] IVBDataObject* pDataObject, [in] POINT* pt, [in, out] DROPEFFECTConstants* Effects);
+    long __stdcall Show([in] long ShowIt);
+  };
+
+
+  // modules
+
+  [
+    dllname("ole32.dll"),
+    helpstring("TimoSoft OLE-Drag'n'Drop-Functions for Visual Basic (Lite-Version)")
+  ]
+  module ole32
+  {
+    const LPSTR strIID_IDragDropHelper = "{4657278A-411B-11d2-839A-00C04FD918D0}";
+    const LPSTR strIID_IDropTargetHelper = "{4657278B-411B-11d2-839A-00C04FD918D0}";
+
+    [entry("CLSIDFromString")]
+    long CLSIDFromString([in] LPWSTR str, [in, out] UUID *CLSID);
+    [entry("CoCreateInstance")]
+    long CoCreateInstance([in] UUID *CLSID, [in] stdole.IUnknown *Unknwn, [in] CLSCTXConstants Context, [in] UUID *IID, [out] void *Interface);
+  };
+
+  [
+    dllname("kernel32.dll"),
+    helpstring("TimoSoft OLE-Drag'n'Drop-Functions for Visual Basic (Lite-Version)")
+  ]
+  module kernel32
+  {
+    [entry("RtlMoveMemory")]
+    void CopyMemory([in] void *pDest, [in] void *pSrc, [in] long Length);
+    [entry("RtlZeroMemory")]
+    void ZeroMemory([in] void *pDest, [in] long Length);
+  };
+};

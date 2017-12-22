@@ -1,0 +1,735 @@
+VERSION 5.00
+Begin VB.PropertyPage ppgAllgemein 
+   AutoRedraw      =   -1  'True
+   Caption         =   "Allgemein"
+   ClientHeight    =   3345
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   5625
+   LockControls    =   -1  'True
+   PaletteMode     =   0  'Rasterbild
+   ScaleHeight     =   223
+   ScaleMode       =   3  'Pixel
+   ScaleWidth      =   375
+   Begin VB.CommandButton cmdAbout 
+      Height          =   375
+      Left            =   4080
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgAllgemein.pgx":0000
+      Style           =   1  'Grafisch
+      TabIndex        =   17
+      ToolTipText     =   "Infos über |1..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.ComboBox cmbScrollBars 
+      Height          =   315
+      ItemData        =   "ppgAllgemein.pgx":0102
+      Left            =   1200
+      List            =   "ppgAllgemein.pgx":010F
+      Style           =   2  'Dropdown-Liste
+      TabIndex        =   9
+      Top             =   1560
+      Width           =   1650
+   End
+   Begin VB.TextBox txtHoverTime 
+      Height          =   285
+      Left            =   1830
+      TabIndex        =   1
+      Top             =   90
+      Width           =   540
+   End
+   Begin VB.ListBox lstProps 
+      Height          =   1410
+      ItemData        =   "ppgAllgemein.pgx":0136
+      Left            =   2925
+      List            =   "ppgAllgemein.pgx":015B
+      Style           =   1  'Kontrollkästchen
+      TabIndex        =   10
+      Top             =   840
+      Width           =   2520
+   End
+   Begin VB.TextBox txtSelChangedDelayTime 
+      Height          =   285
+      Left            =   1830
+      TabIndex        =   3
+      Top             =   450
+      Width           =   540
+   End
+   Begin VB.CommandButton cmdSaveSettings 
+      Height          =   375
+      Left            =   5040
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgAllgemein.pgx":020B
+      Style           =   1  'Grafisch
+      TabIndex        =   19
+      ToolTipText     =   "Einstellungen speichern..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.CommandButton cmdLoadSettings 
+      Height          =   375
+      Left            =   4560
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgAllgemein.pgx":054D
+      Style           =   1  'Grafisch
+      TabIndex        =   18
+      ToolTipText     =   "Einstellungen laden..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.CommandButton cmdPopup 
+      Height          =   285
+      Index           =   1
+      Left            =   5160
+      MaskColor       =   &H00FFFFFF&
+      Picture         =   "ppgAllgemein.pgx":064F
+      Style           =   1  'Grafisch
+      TabIndex        =   16
+      TabStop         =   0   'False
+      Top             =   2880
+      UseMaskColor    =   -1  'True
+      Width           =   285
+   End
+   Begin VB.CommandButton cmdPopup 
+      Height          =   285
+      Index           =   0
+      Left            =   5160
+      MaskColor       =   &H00FFFFFF&
+      Picture         =   "ppgAllgemein.pgx":06B5
+      Style           =   1  'Grafisch
+      TabIndex        =   13
+      TabStop         =   0   'False
+      Top             =   2520
+      UseMaskColor    =   -1  'True
+      Width           =   285
+   End
+   Begin VB.TextBox txtRootPath 
+      Height          =   285
+      Left            =   870
+      TabIndex        =   12
+      Top             =   2520
+      Width           =   4215
+   End
+   Begin VB.TextBox txtPath 
+      Height          =   285
+      Left            =   870
+      TabIndex        =   15
+      Top             =   2880
+      Width           =   4215
+   End
+   Begin VB.ComboBox cmbBorderstyle 
+      Height          =   315
+      ItemData        =   "ppgAllgemein.pgx":071B
+      Left            =   1200
+      List            =   "ppgAllgemein.pgx":0725
+      Style           =   2  'Dropdown-Liste
+      TabIndex        =   7
+      Top             =   1200
+      Width           =   1650
+   End
+   Begin VB.ComboBox cmbAppearance 
+      Height          =   315
+      ItemData        =   "ppgAllgemein.pgx":0744
+      Left            =   1200
+      List            =   "ppgAllgemein.pgx":0751
+      Style           =   2  'Dropdown-Liste
+      TabIndex        =   5
+      Top             =   840
+      Width           =   1650
+   End
+   Begin VB.Line linSep 
+      BorderColor     =   &H80000014&
+      Index           =   1
+      X1              =   8
+      X2              =   363
+      Y1              =   159
+      Y2              =   159
+   End
+   Begin VB.Line linSep 
+      BorderColor     =   &H80000010&
+      Index           =   0
+      X1              =   7
+      X2              =   364
+      Y1              =   158
+      Y2              =   158
+   End
+   Begin VB.Label lblLabel 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "ms"
+      Height          =   195
+      Index           =   1
+      Left            =   2415
+      TabIndex        =   21
+      Top             =   540
+      Width           =   195
+   End
+   Begin VB.Label lblLabel 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "ms"
+      Height          =   195
+      Index           =   0
+      Left            =   2415
+      TabIndex        =   20
+      Top             =   180
+      Width           =   195
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "SelChangedDelayT&ime:"
+      Height          =   195
+      Index           =   1
+      Left            =   120
+      TabIndex        =   2
+      Top             =   540
+      Width           =   1665
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "&ScrollBars:"
+      Height          =   195
+      Index           =   5
+      Left            =   120
+      TabIndex        =   8
+      Top             =   1680
+      Width           =   750
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "&HoverTime:"
+      Height          =   195
+      Index           =   0
+      Left            =   120
+      TabIndex        =   0
+      Top             =   180
+      Width           =   825
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "&RootPath:"
+      Height          =   195
+      Index           =   6
+      Left            =   120
+      TabIndex        =   11
+      Top             =   2610
+      Width           =   720
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "&Path:"
+      Height          =   195
+      Index           =   7
+      Left            =   120
+      TabIndex        =   14
+      Top             =   2970
+      Width           =   375
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "B&orderStyle:"
+      Height          =   195
+      Index           =   4
+      Left            =   120
+      TabIndex        =   6
+      Top             =   1320
+      Width           =   855
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "&Appearance:"
+      Height          =   195
+      Index           =   2
+      Left            =   120
+      TabIndex        =   4
+      Top             =   960
+      Width           =   915
+   End
+End
+Attribute VB_Name = "ppgAllgemein"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = True
+Option Explicit
+
+  ' lokale Variablen
+
+  Private allItems(2) As String
+
+
+  ' lokale APIs
+
+  Private Declare Function CheckMenuRadioItem Lib "user32" (ByVal hMenu As Long, ByVal IDFirst As Long, ByVal IDLast As Long, ByVal IDChecked As Long, ByVal Flags As Long) As Long
+  Private Declare Function InsertMenuItem Lib "user32" Alias "InsertMenuItemA" (ByVal hMenu As Long, ByVal ItemID As Long, ByVal Mode As Long, Data As MENUITEMINFO) As Long
+
+
+' Events
+
+Private Sub cmbAppearance_Click()
+  Changed = True
+End Sub
+
+Private Sub cmbBkImageStyle_Click()
+  Changed = True
+End Sub
+
+Private Sub cmbBorderstyle_Click()
+  Changed = True
+End Sub
+
+Private Sub cmbScrollBars_Click()
+  Changed = True
+End Sub
+
+Private Sub cmdAbout_Click()
+  SelectedControls(0).About
+End Sub
+
+Private Sub cmdLoadSettings_Click()
+  Dim CD As clsCommonDialog
+  Dim File As String
+  Dim i As Integer
+  Dim ret As Boolean
+
+  Set CD = New clsCommonDialog
+  With CD
+    .ActiveFilter = 1
+    .Caption = "Einstellungen laden..."
+    .AddFilter "TimoSoft ExplorerControls-Settings (*.exctlsf)", "*.exctlsf"
+    .AddFilter "Alle Dateien", "*.*"
+    .OpenFlags = CDOpenFlagsConsts.OFN_EXPLORER Or CDOpenFlagsConsts.OFN_FILEMUSTEXIST Or CDOpenFlagsConsts.OFN_HIDEREADONLY Or CDOpenFlagsConsts.OFN_PATHMUSTEXIST
+    .hWndParent = SelectedControls(0).hWnd
+    ret = .showOpen(File)
+    If ret Then
+      For i = 0 To SelectedControls.Count - 1
+        On Error Resume Next
+        SelectedControls(i).LoadSettingsFromFile File
+        If Err Then MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Laden"
+      Next
+      PropertyPage_SelectionChanged
+    End If
+  End With
+  Set CD = Nothing
+End Sub
+
+Private Sub cmdPopup_Click(Index As Integer)
+  Dim arrIndices() As String
+  Dim frm As frmBrowseForFolder
+  Dim Folder As String
+  Dim hMenu As Long
+  Dim cy As Long
+  Dim i As Integer
+  Dim i2 As Integer
+  Dim IDSearch As Integer
+  Dim insertBefore As Integer
+  Dim insertedIndices As String
+  Dim ItemPos As Integer
+  Dim max As Integer
+  Dim menuItemData As MENUITEMINFO
+  Dim min As Integer
+  Dim pos As POINT
+  Dim Selected As Long
+
+  On Error GoTo FreeMemory
+  hMenu = CreatePopupMenu
+  If hMenu Then
+    With menuItemData
+      .cbSize = LenB(menuItemData)
+      If ver_Win_98Or2k Then
+        .fMask = MIIM_STRING Or MIIM_ID
+      Else
+        .fMask = MIIM_TYPE Or MIIM_ID
+        .fType = MFT_STRING
+      End If
+
+      min = 999
+      ' Einträge laden
+      For i = CSIDLConstants.CSIDL_First To CSIDLConstants.CSIDL_Last
+        Folder = CSIDLToMenuItem(i)
+        If Folder <> "" Then
+          insertBefore = CInt(Left(Folder, 3))
+          If insertBefore = 0 Then
+            ItemPos = GetMenuItemCount(hMenu)
+          Else
+            If insertBefore < min Then
+              ItemPos = 0
+            Else
+              arrIndices = Split(insertedIndices, "|")
+              ItemPos = 0
+              For i2 = LBound(arrIndices) To UBound(arrIndices)
+                If insertBefore > CInt(arrIndices(i2)) Then ItemPos = ItemPos + 1
+              Next
+            End If
+          End If
+          Folder = Mid$(Folder, 4)
+
+          .dwTypeData = StrPtr(StrConv(Folder, VbStrConv.vbFromUnicode))
+          .wID = i + 1
+          InsertMenuItem hMenu, ItemPos, 1, menuItemData
+
+          If insertBefore > 0 Then
+            insertedIndices = insertedIndices & IIf(insertedIndices <> "", "|", "") & Format(insertBefore, "000")
+            If insertBefore > max Then max = insertBefore
+            If (insertBefore < min) Or (min = 0) Then min = insertBefore
+          End If
+
+          If Folder = IIf(Index, txtPath, txtRootPath) Then Selected = insertBefore
+        End If
+      Next
+
+      If ver_Win_98Or2k Then
+        .fMask = MIIM_FTYPE Or MIIM_ID
+      Else
+        .fMask = MIIM_TYPE Or MIIM_ID
+      End If
+      .fType = MFT_SEPARATOR
+      .wID = i + 1
+      InsertMenuItem hMenu, GetMenuItemCount(hMenu), 1, menuItemData
+
+      If ver_Win_98Or2k Then
+        .fMask = MIIM_STRING Or MIIM_ID
+      Else
+        .fMask = MIIM_TYPE Or MIIM_ID
+        .fType = MFT_STRING
+      End If
+      Folder = "Auswählen..."
+      .dwTypeData = StrPtr(StrConv(Folder, VbStrConv.vbFromUnicode))
+      .wID = i + 2
+      IDSearch = .wID
+      InsertMenuItem hMenu, GetMenuItemCount(hMenu), 1, menuItemData
+    End With
+
+    If Selected Then CheckMenuRadioItem hMenu, 0, GetMenuItemCount(hMenu), Selected - 1, MF_BYPOSITION
+
+    With pos
+      GetCursorPos pos
+      Selected = TrackPopupMenuExAsLong(hMenu, TPM_LEFTALIGN Or TPM_LEFTBUTTON Or TPM_RIGHTBUTTON Or TPM_RETURNCMD, .x, .y, hWnd, 0)
+      If Selected Then
+        If Selected = IDSearch Then
+          Set frm = New frmBrowseForFolder
+          With SelectedControls(0)
+            Select Case .AppID
+              Case 2
+                frm.showIt Index, IIf(Index, txtRootPath, CSIDLConstants.CSIDL_DESKTOP), IIf(Index, txtPath, txtRootPath), .IncludedItems, .DrivesOnly, .FileAttributes, .FolderAttributes, IIf(.UseFileFilters, .FileFilters, ""), IIf(.UseFolderFilters, .FolderFilters, ""), .ExpandArchives
+              Case 3
+                frm.showIt txtRootPath
+            End Select
+          End With
+          If frm.Selected <> "" Then
+            If Index = 1 Then
+              txtPath = frm.Selected
+            Else
+              txtRootPath = frm.Selected
+            End If
+          End If
+
+          Set frm = Nothing
+        Else
+          Folder = CSIDLToMenuItem(Selected - 1)
+          If Folder <> "" Then
+            Folder = Mid(Folder, 4)
+            If Index = 1 Then
+              txtPath = Folder
+            Else
+              txtRootPath = Folder
+            End If
+          End If
+        End If
+      End If
+    End With
+  End If
+
+FreeMemory:
+  DestroyMenu hMenu
+End Sub
+
+Private Sub cmdSaveSettings_Click()
+  Dim CD As clsCommonDialog
+  Dim File As String
+  Dim MSG As String
+  Dim ret As Boolean
+  Dim ret2 As VbMsgBoxResult
+  Dim tmp As Boolean
+
+  Set CD = New clsCommonDialog
+  tmp = True
+  While tmp
+    With CD
+      .ActiveFilter = 1
+      .Caption = "Einstellungen speichern unter..."
+      .DefaultExtension = ".exctlsf"
+      .AddFilter "TimoSoft ExplorerControls-Settings (*.exctlsf)", "*.exctlsf"
+      .AddFilter "Alle Dateien", "*.*"
+      .OpenFlags = CDOpenFlagsConsts.OFN_EXPLORER Or CDOpenFlagsConsts.OFN_HIDEREADONLY Or CDOpenFlagsConsts.OFN_CREATEPROMPT Or CDOpenFlagsConsts.OFN_PATHMUSTEXIST
+      .hWndParent = SelectedControls(0).hWnd
+      ret = .showSave(File)
+      If ret Then
+        On Error GoTo Fehler
+        If SelectedControls(0).FileContainsValidSettings(File) Then
+          MSG = LoadResString(resOverwriteData)
+          MSG = Replace(MSG, "|1", File)
+          MSG = Replace(MSG, "|2", SelectedControls(0).AppName)
+          MSG = Replace(MSG, "\n", vbNewLine)
+          ret2 = MsgBox(MSG, VbMsgBoxStyle.vbQuestion Or VbMsgBoxStyle.vbYesNoCancel, "Daten ersetzen?")
+          tmp = (ret2 = VbMsgBoxResult.vbNo)
+          ret = Not (ret2 = VbMsgBoxResult.vbCancel)
+        Else
+          tmp = False
+        End If
+      Else
+        tmp = False
+      End If
+    End With
+  Wend
+  Set CD = Nothing
+
+  If ret Then
+    PropertyPage_ApplyChanges
+    On Error Resume Next
+    SelectedControls(0).SaveSettingsToFile File, True
+    If Err Then MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Speichern"
+  End If
+  Exit Sub
+
+Fehler:
+  MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Speichern"
+End Sub
+
+Private Sub lstProps_ItemCheck(Item As Integer)
+  Changed = True
+End Sub
+
+Private Sub PropertyPage_ApplyChanges()
+  Dim i As Integer
+  Dim i2 As Integer
+
+  For i = 0 To SelectedControls.Count - 1
+    With SelectedControls(i)
+      On Error Resume Next
+      .HoverTime = txtHoverTime
+      .SelChangedDelayTime = txtSelChangedDelayTime
+
+      .Appearance = cmbAppearance.ListIndex
+      #If BkImageSupport Then
+        .BkImageStyle = cmbBkImageStyle.ListIndex
+      #End If
+      .BorderStyle = cmbBorderstyle.ListIndex
+      .ScrollBars = cmbScrollBars.ListIndex
+
+      With lstProps
+        For i2 = 0 To .ListCount - 1
+          CallByName SelectedControls(i), .List(i2), VbCallType.VbLet, .Selected(i2)
+        Next
+      End With
+
+      .RootPath = txtRootPath
+      .Path = txtPath
+    End With
+  Next
+
+  Changed = False
+End Sub
+
+Private Sub PropertyPage_SelectionChanged()
+  Dim AppID As Long
+  Dim arr() As String
+  Dim i As Integer
+  Dim remove As Boolean
+
+  With SelectedControls(0)
+    On Error Resume Next
+    AppID = .AppID
+
+    txtSelChangedDelayTime = .SelChangedDelayTime
+    lblDescr(1).Visible = (Err = 0)
+    txtSelChangedDelayTime.Visible = lblDescr(1).Visible
+    lblLabel(1).Visible = lblDescr(1).Visible
+
+    txtHoverTime = .HoverTime
+    cmbAppearance.ListIndex = .Appearance
+
+    #If BkImageSupport Then
+      With cmbBkImageStyle
+        If allItems(0) = "" Then
+          ' 1. Aufruf -> alle Items sichern
+          For i = 0 To .ListCount
+            allItems(0) = allItems(0) & .List(i) & ";"
+          Next
+          allItems(0) = Left(allItems(0), Len(allItems(0)) - 1)
+        Else
+          ' pauschal alles wiederherstellen
+          .Clear
+          arr = Split(allItems(0), ";")
+          For i = LBound(arr) To UBound(arr)
+            .AddItem arr(i)
+          Next
+        End If
+
+        i = 0
+        While i <= .ListCount - 1
+          Select Case LCase(.List(i))
+            Case "|1 - tiled"
+              remove = False
+            Case Else
+              remove = True
+'            Case "|1 - bottomleft"
+'              #If Debuging Then
+'                remove = False
+'              #Else
+'                remove = (AppID = 2)
+'              #End If
+'            Case "|1 - bottomright"
+'              #If Debuging Then
+'                remove = False
+'              #Else
+'                remove = (AppID = 2)
+'              #End If
+'            Case "|1 - centered"
+'              #If Debuging Then
+'                remove = False
+'              #Else
+'                remove = (AppID = 2)
+'              #End If
+'            Case "|1 - topleft"
+'              #If Debuging Then
+'                remove = False
+'              #Else
+'                remove = (AppID = 2)
+'              #End If
+'            Case "|1 - topright"
+'              #If Debuging Then
+'                remove = False
+'              #Else
+'                remove = (AppID = 2)
+'              #End If
+'            Case "|1 - stretched"
+'              #If Debuging Then
+'                remove = False
+'              #Else
+'                remove = (AppID = 2)
+'              #End If
+          End Select
+          If remove Then .RemoveItem i Else i = i + 1
+        Wend
+        For i = 0 To .ListCount - 1
+          .List(i) = Replace(.List(i), "|1", i)
+        Next
+      End With
+      cmbBkImageStyle.ListIndex = .BkImageStyle
+    #End If
+
+    cmbBorderstyle.ListIndex = .BorderStyle
+
+    With cmbScrollBars
+      If allItems(1) = "" Then
+        ' 1. Aufruf -> alle Items sichern
+        For i = 0 To .ListCount
+          allItems(1) = allItems(1) & .List(i) & ";"
+        Next
+        allItems(1) = Left(allItems(1), Len(allItems(1)) - 1)
+      Else
+        ' pauschal alles wiederherstellen
+        .Clear
+        arr = Split(allItems(1), ";")
+        For i = LBound(arr) To UBound(arr)
+          .AddItem arr(i)
+        Next
+      End If
+
+      i = 0
+      While i <= .ListCount - 1
+        Select Case LCase(.List(i))
+          Case "|1 - none"
+            remove = False
+          Case "|1 - normal"
+            remove = False
+          Case "|1 - flat"
+            remove = (AppID = 2)
+        End Select
+        If remove Then .RemoveItem i Else i = i + 1
+      Wend
+      For i = 0 To .ListCount - 1
+        .List(i) = Replace(.List(i), "|1", i)
+      Next
+    End With
+    cmbScrollBars.ListIndex = .ScrollBars
+
+    With lstProps
+      If allItems(2) = "" Then
+        ' 1. Aufruf -> alle Items sichern
+        For i = 0 To .ListCount
+          allItems(2) = allItems(2) & .List(i) & ";"
+        Next
+        allItems(2) = Left(allItems(2), Len(allItems(2)) - 1)
+      Else
+        ' pauschal alles wiederherstellen
+        .Clear
+        arr = Split(allItems(2), ";")
+        For i = LBound(arr) To UBound(arr)
+          .AddItem arr(i)
+        Next
+      End If
+      i = 0
+      While i <= .ListCount - 1
+        Err.Clear
+        .Selected(i) = CallByName(SelectedControls(0), .List(i), VbCallType.VbGet)
+        If Err Then .RemoveItem i Else i = i + 1
+      Wend
+      .ListIndex = 0
+    End With
+
+    Err.Clear
+    txtRootPath = .RootPath
+    txtPath = .Path
+    lblDescr(7).Visible = (Err = 0)
+    txtPath.Visible = lblDescr(7).Visible
+    cmdPopup(1).Visible = lblDescr(7).Visible
+  End With
+
+  cmdAbout.ToolTipText = Replace(cmdAbout.ToolTipText, "|1", TypeName(SelectedControls(0)))
+  Changed = False
+End Sub
+
+Private Sub txtHoverTime_Change()
+  Changed = True
+End Sub
+
+Private Sub txtHoverTime_GotFocus()
+  selectText txtHoverTime
+End Sub
+
+Private Sub txtPath_Change()
+  Changed = True
+End Sub
+
+Private Sub txtPath_GotFocus()
+  selectText txtPath
+End Sub
+
+Private Sub txtRootPath_Change()
+  Changed = True
+End Sub
+
+Private Sub txtRootPath_GotFocus()
+  selectText txtRootPath
+End Sub
+
+Private Sub txtSelChangedDelayTime_Change()
+  Changed = True
+End Sub
+
+Private Sub txtSelChangedDelayTime_GotFocus()
+  selectText txtSelChangedDelayTime
+End Sub

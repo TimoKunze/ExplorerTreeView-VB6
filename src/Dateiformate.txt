@@ -1,0 +1,56 @@
+Dateiformat für ExplorerControls SettingsFile:
+----------------------------------------------
+
+Endung: exctlsf
+
+HEADER
+------
+immer 59 Bytes
+Bytes		Inhalt			Beschreibung
+----------------------------------------------------
+7		"exctlsf"		Signatur
+3		"1.0"			Version des Formats
+5		"excmb"/"extvw"/"exlvw"	created by
+4		Version			HiHiByte = Major, HiLoByte = Minor, LoWord = Revision	(Version des Controls, welches die Datei erstellt hat)
+2		Build			Buildnumber						(Version des Controls, welches die Datei erstellt hat)
+32		reserviert
+4		Addr_Props		Startbyte der Eigenschaften
+4		Length_Props		Länge der Eigenschaften (in Bytes)
+<Length_Props>	Props			Eigenschaften als <PropertyBag.Contents>
+
+
+Bytes			Inhalt			Beschreibung
+------------------------------------------------------------
+7			"exctlsf"		Signatur
+4			"2.00"			Version des Formats
+5			"excmb"/"extvw"/"exlvw"	created by
+4			Version			HiHiByte = Major, HiLoByte = Minor, LoWord = Revision	(Version des Controls, welches die Datei erstellt hat)
+2			Build			Buildnumber						(Version des Controls, welches die Datei erstellt hat)
+5			"excmb"/"extvw"/"exlvw"	last changed by
+4			Version			HiHiByte = Major, HiLoByte = Minor, LoWord = Revision	(Version des Controls, welches die Datei zuletzt geändert hat)
+2			Build			Buildnumber						(Version des Controls, welches die Datei zuletzt geändert hat)
+4			Version	needed r1	HiHiByte = Major, HiLoByte = Minor, LoWord = Revision	(Version von ExplorerTreeView, ab der dieses Format gelesen werden kann)
+2			Build needed r1		Buildnumber						(Version von ExplorerTreeView, ab der dieses Format gelesen werden kann)
+4			Version	needed r2	HiHiByte = Major, HiLoByte = Minor, LoWord = Revision	(Version von ExplorerListView, ab der dieses Format gelesen werden kann)
+2			Build needed r2		Buildnumber						(Version von ExplorerListView, ab der dieses Format gelesen werden kann)
+4			Version	needed r3	HiHiByte = Major, HiLoByte = Minor, LoWord = Revision	(Version von ExplorerComboBox, ab der dieses Format gelesen werden kann)
+2			Build needed r3		Buildnumber						(Version von ExplorerComboBox, ab der dieses Format gelesen werden kann)
+12			reserviert
+4			Version	needed w1	HiHiByte = Major, HiLoByte = Minor, LoWord = Revision	(Version von ExplorerTreeView, ab der dieses Format geschrieben werden kann)
+2			Build needed w1		Buildnumber						(Version von ExplorerTreeView, ab der dieses Format geschrieben werden kann)
+4			Version	needed w2	HiHiByte = Major, HiLoByte = Minor, LoWord = Revision	(Version von ExplorerListView, ab der dieses Format geschrieben werden kann)
+2			Build needed w2		Buildnumber						(Version von ExplorerListView, ab der dieses Format geschrieben werden kann)
+4			Version	needed w3	HiHiByte = Major, HiLoByte = Minor, LoWord = Revision	(Version von ExplorerComboBox, ab der dieses Format geschrieben werden kann)
+2			Build needed w3		Buildnumber						(Version von ExplorerComboBox, ab der dieses Format geschrieben werden kann)
+12			reserviert
+32			reserviert
+4			Addr_Props_extvw	Startbyte der Eigenschaften für ExplorerTreeView
+4			Length_Props_extvw	Länge der Eigenschaften für ExplorerTreeView (in Bytes)
+4			Addr_Props_exlvw	Startbyte der Eigenschaften für ExplorerListView
+4			Length_Props_exlvw	Länge der Eigenschaften für ExplorerListView (in Bytes)
+4			Addr_Props_excmb	Startbyte der Eigenschaften für ExplorerComboBox
+4			Length_Props_excmb	Länge der Eigenschaften für ExplorerComboBox (in Bytes)
+16			reserviert
+<Length_Props_*>	Props			Eigenschaften für ein Control als <PropertyBag.Contents>
+<Length_Props_*>	Props			Eigenschaften für ein Control als <PropertyBag.Contents>
+<Length_Props_*>	Props			Eigenschaften für ein Control als <PropertyBag.Contents>

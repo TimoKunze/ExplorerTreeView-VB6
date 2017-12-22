@@ -1,0 +1,507 @@
+VERSION 5.00
+Begin VB.PropertyPage ppgIconsSortToolTips 
+   AutoRedraw      =   -1  'True
+   Caption         =   "Icons, Sortierung, ToolTips"
+   ClientHeight    =   3345
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   5625
+   LockControls    =   -1  'True
+   PaletteMode     =   0  'Rasterbild
+   ScaleHeight     =   223
+   ScaleMode       =   3  'Pixel
+   ScaleWidth      =   375
+   Begin VB.Frame fraSort 
+      Caption         =   "Sortierung"
+      Height          =   1455
+      Left            =   120
+      TabIndex        =   9
+      Top             =   1800
+      Width           =   5415
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'Kein
+         Height          =   300
+         Left            =   120
+         ScaleHeight     =   20
+         ScaleMode       =   3  'Pixel
+         ScaleWidth      =   169
+         TabIndex        =   10
+         Top             =   240
+         Width           =   2535
+         Begin VB.CheckBox chkArchivesAfterFolders 
+            Caption         =   "&ArchivesAfterFolders"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   11
+            Top             =   0
+            Width           =   1750
+         End
+      End
+      Begin VB.ListBox lstArchivesAfterFolders 
+         Height          =   1185
+         ItemData        =   "ppgIconsSortToolTips.pgx":0000
+         Left            =   4200
+         List            =   "ppgIconsSortToolTips.pgx":0019
+         Style           =   1  'Kontrollkästchen
+         TabIndex        =   17
+         Top             =   200
+         Width           =   1125
+      End
+      Begin VB.ComboBox cmbSortOrder 
+         Height          =   315
+         ItemData        =   "ppgIconsSortToolTips.pgx":0040
+         Left            =   1200
+         List            =   "ppgIconsSortToolTips.pgx":004A
+         Style           =   2  'Dropdown-Liste
+         TabIndex        =   15
+         Top             =   960
+         Width           =   1815
+      End
+      Begin VB.ComboBox cmbSortingCriteria 
+         Height          =   315
+         ItemData        =   "ppgIconsSortToolTips.pgx":006D
+         Left            =   1200
+         List            =   "ppgIconsSortToolTips.pgx":007D
+         TabIndex        =   13
+         Text            =   "cmbSortingCriteria"
+         Top             =   600
+         Width           =   1815
+      End
+      Begin VB.Label lblDescr 
+         BackStyle       =   0  'Transparent
+         Caption         =   "&ArchivesAfter- Folders:"
+         Height          =   435
+         Index           =   3
+         Left            =   3150
+         TabIndex        =   16
+         Top             =   200
+         Width           =   1005
+         WordWrap        =   -1  'True
+      End
+      Begin VB.Label lblDescr 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "So&rtOrder:"
+         Height          =   195
+         Index           =   2
+         Left            =   120
+         TabIndex        =   14
+         Top             =   1080
+         Width           =   720
+      End
+      Begin VB.Label lblDescr 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "Sorting&Criteria:"
+         Height          =   195
+         Index           =   1
+         Left            =   120
+         TabIndex        =   12
+         Top             =   720
+         Width           =   1020
+      End
+   End
+   Begin VB.CheckBox chkShowIcons 
+      Caption         =   "&ShowIcons"
+      Height          =   255
+      Left            =   240
+      TabIndex        =   0
+      Top             =   90
+      Width           =   1095
+   End
+   Begin VB.CommandButton cmdAbout 
+      Height          =   375
+      Left            =   4080
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgIconsSortToolTips.pgx":00B1
+      Style           =   1  'Grafisch
+      TabIndex        =   18
+      ToolTipText     =   "Infos über |1..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.Frame fraToolTips 
+      Caption         =   "ToolTips"
+      Height          =   1095
+      Left            =   3960
+      TabIndex        =   5
+      Top             =   600
+      Width           =   1575
+      Begin VB.PictureBox Picture2 
+         BorderStyle     =   0  'Kein
+         Height          =   735
+         Left            =   120
+         ScaleHeight     =   49
+         ScaleMode       =   3  'Pixel
+         ScaleWidth      =   89
+         TabIndex        =   6
+         Top             =   240
+         Width           =   1335
+         Begin VB.CheckBox chkInfoTips 
+            Caption         =   "&InfoTips"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   7
+            Top             =   0
+            Width           =   865
+         End
+         Begin VB.CheckBox chkHiddenItems 
+            Caption         =   "a&bgeschnittene Items"
+            Height          =   375
+            Left            =   0
+            TabIndex        =   8
+            Top             =   360
+            Width           =   1390
+         End
+      End
+   End
+   Begin VB.Frame fraIcons 
+      Height          =   1575
+      Left            =   120
+      TabIndex        =   1
+      Top             =   120
+      Width           =   3735
+      Begin VB.ListBox lstProps 
+         Height          =   1185
+         ItemData        =   "ppgIconsSortToolTips.pgx":01B3
+         Left            =   120
+         List            =   "ppgIconsSortToolTips.pgx":01C6
+         Style           =   1  'Kontrollkästchen
+         TabIndex        =   2
+         Top             =   255
+         Width           =   2000
+      End
+      Begin VB.ListBox lstShownOverlays 
+         Height          =   960
+         ItemData        =   "ppgIconsSortToolTips.pgx":022B
+         Left            =   2200
+         List            =   "ppgIconsSortToolTips.pgx":023B
+         Style           =   1  'Kontrollkästchen
+         TabIndex        =   4
+         Top             =   480
+         Width           =   1455
+      End
+      Begin VB.Label lblDescr 
+         AutoSize        =   -1  'True
+         Caption         =   "Shown&Overlays:"
+         Height          =   195
+         Index           =   0
+         Left            =   2200
+         TabIndex        =   3
+         Top             =   240
+         Width           =   1155
+      End
+   End
+   Begin VB.CommandButton cmdSaveSettings 
+      Height          =   375
+      Left            =   5040
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgIconsSortToolTips.pgx":025F
+      Style           =   1  'Grafisch
+      TabIndex        =   20
+      ToolTipText     =   "Einstellungen speichern..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.CommandButton cmdLoadSettings 
+      Height          =   375
+      Left            =   4560
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgIconsSortToolTips.pgx":05A1
+      Style           =   1  'Grafisch
+      TabIndex        =   19
+      ToolTipText     =   "Einstellungen laden..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+End
+Attribute VB_Name = "ppgIconsSortToolTips"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = True
+Option Explicit
+
+  ' lokale Variablen
+
+  Private allItems(0) As String
+
+
+' Events
+
+Private Sub chkArchivesAfterFolders_Click()
+  Changed = True
+End Sub
+
+Private Sub chkHiddenItems_Click()
+  Changed = True
+End Sub
+
+Private Sub chkInfoTips_Click()
+  Changed = True
+End Sub
+
+Private Sub chkShowIcons_Click()
+  fraIcons.Enabled = chkShowIcons
+  lstProps.Enabled = fraIcons.Enabled
+  lstShownOverlays.Enabled = fraIcons.Enabled
+
+  Changed = True
+End Sub
+
+Private Sub cmbSortingCriteria_Change()
+  Changed = True
+End Sub
+
+Private Sub cmbSortingCriteria_Click()
+  Changed = True
+End Sub
+
+Private Sub cmbSortOrder_Click()
+  Changed = True
+End Sub
+
+Private Sub cmdAbout_Click()
+  SelectedControls(0).About
+End Sub
+
+Private Sub cmdLoadSettings_Click()
+  Dim CD As clsCommonDialog
+  Dim File As String
+  Dim i As Integer
+  Dim ret As Boolean
+
+  Set CD = New clsCommonDialog
+  With CD
+    .ActiveFilter = 1
+    .Caption = "Einstellungen laden..."
+    .AddFilter "TimoSoft ExplorerControls-Settings (*.exctlsf)", "*.exctlsf"
+    .AddFilter "Alle Dateien", "*.*"
+    .OpenFlags = CDOpenFlagsConsts.OFN_EXPLORER Or CDOpenFlagsConsts.OFN_FILEMUSTEXIST Or CDOpenFlagsConsts.OFN_HIDEREADONLY Or CDOpenFlagsConsts.OFN_PATHMUSTEXIST
+    .hWndParent = SelectedControls(0).hWnd
+    ret = .showOpen(File)
+    If ret Then
+      For i = 0 To SelectedControls.Count - 1
+        On Error Resume Next
+        SelectedControls(i).LoadSettingsFromFile File
+        If Err Then MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Laden"
+      Next
+      PropertyPage_SelectionChanged
+    End If
+  End With
+  Set CD = Nothing
+End Sub
+
+Private Sub cmdSaveSettings_Click()
+  Dim CD As clsCommonDialog
+  Dim File As String
+  Dim MSG As String
+  Dim ret As Boolean
+  Dim ret2 As VbMsgBoxResult
+  Dim tmp As Boolean
+
+  Set CD = New clsCommonDialog
+  tmp = True
+  While tmp
+    With CD
+      .ActiveFilter = 1
+      .Caption = "Einstellungen speichern unter..."
+      .DefaultExtension = ".exctlsf"
+      .AddFilter "TimoSoft ExplorerControls-Settings (*.exctlsf)", "*.exctlsf"
+      .AddFilter "Alle Dateien", "*.*"
+      .OpenFlags = CDOpenFlagsConsts.OFN_EXPLORER Or CDOpenFlagsConsts.OFN_HIDEREADONLY Or CDOpenFlagsConsts.OFN_CREATEPROMPT Or CDOpenFlagsConsts.OFN_PATHMUSTEXIST
+      .hWndParent = SelectedControls(0).hWnd
+      ret = .showSave(File)
+      If ret Then
+        On Error GoTo Fehler
+        If SelectedControls(0).FileContainsValidSettings(File) Then
+          MSG = LoadResString(resOverwriteData)
+          MSG = Replace(MSG, "|1", File)
+          MSG = Replace(MSG, "|2", SelectedControls(0).AppName)
+          MSG = Replace(MSG, "\n", vbNewLine)
+          ret2 = MsgBox(MSG, VbMsgBoxStyle.vbQuestion Or VbMsgBoxStyle.vbYesNoCancel, "Daten ersetzen?")
+          tmp = (ret2 = VbMsgBoxResult.vbNo)
+          ret = Not (ret2 = VbMsgBoxResult.vbCancel)
+        Else
+          tmp = False
+        End If
+      Else
+        tmp = False
+      End If
+    End With
+  Wend
+  Set CD = Nothing
+
+  If ret Then
+    PropertyPage_ApplyChanges
+    On Error Resume Next
+    SelectedControls(0).SaveSettingsToFile File, True
+    If Err Then MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Speichern"
+  End If
+  Exit Sub
+
+Fehler:
+  MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Speichern"
+End Sub
+
+Private Sub lstArchivesAfterFolders_ItemCheck(Item As Integer)
+  Changed = True
+End Sub
+
+Private Sub lstProps_ItemCheck(Item As Integer)
+  Changed = True
+End Sub
+
+Private Sub lstShownOverlays_ItemCheck(Item As Integer)
+  Changed = True
+End Sub
+
+Private Sub PropertyPage_ApplyChanges()
+  Dim i As Integer
+  Dim i2 As Integer
+  Dim tmp As Integer
+
+  For i = 0 To SelectedControls.Count - 1
+    With SelectedControls(i)
+      On Error Resume Next
+      .ShowIcons = chkShowIcons
+
+      With lstProps
+        For i2 = 0 To .ListCount - 1
+          CallByName SelectedControls(i), .List(i2), VbCallType.VbLet, .Selected(i2)
+        Next
+      End With
+
+      tmp = ShownOverlaysConstants.soNone
+      With lstShownOverlays
+        If .Selected(0) Then tmp = tmp Or ShownOverlaysConstants.soLink
+        If .Selected(1) Then tmp = tmp Or ShownOverlaysConstants.soSharedItem
+        If .Selected(2) Then tmp = tmp Or ShownOverlaysConstants.soSlowFile
+        If .Selected(3) Then tmp = tmp Or ShownOverlaysConstants.soOthers
+      End With
+      .ShownOverlays = tmp
+
+      tmp = ShownToolTipsConstants.sttNone
+      If chkInfoTips Then tmp = tmp Or ShownToolTipsConstants.sttInfoTips
+      If chkHiddenItems Then tmp = tmp Or ShownToolTipsConstants.sttHiddenItems
+      .ShownToolTips = tmp
+
+      If chkArchivesAfterFolders.Visible Then
+        .ArchivesAfterFolders = chkArchivesAfterFolders
+      ElseIf lstArchivesAfterFolders.Visible Then
+        tmp = 0   'ArchivesAfterFoldersConstants.aafNone
+        With lstArchivesAfterFolders
+          If .Selected(0) Then tmp = tmp Or 1   'ArchivesAfterFoldersConstants.aafACE
+          If .Selected(1) Then tmp = tmp Or 2   'ArchivesAfterFoldersConstants.aafBIN
+          If .Selected(2) Then tmp = tmp Or 4   'ArchivesAfterFoldersConstants.aafCAB
+          If .Selected(3) Then tmp = tmp Or 8   'ArchivesAfterFoldersConstants.aafISO
+          If .Selected(4) Then tmp = tmp Or 16   'ArchivesAfterFoldersConstants.aafJAR
+          If .Selected(5) Then tmp = tmp Or 32   'ArchivesAfterFoldersConstants.aafRAR
+          If .Selected(6) Then tmp = tmp Or 64   'ArchivesAfterFoldersConstants.aafZIP
+        End With
+        .ArchivesAfterFolders = tmp
+      End If
+
+      If cmbSortingCriteria.ListIndex = -1 Then
+        .SortingCriteria = cmbSortingCriteria.Text
+      Else
+        .SortingCriteria = cmbSortingCriteria.ListIndex
+      End If
+      If IsWithinRange(.SortingCriteria, 0, 3) Then cmbSortingCriteria.ListIndex = .SortingCriteria Else cmbSortingCriteria.Text = .SortingCriteria
+      .SortOrder = cmbSortOrder.ListIndex
+    End With
+  Next
+
+  Changed = False
+End Sub
+
+Private Sub PropertyPage_SelectionChanged()
+  Dim AppID As Long
+  Dim arr() As String
+  Dim i As Integer
+  Dim tmp As Integer
+
+  With SelectedControls(0)
+    On Error Resume Next
+    AppID = .AppID
+
+    chkShowIcons = Abs(.ShowIcons)
+    fraIcons.Enabled = chkShowIcons
+    lstProps.Enabled = fraIcons.Enabled
+    lstShownOverlays.Enabled = fraIcons.Enabled
+
+    With lstProps
+      If allItems(0) = "" Then
+        ' 1. Aufruf -> alle Items sichern
+        For i = 0 To .ListCount
+          allItems(0) = allItems(0) & .List(i) & ";"
+        Next
+        allItems(0) = Left(allItems(0), Len(allItems(0)) - 1)
+      Else
+        ' pauschal alles wiederherstellen
+        .Clear
+        arr = Split(allItems(0), ";")
+        For i = LBound(arr) To UBound(arr)
+          .AddItem arr(i)
+        Next
+      End If
+      i = 0
+      While i <= .ListCount - 1
+        Err.Clear
+        .Selected(i) = CallByName(SelectedControls(0), .List(i), VbCallType.VbGet)
+        If Err Then .RemoveItem i Else i = i + 1
+      Wend
+      .ListIndex = 0
+    End With
+
+    tmp = .ShownOverlays
+    With lstShownOverlays
+      .Selected(0) = (tmp And ShownOverlaysConstants.soLink)
+      .Selected(1) = (tmp And ShownOverlaysConstants.soSharedItem)
+      .Selected(2) = (tmp And ShownOverlaysConstants.soSlowFile)
+      .Selected(3) = (tmp And ShownOverlaysConstants.soOthers)
+      .ListIndex = 0
+    End With
+
+    Err.Clear
+    tmp = .ShownToolTips
+    fraToolTips.Visible = (Err = 0)
+    chkInfoTips = Abs((tmp And ShownToolTipsConstants.sttInfoTips) = ShownToolTipsConstants.sttInfoTips)
+    chkHiddenItems = Abs((tmp And ShownToolTipsConstants.sttHiddenItems) = ShownToolTipsConstants.sttHiddenItems)
+
+    chkArchivesAfterFolders.Visible = (AppID = 2)
+    lblDescr(3).Visible = (AppID = 3)
+    lstArchivesAfterFolders.Visible = lblDescr(3).Visible
+    fraSort.Width = IIf(AppID = 3, 361, 209)
+    If AppID = 2 Then
+      chkArchivesAfterFolders = Abs(.ArchivesAfterFolders)
+      lblDescr(1).Top = 720
+      cmbSortingCriteria.Top = 600
+      lblDescr(2).Top = 1080
+      cmbSortOrder.Top = 960
+    Else
+      lblDescr(1).Top = 320
+      cmbSortingCriteria.Top = 200
+      lblDescr(2).Top = 680
+      cmbSortOrder.Top = 560
+      tmp = .ArchivesAfterFolders
+      With lstArchivesAfterFolders
+        .Selected(0) = (tmp And 1)   'ArchivesAfterFoldersConstants.aafACE
+        .Selected(1) = (tmp And 2)   'ArchivesAfterFoldersConstants.aafCAB)
+        .Selected(2) = (tmp And 4)   'ArchivesAfterFoldersConstants.aafJAR)
+        .Selected(3) = (tmp And 8)   'ArchivesAfterFoldersConstants.aafRAR)
+        .Selected(4) = (tmp And 16)   'ArchivesAfterFoldersConstants.aafZIP)
+        .ListIndex = 0
+      End With
+    End If
+
+    If IsWithinRange(.SortingCriteria, 0, 3) Then cmbSortingCriteria.ListIndex = .SortingCriteria Else cmbSortingCriteria.Text = .SortingCriteria
+    cmbSortOrder.ListIndex = .SortOrder
+  End With
+
+  cmdAbout.ToolTipText = Replace(cmdAbout.ToolTipText, "|1", TypeName(SelectedControls(0)))
+  Changed = False
+End Sub

@@ -1,0 +1,442 @@
+VERSION 5.00
+Begin VB.PropertyPage ppgDragDrop 
+   AutoRedraw      =   -1  'True
+   Caption         =   "Drag'n'Drop"
+   ClientHeight    =   3345
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   5625
+   LockControls    =   -1  'True
+   PaletteMode     =   0  'Rasterbild
+   ScaleHeight     =   223
+   ScaleMode       =   3  'Pixel
+   ScaleWidth      =   375
+   Begin VB.CheckBox chkDragShowAlphaBlendedItems 
+      Caption         =   "DragShowAlpha&BlendedItems"
+      Height          =   255
+      Left            =   120
+      TabIndex        =   1
+      Top             =   480
+      Width           =   2415
+   End
+   Begin VB.TextBox txtDragExpandTime 
+      Height          =   285
+      Left            =   1440
+      TabIndex        =   3
+      Top             =   795
+      Width           =   540
+   End
+   Begin VB.TextBox txtDragScrollTime 
+      Height          =   285
+      Left            =   4650
+      TabIndex        =   6
+      Top             =   795
+      Width           =   540
+   End
+   Begin VB.PictureBox picDragScrollZone 
+      Appearance      =   0  '2D
+      AutoRedraw      =   -1  'True
+      BackColor       =   &H80000005&
+      DrawStyle       =   5  'Transparent
+      Height          =   1815
+      Left            =   120
+      ScaleHeight     =   119
+      ScaleMode       =   3  'Pixel
+      ScaleWidth      =   119
+      TabIndex        =   9
+      TabStop         =   0   'False
+      Top             =   1440
+      Width           =   1815
+      Begin VB.TextBox txtDragScrollZoneTop 
+         Height          =   285
+         Left            =   720
+         TabIndex        =   10
+         Top             =   0
+         Width           =   375
+      End
+      Begin VB.TextBox txtDragScrollZoneLeft 
+         Height          =   285
+         Left            =   0
+         TabIndex        =   11
+         Top             =   750
+         Width           =   375
+      End
+      Begin VB.TextBox txtDragScrollZoneRight 
+         Height          =   285
+         Left            =   1395
+         TabIndex        =   12
+         Top             =   750
+         Width           =   375
+      End
+      Begin VB.TextBox txtDragScrollZoneBottom 
+         Height          =   285
+         Left            =   720
+         TabIndex        =   13
+         Top             =   1485
+         Width           =   375
+      End
+   End
+   Begin VB.CommandButton cmdAbout 
+      Height          =   375
+      Left            =   4080
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgDragDrop.pgx":0000
+      Style           =   1  'Grafisch
+      TabIndex        =   14
+      ToolTipText     =   "Infos über |1..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.CheckBox chkAllowDragDrop 
+      Caption         =   "&AllowDragDrop"
+      Height          =   255
+      Left            =   120
+      TabIndex        =   0
+      Top             =   120
+      Width           =   1365
+   End
+   Begin VB.CommandButton cmdLoadSettings 
+      Height          =   375
+      Left            =   4560
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgDragDrop.pgx":0102
+      Style           =   1  'Grafisch
+      TabIndex        =   15
+      ToolTipText     =   "Einstellungen laden..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.CommandButton cmdSaveSettings 
+      Height          =   375
+      Left            =   5040
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgDragDrop.pgx":0204
+      Style           =   1  'Grafisch
+      TabIndex        =   16
+      ToolTipText     =   "Einstellungen speichern..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "Drag&ExpandTime:"
+      Height          =   195
+      Index           =   0
+      Left            =   120
+      TabIndex        =   2
+      Top             =   885
+      Width           =   1275
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "Drag&ScrollTime:"
+      Height          =   195
+      Index           =   1
+      Left            =   3480
+      TabIndex        =   5
+      Top             =   885
+      Width           =   1125
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "DragScroll&Zone (Pixel):"
+      Height          =   195
+      Index           =   2
+      Left            =   120
+      TabIndex        =   8
+      Top             =   1200
+      Width           =   1620
+   End
+   Begin VB.Label lblLabel 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "ms"
+      Height          =   195
+      Index           =   0
+      Left            =   2010
+      TabIndex        =   4
+      Top             =   885
+      Width           =   195
+   End
+   Begin VB.Label lblLabel 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "ms"
+      Height          =   195
+      Index           =   1
+      Left            =   5220
+      TabIndex        =   7
+      Top             =   885
+      Width           =   195
+   End
+End
+Attribute VB_Name = "ppgDragDrop"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = True
+Option Explicit
+
+  ' lokale Variablen
+
+  Private rc As RECT
+
+
+' Events
+
+Private Sub chkAllowDragDrop_Click()
+  Changed = True
+End Sub
+
+Private Sub chkDragShowAlphaBlendedItems_Click()
+  Changed = True
+End Sub
+
+Private Sub cmdAbout_Click()
+  SelectedControls(0).About
+End Sub
+
+Private Sub cmdLoadSettings_Click()
+  Dim CD As clsCommonDialog
+  Dim File As String
+  Dim i As Integer
+  Dim ret As Boolean
+
+  Set CD = New clsCommonDialog
+  With CD
+    .ActiveFilter = 1
+    .Caption = "Einstellungen laden..."
+    .AddFilter "TimoSoft ExplorerControls-Settings (*.exctlsf)", "*.exctlsf"
+    .AddFilter "Alle Dateien", "*.*"
+    .OpenFlags = CDOpenFlagsConsts.OFN_EXPLORER Or CDOpenFlagsConsts.OFN_FILEMUSTEXIST Or CDOpenFlagsConsts.OFN_HIDEREADONLY Or CDOpenFlagsConsts.OFN_PATHMUSTEXIST
+    .hWndParent = SelectedControls(0).hWnd
+    ret = .showOpen(File)
+    If ret Then
+      For i = 0 To SelectedControls.Count - 1
+        On Error Resume Next
+        SelectedControls(i).LoadSettingsFromFile File
+        If Err Then MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Laden"
+      Next
+      PropertyPage_SelectionChanged
+    End If
+  End With
+  Set CD = Nothing
+End Sub
+
+Private Sub cmdSaveSettings_Click()
+  Dim CD As clsCommonDialog
+  Dim File As String
+  Dim MSG As String
+  Dim ret As Boolean
+  Dim ret2 As VbMsgBoxResult
+  Dim tmp As Boolean
+
+  Set CD = New clsCommonDialog
+  tmp = True
+  While tmp
+    With CD
+      .ActiveFilter = 1
+      .Caption = "Einstellungen speichern unter..."
+      .DefaultExtension = ".exctlsf"
+      .AddFilter "TimoSoft ExplorerControls-Settings (*.exctlsf)", "*.exctlsf"
+      .AddFilter "Alle Dateien", "*.*"
+      .OpenFlags = CDOpenFlagsConsts.OFN_EXPLORER Or CDOpenFlagsConsts.OFN_HIDEREADONLY Or CDOpenFlagsConsts.OFN_CREATEPROMPT Or CDOpenFlagsConsts.OFN_PATHMUSTEXIST
+      .hWndParent = SelectedControls(0).hWnd
+      ret = .showSave(File)
+      If ret Then
+        On Error GoTo Fehler
+        If SelectedControls(0).FileContainsValidSettings(File) Then
+          MSG = LoadResString(resOverwriteData)
+          MSG = Replace(MSG, "|1", File)
+          MSG = Replace(MSG, "|2", SelectedControls(0).AppName)
+          MSG = Replace(MSG, "\n", vbNewLine)
+          ret2 = MsgBox(MSG, VbMsgBoxStyle.vbQuestion Or VbMsgBoxStyle.vbYesNoCancel, "Daten ersetzen?")
+          tmp = (ret2 = VbMsgBoxResult.vbNo)
+          ret = Not (ret2 = VbMsgBoxResult.vbCancel)
+        Else
+          tmp = False
+        End If
+      Else
+        tmp = False
+      End If
+    End With
+  Wend
+  Set CD = Nothing
+
+  If ret Then
+    PropertyPage_ApplyChanges
+    On Error Resume Next
+    SelectedControls(0).SaveSettingsToFile File, True
+    If Err Then MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Speichern"
+  End If
+  Exit Sub
+
+Fehler:
+  MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Speichern"
+End Sub
+
+Private Sub PropertyPage_ApplyChanges()
+  Dim i As Integer
+
+  For i = 0 To SelectedControls.Count - 1
+    With SelectedControls(i)
+      On Error Resume Next
+      .AllowDragDrop = chkAllowDragDrop
+      .DragShowAlphaBlendedItems = chkDragShowAlphaBlendedItems
+      .DragExpandTime = txtDragExpandTime
+      .DragScrollTime = txtDragScrollTime
+      .DragScrollZoneBottom = txtDragScrollZoneBottom
+      .DragScrollZoneLeft = txtDragScrollZoneLeft
+      .DragScrollZoneRight = txtDragScrollZoneRight
+      .DragScrollZoneTop = txtDragScrollZoneTop
+    End With
+  Next
+
+  Changed = False
+End Sub
+
+Private Sub PropertyPage_SelectionChanged()
+  Dim cx As Long
+  Dim cy As Long
+
+  With SelectedControls(0)
+    On Error Resume Next
+    chkAllowDragDrop = Abs(.AllowDragDrop)
+    chkDragShowAlphaBlendedItems = Abs(.DragShowAlphaBlendedItems)
+
+    txtDragExpandTime = .DragExpandTime
+    lblDescr(0).Visible = (Err = 0)
+    lblLabel(0).Visible = lblDescr(0).Visible
+    txtDragExpandTime.Visible = lblDescr(0).Visible
+
+    txtDragScrollTime = .DragScrollTime
+    lblDescr(1).Left = IIf(lblDescr(0).Visible, 232, 8)
+    txtDragScrollTime.Left = IIf(lblDescr(0).Visible, 310, 86)
+    lblLabel(1).Left = IIf(lblDescr(0).Visible, 348, 124)
+
+    txtDragScrollZoneBottom = .DragScrollZoneBottom
+    txtDragScrollZoneLeft = .DragScrollZoneLeft
+    txtDragScrollZoneRight = .DragScrollZoneRight
+    txtDragScrollZoneTop = .DragScrollZoneTop
+
+    ' picDragScrollZone resizen
+    GetClientRect .hWnd, rc
+    cx = rc.Right - rc.Left
+    cy = rc.Bottom - rc.Top
+    cx = Fix(cx / cy * picDragScrollZone.Height)
+    If cx > 361 Then cx = 361
+    If cx < 60 Then cx = 60
+    picDragScrollZone.Width = cx
+    With picDragScrollZone
+      .ScaleMode = ScaleModeConstants.vbPixels
+      txtDragScrollZoneBottom.Left = Fix(.Width / 2 - txtDragScrollZoneBottom.Width / 2)
+      txtDragScrollZoneBottom.Top = .Height - txtDragScrollZoneBottom.Height - 2
+      txtDragScrollZoneLeft.Left = 1
+      txtDragScrollZoneLeft.Top = Fix(.Height / 2 - txtDragScrollZoneLeft.Height / 2)
+      txtDragScrollZoneRight.Left = .Width - txtDragScrollZoneRight.Width - 2
+      txtDragScrollZoneRight.Top = txtDragScrollZoneLeft.Top
+      txtDragScrollZoneTop.Left = txtDragScrollZoneBottom.Left
+      txtDragScrollZoneTop.Top = 1
+    End With
+
+    drawDragScrollZone CInt(txtDragScrollZoneTop), CInt(txtDragScrollZoneLeft), CInt(txtDragScrollZoneRight), CInt(txtDragScrollZoneBottom)
+  End With
+
+  cmdAbout.ToolTipText = Replace(cmdAbout.ToolTipText, "|1", TypeName(SelectedControls(0)))
+  Changed = False
+End Sub
+
+Private Sub txtDragExpandTime_Change()
+  Changed = True
+End Sub
+
+Private Sub txtDragExpandTime_GotFocus()
+  selectText txtDragExpandTime
+End Sub
+
+Private Sub txtDragScrollTime_Change()
+  Changed = True
+End Sub
+
+Private Sub txtDragScrollTime_GotFocus()
+  selectText txtDragScrollTime
+End Sub
+
+Private Sub txtDragScrollZoneBottom_Change()
+  Changed = True
+End Sub
+
+Private Sub txtDragScrollZoneBottom_GotFocus()
+  selectText txtDragScrollZoneBottom
+End Sub
+
+Private Sub txtDragScrollZoneBottom_LostFocus()
+  If Not IsNumeric(txtDragScrollZoneBottom) Then txtDragScrollZoneBottom = 0
+  drawDragScrollZone CInt(txtDragScrollZoneTop), CInt(txtDragScrollZoneLeft), CInt(txtDragScrollZoneRight), CInt(txtDragScrollZoneBottom)
+End Sub
+
+Private Sub txtDragScrollZoneLeft_Change()
+  Changed = True
+End Sub
+
+Private Sub txtDragScrollZoneLeft_GotFocus()
+  selectText txtDragScrollZoneLeft
+End Sub
+
+Private Sub txtDragScrollZoneLeft_LostFocus()
+  If Not IsNumeric(txtDragScrollZoneLeft) Then txtDragScrollZoneLeft = 0
+  drawDragScrollZone CInt(txtDragScrollZoneTop), CInt(txtDragScrollZoneLeft), CInt(txtDragScrollZoneRight), CInt(txtDragScrollZoneBottom)
+End Sub
+
+Private Sub txtDragScrollZoneRight_Change()
+  Changed = True
+End Sub
+
+Private Sub txtDragScrollZoneRight_GotFocus()
+  selectText txtDragScrollZoneRight
+End Sub
+
+Private Sub txtDragScrollZoneRight_LostFocus()
+  If Not IsNumeric(txtDragScrollZoneRight) Then txtDragScrollZoneRight = 0
+  drawDragScrollZone CInt(txtDragScrollZoneTop), CInt(txtDragScrollZoneLeft), CInt(txtDragScrollZoneRight), CInt(txtDragScrollZoneBottom)
+End Sub
+
+Private Sub txtDragScrollZoneTop_Change()
+  Changed = True
+End Sub
+
+Private Sub txtDragScrollZoneTop_GotFocus()
+  selectText txtDragScrollZoneTop
+End Sub
+
+Private Sub txtDragScrollZoneTop_LostFocus()
+  If Not IsNumeric(txtDragScrollZoneTop) Then txtDragScrollZoneTop = 0
+  drawDragScrollZone CInt(txtDragScrollZoneTop), CInt(txtDragScrollZoneLeft), CInt(txtDragScrollZoneRight), CInt(txtDragScrollZoneBottom)
+End Sub
+
+
+' lokale Methoden
+
+Private Sub drawDragScrollZone(ByVal cyTop As Integer, ByVal cxLeft As Integer, ByVal cxRight As Integer, ByVal cyBottom As Integer)
+  With picDragScrollZone
+    .ScaleMode = ScaleModeConstants.vbUser
+    .ScaleLeft = 0
+    .ScaleTop = 0
+    .ScaleHeight = rc.Bottom - rc.Top
+    .ScaleWidth = rc.Right - rc.Left
+    .Cls
+    .FillColor = RGB(128, 128, 128)
+    .FillStyle = FillStyleConstants.vbFSSolid
+
+    picDragScrollZone.Line (-2, -2)-(cxLeft + 1, .ScaleHeight + 1), , B
+    picDragScrollZone.Line (-2, -2)-(.ScaleWidth + 1, cyTop + 1), , B
+    picDragScrollZone.Line (.ScaleWidth - (cxRight + 1), -2)-(.ScaleWidth + 1, .ScaleHeight + 1), , B
+    picDragScrollZone.Line (-2, .ScaleHeight - (cyBottom + 1))-(.ScaleWidth + 1, .ScaleHeight + 1), , B
+  End With
+End Sub

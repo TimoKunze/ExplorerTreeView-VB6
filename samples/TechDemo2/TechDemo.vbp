@@ -1,0 +1,37 @@
+Type=Exe
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\WINDOWS\system32\STDOLE2.TLB#OLE Automation
+Reference=*\G{E9D17CD4-0E70-420A-A142-D80353D72BA6}#1.0#0#..\..\..\..\StatusBar\samples\VB6\General\Alignment\res\ISpecifyPropertyPages.tlb#ISpecifyPropertyPages definition for VB6 (by TimoSoft)
+Object={CAB249C7-BAC9-4C51-9526-12F29E40C4CE}#2.0#0; ExTvw.ocx
+Form=frmMain.frm
+Form=frmBrowseForFolder.frm
+Startup="frmMain"
+ExeName32="TechDemo2.exe"
+Path32="bin"
+Command32=""
+Name="TechDemo2"
+HelpContextID="0"
+CompatibleMode="0"
+MajorVer=1
+MinorVer=0
+RevisionVer=0
+AutoIncrementVer=0
+ServerSupportFiles=0
+VersionCompanyName="TimoSoft"
+CompilationType=0
+OptimizationType=0
+FavorPentiumPro(tm)=0
+CodeViewDebugInfo=0
+NoAliasing=0
+BoundsCheck=0
+OverflowCheck=0
+FlPointCheck=0
+FDIVCheck=0
+UnroundedFP=0
+StartMode=0
+Unattended=0
+Retained=0
+ThreadPerObject=0
+MaxNumberOfThreads=1
+
+[MS Transaction Server]
+AutoRefresh=1

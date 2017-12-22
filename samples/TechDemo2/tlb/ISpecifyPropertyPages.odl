@@ -1,0 +1,46 @@
+[
+  uuid(E9D17CD4-0E70-420a-A142-D80353D72BA6),
+  helpstring("ISpecifyPropertyPages definition for VB6 (by TimoSoft)"),
+  version(1.0)
+]
+library ISpecifyPropertyPagesLib
+{
+  importlib("stdole2.tlb");
+
+  typedef struct UUID
+  {
+    long Data1;
+    short Data2;
+    short Data3;
+    unsigned char Data4[8];
+  } UUID;
+
+  typedef struct CAUUID
+  {
+    long cElems;
+    long pElems;
+  } CAUUID;
+
+
+  [
+    uuid(00000000-0000-0000-C000-000000000046),
+    version(1.0),
+    odl
+  ]
+  interface IVBUnknown
+  {
+    long __stdcall QueryInterface([in] UUID* IID, [in, out] void* pObject);
+    long __stdcall AddRef();
+    long __stdcall Release();
+  };
+
+  [
+    uuid(B196B28B-BAB4-101A-B69C-00AA00341D07),
+    version(1.0),
+    odl
+  ]
+  interface IVBSpecifyPropertyPages : IVBUnknown
+  {
+    long __stdcall GetPages([in, out] CAUUID* pPages);
+  };
+};

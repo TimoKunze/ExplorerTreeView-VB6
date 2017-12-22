@@ -1,0 +1,409 @@
+VERSION 5.00
+Begin VB.PropertyPage ppgFilter 
+   AutoRedraw      =   -1  'True
+   Caption         =   "Filter"
+   ClientHeight    =   3345
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   5625
+   LockControls    =   -1  'True
+   PaletteMode     =   0  'Rasterbild
+   ScaleHeight     =   223
+   ScaleMode       =   3  'Pixel
+   ScaleWidth      =   375
+   Begin VB.ListBox lstFireBeforeInsertItem 
+      Height          =   960
+      ItemData        =   "ppgFilter.pgx":0000
+      Left            =   1920
+      List            =   "ppgFilter.pgx":0010
+      Style           =   1  'Kontrollkästchen
+      TabIndex        =   3
+      Top             =   360
+      Width           =   1695
+   End
+   Begin VB.ComboBox cmbFilesFolders 
+      Height          =   315
+      ItemData        =   "ppgFilter.pgx":0046
+      Left            =   120
+      List            =   "ppgFilter.pgx":0050
+      Style           =   2  'Dropdown-Liste
+      TabIndex        =   4
+      Top             =   1560
+      Width           =   1695
+   End
+   Begin VB.CommandButton cmdAbout 
+      Height          =   375
+      Left            =   4080
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgFilter.pgx":0064
+      Style           =   1  'Grafisch
+      TabIndex        =   11
+      ToolTipText     =   "Infos über |1..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.CommandButton cmdLoadSettings 
+      Height          =   375
+      Left            =   4560
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgFilter.pgx":0166
+      Style           =   1  'Grafisch
+      TabIndex        =   12
+      ToolTipText     =   "Einstellungen laden..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.CommandButton cmdSaveSettings 
+      Height          =   375
+      Left            =   5040
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgFilter.pgx":0268
+      Style           =   1  'Grafisch
+      TabIndex        =   13
+      ToolTipText     =   "Einstellungen speichern..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.ListBox lstAttributes 
+      Height          =   735
+      ItemData        =   "ppgFilter.pgx":05AA
+      Left            =   1920
+      List            =   "ppgFilter.pgx":05C0
+      Style           =   1  'Kontrollkästchen
+      TabIndex        =   6
+      Top             =   1800
+      Width           =   1695
+   End
+   Begin VB.CheckBox chkUseFilters 
+      Caption         =   "&UseFolderFilters"
+      Height          =   255
+      Left            =   240
+      TabIndex        =   7
+      Top             =   2595
+      Width           =   1455
+   End
+   Begin VB.Frame fraFilters 
+      Height          =   675
+      Left            =   120
+      TabIndex        =   8
+      Top             =   2625
+      Width           =   5295
+      Begin VB.TextBox txtFilters 
+         Height          =   285
+         Left            =   600
+         TabIndex        =   10
+         ToolTipText     =   "Format: ""<Filter1>|<Filter2>"", Wildcards sind möglich, ein vorangestelltes ""/"" negiert den Filter"
+         Top             =   270
+         Width           =   4575
+      End
+      Begin VB.Label lblDescr 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "&Filters:"
+         Height          =   195
+         Index           =   3
+         Left            =   120
+         TabIndex        =   9
+         Top             =   360
+         Width           =   450
+      End
+   End
+   Begin VB.ListBox lstIncludedItems 
+      Height          =   960
+      ItemData        =   "ppgFilter.pgx":05FE
+      Left            =   120
+      List            =   "ppgFilter.pgx":060E
+      Style           =   1  'Kontrollkästchen
+      TabIndex        =   1
+      Top             =   360
+      Width           =   1695
+   End
+   Begin VB.Line lLine 
+      BorderColor     =   &H80000010&
+      X1              =   8
+      X2              =   368
+      Y1              =   96
+      Y2              =   96
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "Fi&reBeforeInsertItem:"
+      Height          =   195
+      Index           =   1
+      Left            =   1920
+      TabIndex        =   2
+      Top             =   120
+      Width           =   1455
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "F&ileAttributes:"
+      Height          =   195
+      Index           =   2
+      Left            =   1920
+      TabIndex        =   5
+      Top             =   1560
+      Width           =   945
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "In&cludedItems:"
+      Height          =   195
+      Index           =   0
+      Left            =   120
+      TabIndex        =   0
+      Top             =   120
+      Width           =   1035
+   End
+End
+Attribute VB_Name = "ppgFilter"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = True
+Option Explicit
+
+  Private bSaveFilters As Boolean
+  Private bUseFilters(1) As Boolean
+  Private lAttributes(1) As Long
+  Private strFilters(1) As String
+
+
+' Events
+
+Private Sub chkUseFilters_Click()
+  fraFilters.Enabled = chkUseFilters
+  lblDescr(3).Enabled = fraFilters.Enabled
+  txtFilters.Enabled = fraFilters.Enabled
+
+  Changed = True
+End Sub
+
+Private Sub cmbFilesFolders_Click()
+  If bSaveFilters Then saveFilters (cmbFilesFolders.ListIndex + 1) Mod 2
+  loadFilters cmbFilesFolders.ListIndex
+End Sub
+
+Private Sub cmdAbout_Click()
+  SelectedControls(0).About
+End Sub
+
+Private Sub cmdLoadSettings_Click()
+  Dim CD As clsCommonDialog
+  Dim File As String
+  Dim i As Integer
+  Dim ret As Boolean
+
+  Set CD = New clsCommonDialog
+  With CD
+    .ActiveFilter = 1
+    .Caption = "Einstellungen laden..."
+    .AddFilter "TimoSoft ExplorerControls-Settings (*.exctlsf)", "*.exctlsf"
+    .AddFilter "Alle Dateien", "*.*"
+    .OpenFlags = CDOpenFlagsConsts.OFN_EXPLORER Or CDOpenFlagsConsts.OFN_FILEMUSTEXIST Or CDOpenFlagsConsts.OFN_HIDEREADONLY Or CDOpenFlagsConsts.OFN_PATHMUSTEXIST
+    .hWndParent = SelectedControls(0).hWnd
+    ret = .showOpen(File)
+    If ret Then
+      For i = 0 To SelectedControls.Count - 1
+        On Error Resume Next
+        SelectedControls(i).LoadSettingsFromFile File
+        If Err Then MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Laden"
+      Next
+      PropertyPage_SelectionChanged
+    End If
+  End With
+  Set CD = Nothing
+End Sub
+
+Private Sub cmdSaveSettings_Click()
+  Dim CD As clsCommonDialog
+  Dim File As String
+  Dim MSG As String
+  Dim ret As Boolean
+  Dim ret2 As VbMsgBoxResult
+  Dim tmp As Boolean
+
+  Set CD = New clsCommonDialog
+  tmp = True
+  While tmp
+    With CD
+      .ActiveFilter = 1
+      .Caption = "Einstellungen speichern unter..."
+      .DefaultExtension = ".exctlsf"
+      .AddFilter "TimoSoft ExplorerControls-Settings (*.exctlsf)", "*.exctlsf"
+      .AddFilter "Alle Dateien", "*.*"
+      .OpenFlags = CDOpenFlagsConsts.OFN_EXPLORER Or CDOpenFlagsConsts.OFN_HIDEREADONLY Or CDOpenFlagsConsts.OFN_CREATEPROMPT Or CDOpenFlagsConsts.OFN_PATHMUSTEXIST
+      .hWndParent = SelectedControls(0).hWnd
+      ret = .showSave(File)
+      If ret Then
+        On Error GoTo Fehler
+        If SelectedControls(0).FileContainsValidSettings(File) Then
+          MSG = LoadResString(resOverwriteData)
+          MSG = Replace(MSG, "|1", File)
+          MSG = Replace(MSG, "|2", SelectedControls(0).AppName)
+          MSG = Replace(MSG, "\n", vbNewLine)
+          ret2 = MsgBox(MSG, VbMsgBoxStyle.vbQuestion Or VbMsgBoxStyle.vbYesNoCancel, "Daten ersetzen?")
+          tmp = (ret2 = VbMsgBoxResult.vbNo)
+          ret = Not (ret2 = VbMsgBoxResult.vbCancel)
+        Else
+          tmp = False
+        End If
+      Else
+        tmp = False
+      End If
+    End With
+  Wend
+  Set CD = Nothing
+
+  If ret Then
+    PropertyPage_ApplyChanges
+    On Error Resume Next
+    SelectedControls(0).SaveSettingsToFile File, True
+    If Err Then MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Speichern"
+  End If
+  Exit Sub
+
+Fehler:
+  MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Speichern"
+End Sub
+
+Private Sub lstAttributes_ItemCheck(Item As Integer)
+  Changed = True
+End Sub
+
+Private Sub lstFireBeforeInsertItem_Click()
+  Changed = True
+End Sub
+
+Private Sub lstIncludedItems_ItemCheck(Item As Integer)
+  Changed = True
+End Sub
+
+Private Sub PropertyPage_ApplyChanges()
+  Dim i As Integer
+  Dim tmp As Integer
+
+  saveFilters cmbFilesFolders.ListIndex
+  For i = 0 To SelectedControls.Count - 1
+    With SelectedControls(i)
+      tmp = 0
+      With lstIncludedItems
+        If .Selected(0) Then tmp = tmp Or IncludedItemsConstants.iiFSFolders
+        If .Selected(1) Then tmp = tmp Or IncludedItemsConstants.iiFSFiles
+        If .Selected(2) Then tmp = tmp Or IncludedItemsConstants.iiNonFSFolders
+        If .Selected(3) Then tmp = tmp Or IncludedItemsConstants.iiNonFSFiles
+      End With
+      .IncludedItems = tmp
+      tmp = 0
+      With lstFireBeforeInsertItem
+        If .Selected(0) Then tmp = tmp Or FireBeforeInsertItemConstants.fbiiForFSFolders
+        If .Selected(1) Then tmp = tmp Or FireBeforeInsertItemConstants.fbiiForFSFiles
+        If .Selected(2) Then tmp = tmp Or FireBeforeInsertItemConstants.fbiiForNonFSFolders
+        If .Selected(3) Then tmp = tmp Or FireBeforeInsertItemConstants.fbiiForNonFSFiles
+      End With
+      .FireBeforeInsertItem = tmp
+
+      .FolderAttributes = lAttributes(0)
+      .FileAttributes = lAttributes(1)
+
+      .UseFolderFilters = bUseFilters(0)
+      .UseFileFilters = bUseFilters(1)
+      .FolderFilters = strFilters(0)
+      .FileFilters = strFilters(1)
+    End With
+  Next
+
+  Changed = False
+End Sub
+
+Private Sub PropertyPage_SelectionChanged()
+  Dim tmp As Integer
+
+  With SelectedControls(0)
+    tmp = .IncludedItems
+    With lstIncludedItems
+      .Selected(0) = (tmp And IncludedItemsConstants.iiFSFolders)
+      .Selected(1) = (tmp And IncludedItemsConstants.iiFSFiles)
+      .Selected(2) = (tmp And IncludedItemsConstants.iiNonFSFolders)
+      .Selected(3) = (tmp And IncludedItemsConstants.iiNonFSFiles)
+      .ListIndex = 0
+    End With
+    tmp = .FireBeforeInsertItem
+    With lstFireBeforeInsertItem
+      .Selected(0) = (tmp And FireBeforeInsertItemConstants.fbiiForFSFolders)
+      .Selected(1) = (tmp And FireBeforeInsertItemConstants.fbiiForFSFiles)
+      .Selected(2) = (tmp And FireBeforeInsertItemConstants.fbiiForNonFSFolders)
+      .Selected(3) = (tmp And FireBeforeInsertItemConstants.fbiiForNonFSFiles)
+      .ListIndex = 0
+    End With
+
+    lAttributes(0) = .FolderAttributes
+    lAttributes(1) = .FileAttributes
+    bUseFilters(0) = .UseFolderFilters
+    bUseFilters(1) = .UseFileFilters
+    strFilters(0) = .FolderFilters
+    strFilters(1) = .FileFilters
+    If cmbFilesFolders.ListIndex = -1 Then
+      bSaveFilters = False
+      cmbFilesFolders.ListIndex = 0
+      bSaveFilters = True
+    Else
+      loadFilters cmbFilesFolders.ListIndex
+    End If
+  End With
+
+  cmdAbout.ToolTipText = Replace(cmdAbout.ToolTipText, "|1", TypeName(SelectedControls(0)))
+  Changed = False
+End Sub
+
+Private Sub txtFilters_Change()
+  Changed = True
+End Sub
+
+Private Sub txtFilters_GotFocus()
+  selectText txtFilters
+End Sub
+
+
+' lokale Methoden
+
+Private Sub loadFilters(ByVal i As Long)
+  lblDescr(2).Caption = Choose(i + 1, "F&olderAttributes:", "F&ileAttributes:")
+  With lstAttributes
+    .Selected(0) = (lAttributes(i) And AttributesConstants.attArchive)
+    .Selected(1) = (lAttributes(i) And AttributesConstants.attCompressed)
+    .Selected(2) = (lAttributes(i) And AttributesConstants.attEncrypted)
+    .Selected(3) = (lAttributes(i) And AttributesConstants.attHidden)
+    .Selected(4) = (lAttributes(i) And AttributesConstants.attReadOnly)
+    .Selected(5) = (lAttributes(i) And AttributesConstants.attSystem)
+    .ListIndex = 0
+  End With
+  chkUseFilters.Width = Choose(i + 1, 95, 81)
+  chkUseFilters.Caption = Choose(i + 1, "&UseFolderFilters", "&UseFileFilters")
+  chkUseFilters.Value = Abs(bUseFilters(i))
+  txtFilters.Text = strFilters(i)
+
+  lblDescr(3).Enabled = bUseFilters(i)
+  txtFilters.Enabled = lblDescr(3).Enabled
+  fraFilters.Enabled = lblDescr(3).Enabled
+End Sub
+
+Private Sub saveFilters(ByVal i As Long)
+  lAttributes(i) = 0
+  With lstAttributes
+    If .Selected(0) Then lAttributes(i) = lAttributes(i) Or AttributesConstants.attArchive
+    If .Selected(1) Then lAttributes(i) = lAttributes(i) Or AttributesConstants.attCompressed
+    If .Selected(2) Then lAttributes(i) = lAttributes(i) Or AttributesConstants.attEncrypted
+    If .Selected(3) Then lAttributes(i) = lAttributes(i) Or AttributesConstants.attHidden
+    If .Selected(4) Then lAttributes(i) = lAttributes(i) Or AttributesConstants.attReadOnly
+    If .Selected(5) Then lAttributes(i) = lAttributes(i) Or AttributesConstants.attSystem
+  End With
+  bUseFilters(i) = (chkUseFilters.Value = CheckBoxConstants.vbChecked)
+  strFilters(i) = txtFilters.Text
+End Sub

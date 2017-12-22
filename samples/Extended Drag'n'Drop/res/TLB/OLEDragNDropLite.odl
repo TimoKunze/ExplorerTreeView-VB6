@@ -1,0 +1,215 @@
+[
+  uuid(3FFDD9FD-46EC-4011-87FE-E6933C5F2094),
+  helpstring("TimoSoft OLE-Drag'n'Drop-Interfaces for Visual Basic (Lite-Version)"),
+  version(1.0)
+]
+library OLEDragNDropLiteInterfaces
+{
+  importlib("stdole2.tlb");
+
+
+  // enums
+
+  typedef enum CLSCTXConstants
+  {
+    CLSCTX_INPROC_SERVER = 0x1,
+    CLSCTX_INPROC_HANDLER = 0x2,
+    CLSCTX_LOCAL_SERVER = 0x4,
+    CLSCTX_INPROC_SERVER16 = 0x8,
+    CLSCTX_REMOTE_SERVER = 0x10,
+    CLSCTX_INPROC_HANDLER16 = 0x20,
+    CLSCTX_INPROC_SERVERX86 = 0x40,
+    CLSCTX_INPROC_HANDLERX86 = 0x80,
+    CLSCTX_ESERVER_HANDLER = 0x100,
+    CLSCTX_RESERVED = 0x200,
+    CLSCTX_NO_CODE_DOWNLOAD = 0x400,
+    CLSCTX_NO_WX86_TRANSLATION = 0x800,
+    CLSCTX_NO_CUSTOM_MARSHAL = 0x1000,
+    CLSCTX_ENABLE_CODE_DOWNLOAD = 0x2000,
+    CLSCTX_NO_FAILURE_LOG = 0x4000
+  } CLSCTXConstants;
+
+  typedef enum DATADIRConstants
+  {
+    [helpstring("alle Formate aufzählen, die in 'GetData' verwendet werden können")]
+    DATADIR_GET = 1,
+    [helpstring("alle Formate aufzählen, die in 'SetData' verwendet werden können")]
+    DATADIR_SET = 2,
+  } DATADIRConstants;
+
+  typedef enum DROPEFFECTConstants
+  {
+    [helpstring("Das Ziel kann die Daten nicht aufnehmen.")]
+    DROPEFFECT_NONE = 0,
+    [helpstring("Die Daten werden kopiert.")]
+    DROPEFFECT_COPY = 1,
+    [helpstring("Die Quelle sollte die Daten entfernen.")]
+    DROPEFFECT_MOVE = 2,
+    [helpstring("Die Quelle sollte eine Verknüpfung zu den Original-Daten erstellen.")]
+    DROPEFFECT_LINK = 4,
+    [helpstring("Im Ziel wird gerade gescrollt.")]
+    DROPEFFECT_SCROLL = 0x80000000
+  } DROPEFFECTConstants;
+
+
+  // structs
+
+  typedef struct POINT
+  {
+    long x;
+    long y;
+  } POINT;
+
+  typedef struct SIZE
+  {
+    long cx;
+    long cy;
+  } SIZE;
+
+  typedef struct SHDRAGIMAGE
+  {
+    [helpstring("Größe des DragImages")]
+    SIZE DragImageSize;
+    [helpstring("Position des Mauszeigers (relativ zum DragImage)")]
+    POINT ptCursorOffset;
+    [helpstring("Handle auf das DragImage")]
+    long hBMPDragImage;
+    [helpstring("Farbe zum Auffüllen des Hintergrundes")]
+    long BackClr;
+  } SHDRAGIMAGE;
+
+  typedef struct UUID
+  {
+    long Data1;
+    short Data2;
+    short Data3;
+    unsigned char Data4[8];
+  } UUID;
+  typedef UUID *REFGUID;
+  typedef [public] UUID IID;
+  typedef UUID *REFIID;
+  typedef [public] UUID CLSID;
+  typedef UUID *REFCLSID;
+  typedef [public] UUID GUID;
+
+
+  // interfaces
+
+  [
+    uuid(00000000-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("IUnknown-Interface for Visual Basic (© by TimoSoft)"),
+    odl
+  ]
+  interface IVBUnknown
+  {
+    long __stdcall QueryInterface([in] UUID* IID, [in, out] void* pObject);
+    long __stdcall AddRef();
+    long __stdcall Release();
+  };
+
+  [
+    uuid(0000010E-0000-0000-C000-000000000046),
+    version(1.0),
+    helpstring("TimoSoft IDataObject-Interface for Visual Basic"),
+    odl
+  ]
+  interface IVBDataObject : IVBUnknown
+  {
+    [helpstring("Gibt die gespeicherten Daten vom Format <DataFormat> in <Data> zurück.")]
+    HRESULT __stdcall GetData([in, out] long* DataFormat, [in, out] long* Data);
+    [helpstring("Gibt die gespeicherten Daten vom Format <DataFormat> in <Data> zurück.")]
+    HRESULT __stdcall GetDataHere([in, out] long* DataFormat, [in, out] long* Data);
+    [helpstring("Prüft, ob Daten vom Format <DataFormat> verfügbar sind.")]
+    long __stdcall QueryGetData([in, out] long* DataFormat);
+    [helpstring("Prüft, ob die beiden Formate <DataFormatIn> und <DataFormatOut> bei einem Aufruf mit 'GetData' den selben Rendervorgang auslösen würden.")]
+    HRESULT __stdcall GetCanonicalFormatEtc([in, out] long* DataFormatIn, [in, out] long* DataFormatOut);
+    [helpstring("Sendet <Data> vom Format <DataFormat> an den Implementer dieser Methode. <ReleaseData> gibt an, ob der Implementer sich um die Freigabe des Speichers für <Data> kümmern soll.")]
+    HRESULT __stdcall SetData([in, out] long* DataFormat, [in, out] long* Data, [in] long ReleaseData);
+    [helpstring("Gibt in <pIEnumFORMATETC> einen Pointer auf eine Aufzählung mit allen Datenformaten des Objektes zurück.")]
+    HRESULT __stdcall EnumFormatEtc([in] DATADIRConstants Direction, [out] long* EnumFORMATETC);
+    [helpstring("Erstellt eine Verbindung zwischen <DataFormat> und <pIAdviseSink> und gibt in <pToken> ein Token zur Identifizierung zurück. Nutzen Sie eine solche Verbindung, um über Veränderungen an den Daten vom Format <DataFormat> benachrichtigt zu werden.")]
+    HRESULT __stdcall DAdvise([in, out] long* DataFormat, [in] long Flags, [in] long pIAdviseSink, [in, out] long* pToken);
+    [helpstring("Löst die mit 'DAdvise' erstellte Verbindung <pToken>")]
+    HRESULT __stdcall DUnadvise([in] long pToken);
+    [helpstring("Gibt in <pIEnumSTATDATA> einen Pointer auf eine Aufzählung mit allen Verbindungen zurück.")]
+    HRESULT __stdcall EnumDAdvise([in, out] long* pIEnumAdvise);
+  };
+
+  [
+    uuid(DE5BF786-477A-11D2-839D-00C04FD918D0),
+    version(1.0),
+    helpstring("TimoSoft IDragSourceHelper-Interface for Visual Basic"),
+    odl
+  ]
+  interface IVBDragSourceHelper : IVBUnknown
+  {
+    [helpstring("Initialisiert den DragImage-Manager für eine Klasse ohne Fenster.")]
+    long __stdcall InitializeFromBitmap([in] SHDRAGIMAGE* DragImage, [in] IVBDataObject* pDataObject);
+    [helpstring("Initialisiert den DragImage-Manager für eine Klasse mit Fenster.")]
+    long __stdcall InitializeFromWindow([in] long hWnd, [in] POINT* ptCursorInImage, [in] IVBDataObject* pDataObject);
+  };
+
+  [
+    uuid(4657278B-411B-11D2-839A-00C04FD918D0),
+    version(1.0),
+    helpstring("TimoSoft IDropTargetHelper-Interface for Visual Basic"),
+    odl
+  ]
+  interface IVBDropTargetHelper : IVBUnknown
+  {
+    [helpstring("Die Prozedur 'DragEnter()' des Drop-Targets wurde aufgerufen.")]
+    long __stdcall DragEnter([in] long hWndTarget, [in] IVBDataObject* pDataObject, [in] POINT* pt, [in, out] DROPEFFECTConstants* Effects);
+    [helpstring("Die Prozedur 'DragLeave()' des Drop-Targets wurde aufgerufen.")]
+    long __stdcall DragLeave();
+    [helpstring("Die Prozedur 'DragOver()' des Drop-Targets wurde aufgerufen.")]
+    long __stdcall DragOver([in] POINT* pt, [in, out] DROPEFFECTConstants* Effects);
+    [helpstring("Die Prozedur 'Drop()' des Drop-Targets wurde aufgerufen.")]
+    long __stdcall Drop([in] IVBDataObject* pDataObject, [in] POINT* pt, [in, out] DROPEFFECTConstants* Effects);
+    [helpstring("Zeigt das Drag-Image an oder versteckt es.")]
+    long __stdcall Show([in] long ShowIt);
+  };
+
+
+  // modules
+
+  [
+    dllname("ole32.dll"),
+    helpstring("TimoSoft OLE-Drag'n'Drop-Functions for Visual Basic (Lite-Version)")
+  ]
+  module ole32
+  {
+    const LPSTR strIID_IDragDropHelper = "{4657278A-411B-11d2-839A-00C04FD918D0}";
+    const LPSTR strIID_IDragSourceHelper = "{DE5BF786-477A-11d2-839D-00C04FD918D0}";
+    const LPSTR strIID_IDropTargetHelper = "{4657278B-411B-11d2-839A-00C04FD918D0}";
+
+    [entry("CLSIDFromString")]
+    long CLSIDFromString([in] LPWSTR str, [in, out] UUID *CLSID);
+    [entry("CoCreateInstance")]
+    long CoCreateInstance([in] UUID *CLSID, [in] stdole.IUnknown *Unknwn, [in] CLSCTXConstants Context, [in] UUID *IID, [out] void *Interface);
+  };
+
+  [
+    dllname("kernel32.dll"),
+    helpstring("TimoSoft OLE-Drag'n'Drop-Functions for Visual Basic (Lite-Version)")
+  ]
+  module kernel32
+  {
+    [entry("RtlMoveMemory")]
+    void CopyMemory([in] void *pDest, [in] void *pSrc, [in] long Length);
+    [entry("RtlZeroMemory")]
+    void ZeroMemory([in] void *pDest, [in] long Length);
+  };
+
+  [
+    dllname("user32.dll"),
+    helpstring("TimoSoft OLE-Drag'n'Drop-Functions for Visual Basic (Lite-Version)")
+  ]
+  module user32
+  {
+    [entry("GetCursorPos")]
+    long GetCursorPos([in] POINT *pt);
+    [entry("ScreenToClient")]
+    long ScreenToClient([in] long hWnd, [in, out] POINT *pt);
+  };
+};

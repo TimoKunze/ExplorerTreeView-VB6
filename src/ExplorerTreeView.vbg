@@ -1,0 +1,3 @@
+VBGROUP 5.0
+Project=ExplorerTreeView.vbp
+StartupProject=..\samples\TestApp\Test.vbp

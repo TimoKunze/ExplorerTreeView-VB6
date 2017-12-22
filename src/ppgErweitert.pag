@@ -1,0 +1,461 @@
+VERSION 5.00
+Begin VB.PropertyPage ppgErweitert 
+   AutoRedraw      =   -1  'True
+   Caption         =   "Erweitert"
+   ClientHeight    =   3345
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   5625
+   LockControls    =   -1  'True
+   PaletteMode     =   0  'Rasterbild
+   ScaleHeight     =   223
+   ScaleMode       =   3  'Pixel
+   ScaleWidth      =   375
+   Begin VB.CommandButton cmdAbout 
+      Height          =   375
+      Left            =   4080
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgErweitert.pgx":0000
+      Style           =   1  'Grafisch
+      TabIndex        =   17
+      ToolTipText     =   "Infos über |1..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.ComboBox cmbSingleExpand 
+      Height          =   315
+      ItemData        =   "ppgErweitert.pgx":0102
+      Left            =   3840
+      List            =   "ppgErweitert.pgx":010F
+      Style           =   2  'Dropdown-Liste
+      TabIndex        =   10
+      Top             =   1934
+      Width           =   1620
+   End
+   Begin VB.TextBox txtItemHeight 
+      Height          =   285
+      Left            =   3840
+      TabIndex        =   15
+      Top             =   2640
+      Width           =   540
+   End
+   Begin VB.TextBox txtIndent 
+      Height          =   285
+      Left            =   3840
+      TabIndex        =   12
+      Top             =   2301
+      Width           =   540
+   End
+   Begin VB.ComboBox cmbRenaming 
+      Height          =   315
+      ItemData        =   "ppgErweitert.pgx":0139
+      Left            =   3840
+      List            =   "ppgErweitert.pgx":0143
+      Style           =   2  'Dropdown-Liste
+      TabIndex        =   8
+      Top             =   1567
+      Width           =   1620
+   End
+   Begin VB.ComboBox cmbLineStyle 
+      Height          =   315
+      ItemData        =   "ppgErweitert.pgx":0162
+      Left            =   3840
+      List            =   "ppgErweitert.pgx":016C
+      Style           =   2  'Dropdown-Liste
+      TabIndex        =   6
+      Top             =   1200
+      Width           =   1620
+   End
+   Begin VB.ListBox lstProps 
+      Height          =   1185
+      ItemData        =   "ppgErweitert.pgx":0192
+      Left            =   120
+      List            =   "ppgErweitert.pgx":01A5
+      Style           =   1  'Kontrollkästchen
+      TabIndex        =   0
+      Top             =   120
+      Width           =   2655
+   End
+   Begin VB.ListBox lstTreeViewStyle 
+      Height          =   510
+      ItemData        =   "ppgErweitert.pgx":0209
+      Left            =   1470
+      List            =   "ppgErweitert.pgx":0213
+      Style           =   1  'Kontrollkästchen
+      TabIndex        =   4
+      Top             =   1567
+      Width           =   1095
+   End
+   Begin VB.CommandButton cmdLoadSettings 
+      Height          =   375
+      Left            =   4560
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgErweitert.pgx":0227
+      Style           =   1  'Grafisch
+      TabIndex        =   18
+      ToolTipText     =   "Einstellungen laden..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.CommandButton cmdSaveSettings 
+      Height          =   375
+      Left            =   5040
+      MaskColor       =   &H00FF00FF&
+      Picture         =   "ppgErweitert.pgx":0329
+      Style           =   1  'Grafisch
+      TabIndex        =   19
+      ToolTipText     =   "Einstellungen speichern..."
+      Top             =   120
+      UseMaskColor    =   -1  'True
+      Width           =   375
+   End
+   Begin VB.ListBox lstExpandArchives 
+      Height          =   1635
+      ItemData        =   "ppgErweitert.pgx":066B
+      Left            =   120
+      List            =   "ppgErweitert.pgx":0684
+      Style           =   1  'Kontrollkästchen
+      TabIndex        =   2
+      Top             =   1567
+      Width           =   1245
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "&LineStyle:"
+      Height          =   195
+      Index           =   2
+      Left            =   2760
+      TabIndex        =   5
+      Top             =   1320
+      Width           =   690
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "&Renaming:"
+      Height          =   195
+      Index           =   3
+      Left            =   2760
+      TabIndex        =   7
+      Top             =   1687
+      Width           =   765
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "&SingleExpand:"
+      Height          =   195
+      Index           =   4
+      Left            =   2760
+      TabIndex        =   9
+      Top             =   2054
+      Width           =   1020
+   End
+   Begin VB.Label lblLabel 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "Pixel"
+      Height          =   195
+      Index           =   1
+      Left            =   4410
+      TabIndex        =   16
+      Top             =   2730
+      Width           =   330
+   End
+   Begin VB.Label lblLabel 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "Pixel"
+      Height          =   195
+      Index           =   0
+      Left            =   4410
+      TabIndex        =   13
+      Top             =   2391
+      Width           =   330
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "&ExpandArchives:"
+      Height          =   195
+      Index           =   0
+      Left            =   120
+      TabIndex        =   1
+      Top             =   1320
+      Width           =   1200
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "Item&Height:"
+      Height          =   195
+      Index           =   6
+      Left            =   2760
+      TabIndex        =   14
+      Top             =   2730
+      Width           =   810
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "&Indent:"
+      Height          =   195
+      Index           =   5
+      Left            =   2760
+      TabIndex        =   11
+      Top             =   2391
+      Width           =   495
+   End
+   Begin VB.Label lblDescr 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "&TreeViewStyle:"
+      Height          =   195
+      Index           =   1
+      Left            =   1470
+      TabIndex        =   3
+      Top             =   1320
+      Width           =   1065
+   End
+End
+Attribute VB_Name = "ppgErweitert"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = True
+Option Explicit
+
+' Events
+
+Private Sub cmbLineStyle_Click()
+  Changed = True
+End Sub
+
+Private Sub cmbRenaming_Click()
+  Changed = True
+End Sub
+
+Private Sub cmbSingleExpand_Click()
+  If cmbSingleExpand.ListIndex <> 1 Then
+    lstProps.Selected(2) = False
+  End If
+
+  Changed = True
+End Sub
+
+Private Sub cmdAbout_Click()
+  SelectedControls(0).About
+End Sub
+
+Private Sub cmdLoadSettings_Click()
+  Dim CD As clsCommonDialog
+  Dim File As String
+  Dim i As Integer
+  Dim ret As Boolean
+
+  Set CD = New clsCommonDialog
+  With CD
+    .ActiveFilter = 1
+    .Caption = "Einstellungen laden..."
+    .AddFilter "TimoSoft ExplorerControls-Settings (*.exctlsf)", "*.exctlsf"
+    .AddFilter "Alle Dateien", "*.*"
+    .OpenFlags = CDOpenFlagsConsts.OFN_EXPLORER Or CDOpenFlagsConsts.OFN_FILEMUSTEXIST Or CDOpenFlagsConsts.OFN_HIDEREADONLY Or CDOpenFlagsConsts.OFN_PATHMUSTEXIST
+    .hWndParent = SelectedControls(0).hWnd
+    ret = .showOpen(File)
+    If ret Then
+      For i = 0 To SelectedControls.Count - 1
+        On Error Resume Next
+        SelectedControls(i).LoadSettingsFromFile File
+        If Err Then MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Laden"
+      Next
+      PropertyPage_SelectionChanged
+    End If
+  End With
+  Set CD = Nothing
+End Sub
+
+Private Sub cmdSaveSettings_Click()
+  Dim CD As clsCommonDialog
+  Dim File As String
+  Dim MSG As String
+  Dim ret As Boolean
+  Dim ret2 As VbMsgBoxResult
+  Dim tmp As Boolean
+
+  Set CD = New clsCommonDialog
+  tmp = True
+  While tmp
+    With CD
+      .ActiveFilter = 1
+      .Caption = "Einstellungen speichern unter..."
+      .DefaultExtension = ".exctlsf"
+      .AddFilter "TimoSoft ExplorerControls-Settings (*.exctlsf)", "*.exctlsf"
+      .AddFilter "Alle Dateien", "*.*"
+      .OpenFlags = CDOpenFlagsConsts.OFN_EXPLORER Or CDOpenFlagsConsts.OFN_HIDEREADONLY Or CDOpenFlagsConsts.OFN_CREATEPROMPT Or CDOpenFlagsConsts.OFN_PATHMUSTEXIST
+      .hWndParent = SelectedControls(0).hWnd
+      ret = .showSave(File)
+      If ret Then
+        On Error GoTo Fehler
+        If SelectedControls(0).FileContainsValidSettings(File) Then
+          MSG = LoadResString(resOverwriteData)
+          MSG = Replace(MSG, "|1", File)
+          MSG = Replace(MSG, "|2", SelectedControls(0).AppName)
+          MSG = Replace(MSG, "\n", vbNewLine)
+          ret2 = MsgBox(MSG, VbMsgBoxStyle.vbQuestion Or VbMsgBoxStyle.vbYesNoCancel, "Daten ersetzen?")
+          tmp = (ret2 = VbMsgBoxResult.vbNo)
+          ret = Not (ret2 = VbMsgBoxResult.vbCancel)
+        Else
+          tmp = False
+        End If
+      Else
+        tmp = False
+      End If
+    End With
+  Wend
+  Set CD = Nothing
+
+  If ret Then
+    PropertyPage_ApplyChanges
+    On Error Resume Next
+    SelectedControls(0).SaveSettingsToFile File, True
+    If Err Then MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Speichern"
+  End If
+  Exit Sub
+
+Fehler:
+  MsgBox "Fehler " & Err.Number & ":" & vbNewLine & Err.Description, VbMsgBoxStyle.vbCritical, "Fehler beim Speichern"
+End Sub
+
+Private Sub lstExpandArchives_ItemCheck(Item As Integer)
+  Changed = True
+End Sub
+
+Private Sub lstProps_ItemCheck(Item As Integer)
+  If lstProps.List(Item) = "FavoritesStyle" Then
+    If lstProps.Selected(Item) Then
+      cmbSingleExpand.ListIndex = 1
+    End If
+  End If
+
+  Changed = True
+End Sub
+
+Private Sub lstTreeViewStyle_ItemCheck(Item As Integer)
+  Changed = True
+End Sub
+
+Private Sub PropertyPage_ApplyChanges()
+  Dim i As Integer
+  Dim i2 As Integer
+  Dim tmp As Integer
+
+  For i = 0 To SelectedControls.Count - 1
+    With SelectedControls(i)
+      On Error Resume Next
+      With lstProps
+        For i2 = 0 To .ListCount - 1
+          CallByName SelectedControls(i), .List(i2), VbCallType.VbLet, .Selected(i2)
+        Next
+      End With
+
+      tmp = ExpandArchivesConstants.eaNone
+      With lstExpandArchives
+        If .Selected(0) Then tmp = tmp Or ExpandArchivesConstants.eaACE
+        If .Selected(1) Then tmp = tmp Or ExpandArchivesConstants.eaBIN
+        If .Selected(2) Then tmp = tmp Or ExpandArchivesConstants.eaCAB
+        If .Selected(3) Then tmp = tmp Or ExpandArchivesConstants.eaISO
+        If .Selected(4) Then tmp = tmp Or ExpandArchivesConstants.eaJAR
+        If .Selected(5) Then tmp = tmp Or ExpandArchivesConstants.eaRAR
+        #If NewArchiveSupport Then
+          If .Selected(6) Then tmp = tmp Or ExpandArchivesConstants.eaTAR
+          If .Selected(7) Then tmp = tmp Or ExpandArchivesConstants.eaZIP
+        #Else
+          If .Selected(6) Then tmp = tmp Or ExpandArchivesConstants.eaZIP
+        #End If
+      End With
+      .ExpandArchives = tmp
+
+      tmp = 0
+      With lstTreeViewStyle
+        If .Selected(0) Then tmp = tmp Or TreeViewStyleConstants.tvsButtons
+        If .Selected(1) Then tmp = tmp Or TreeViewStyleConstants.tvsLines
+      End With
+      .TreeViewStyle = tmp
+
+      .LineStyle = cmbLineStyle.ListIndex
+      .Renaming = cmbRenaming.ListIndex
+      .SingleExpand = cmbSingleExpand.ListIndex
+      .Indent = txtIndent
+      .ItemHeight = txtItemHeight
+    End With
+  Next
+
+  Changed = False
+End Sub
+
+Private Sub PropertyPage_SelectionChanged()
+  Dim i As Integer
+  Dim tmp As Integer
+
+  With SelectedControls(0)
+    On Error Resume Next
+    With lstProps
+      For i = 0 To .ListCount - 1
+        .Selected(i) = CallByName(SelectedControls(0), .List(i), VbCallType.VbGet)
+      Next
+      .ListIndex = 0
+    End With
+
+    tmp = .ExpandArchives
+    With lstExpandArchives
+      .Selected(0) = (tmp And ExpandArchivesConstants.eaACE)
+      .Selected(1) = (tmp And ExpandArchivesConstants.eaBIN)
+      .Selected(2) = (tmp And ExpandArchivesConstants.eaCAB)
+      .Selected(3) = (tmp And ExpandArchivesConstants.eaISO)
+      .Selected(4) = (tmp And ExpandArchivesConstants.eaJAR)
+      .Selected(5) = (tmp And ExpandArchivesConstants.eaRAR)
+      #If NewArchiveSupport Then
+        .Selected(6) = (tmp And ExpandArchivesConstants.eaTAR)
+        .Selected(7) = (tmp And ExpandArchivesConstants.eaZIP)
+      #Else
+        .Selected(6) = (tmp And ExpandArchivesConstants.eaZIP)
+      #End If
+      .ListIndex = 0
+    End With
+
+    tmp = .TreeViewStyle
+    With lstTreeViewStyle
+      .Selected(0) = (tmp And TreeViewStyleConstants.tvsButtons)
+      .Selected(1) = (tmp And TreeViewStyleConstants.tvsLines)
+      .ListIndex = 0
+    End With
+
+    cmbLineStyle.ListIndex = .LineStyle
+    cmbRenaming.ListIndex = .Renaming
+    cmbSingleExpand.ListIndex = .SingleExpand
+    txtIndent = .Indent
+    txtItemHeight = .ItemHeight
+  End With
+
+  cmdAbout.ToolTipText = Replace(cmdAbout.ToolTipText, "|1", TypeName(SelectedControls(0)))
+  Changed = False
+End Sub
+
+Private Sub txtIndent_Change()
+  Changed = True
+End Sub
+
+Private Sub txtIndent_GotFocus()
+  selectText txtIndent
+End Sub
+
+Private Sub txtItemHeight_Change()
+  Changed = True
+End Sub
+
+Private Sub txtItemHeight_GotFocus()
+  selectText txtItemHeight
+End Sub
