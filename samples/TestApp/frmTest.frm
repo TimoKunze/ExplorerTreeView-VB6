@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{CAB249C7-BAC9-4C51-9526-12F29E40C4CE}#2.7#0"; "ExTvw.ocx"
+Object = "{CAB249C7-BAC9-4C51-9526-12F29E40C4CE}#2.6#0"; "ExTvw.ocx"
 Begin VB.Form frmTest 
    AutoRedraw      =   -1  'True
    Caption         =   "Form1"
