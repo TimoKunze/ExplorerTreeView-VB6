@@ -96,7 +96,7 @@ Begin VB.Form frmAbout
    Begin VB.Label lblLabels 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
-      Caption         =   "Getestet von: Christian LÃ¼tgens"
+      Caption         =   "Getestet von: Christian Lütgens"
       Height          =   195
       Index           =   5
       Left            =   960
@@ -216,7 +216,7 @@ Begin VB.Form frmAbout
       Left            =   960
       MousePointer    =   99  'Benutzerdefiniert
       TabIndex        =   4
-      ToolTipText     =   "Webseite Ã¶ffnen / Open website"
+      ToolTipText     =   "Webseite öffnen / Open website"
       Top             =   1320
       Width           =   2400
    End
@@ -347,7 +347,7 @@ Private Sub lblURL_Click()
 End Sub
 
 
-' Ã¶ffentliche Methoden
+' öffentliche Methoden
 
 Public Sub showIt(ByVal ControlType As String, ByVal ResID As Long)
   CtlType = ControlType
@@ -366,7 +366,7 @@ Private Sub SubClass()
   StartListening Me, hWnd
 End Sub
 
-' beendet das Abfangen von Nachrichten fÃ¼r alle Fenster, fÃ¼r die SubClassing aktiviert wurde
+' beendet das Abfangen von Nachrichten für alle Fenster, für die SubClassing aktiviert wurde
 Private Sub UnSubClass()
   StopListening Me, hWnd
 End Sub
@@ -375,12 +375,12 @@ End Sub
 Private Function WinMain(ByVal iListener As Long, ByVal oldWinMain As Long, ByVal hWnd As Long, ByVal MSG As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
   Const WM_SETCURSOR = &H20
   Dim hCursor As Long
-  Dim pt As Point
+  Dim pt As POINT
   Dim rc As RECT
 
   Select Case MSG
     Case WM_SETCURSOR
-      ' MÃ¶glichkeit, den Mauszeiger anzupassen
+      ' Möglichkeit, den Mauszeiger anzupassen
       With lblURL
         rc.Bottom = .Top + .Height
         rc.Left = .Left
