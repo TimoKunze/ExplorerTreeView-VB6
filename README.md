@@ -1,3 +1,18 @@
+<p align=center>
+  <a href="https://github.com/TimoKunze/ExplorerTreeView-VB6/releases/tag/1.15.3">
+    <img alt="Release 1.15.3 Release" src="https://img.shields.io/badge/release-1.15.3-0688CB.svg">
+  </a>
+  <a href="https://github.com/TimoKunze/ExplorerTreeView-VB6/releases">
+    <img alt="Download ExplorerTreeView" src="https://img.shields.io/badge/download-latest-0688CB.svg">
+  </a>
+  <a href="https://github.com/TimoKunze/ExplorerTreeView-VB6/blob/master/LICENSE">
+    <img alt="License" src="https://img.shields.io/badge/license-MIT-0688CB.svg">
+  </a>
+  <a href="https://www.paypal.com/xclick/business=TKunze71216%40gmx.de&item_name=ExplorerTreeView&no_shipping=1&tax=0&currency_code=EUR">
+    <img alt="Donate" src="https://img.shields.io/badge/%24-donate-E44E4A.svg">
+  </a>
+</p>
+
 # ExplorerTreeView-VB6
 An ActiveX control for Visual Basic 6 that allows browsing for a folder in a tree view.
 
