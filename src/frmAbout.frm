@@ -30,7 +30,7 @@ Begin VB.Form frmAbout
    Begin VB.Label lblBugtracker 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
-      Caption         =   "http://bugtracker.timosoft-software.de"
+      Caption         =   "https://bugtracker.timosoft-software.de"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -63,7 +63,7 @@ Begin VB.Form frmAbout
    Begin VB.Label lblForum 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
-      Caption         =   "http://www.timosoft-software.de/forum/"
+      Caption         =   "https://www.timosoft-software.de/forum/"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -96,7 +96,7 @@ Begin VB.Form frmAbout
    Begin VB.Label lblLabels 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
-      Caption         =   "Getestet von: Christian Lütgens"
+      Caption         =   "Getestet von: Christian LÃ¼tgens"
       Height          =   195
       Index           =   5
       Left            =   960
@@ -107,7 +107,7 @@ Begin VB.Form frmAbout
    Begin VB.Label lblDC 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
-      Caption         =   "http://www.dateicommander.de"
+      Caption         =   "https://www.dateicommander.de"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -121,7 +121,7 @@ Begin VB.Form frmAbout
       Height          =   195
       Left            =   3360
       TabIndex        =   12
-      ToolTipText     =   "http://www.dateicommander.de"
+      ToolTipText     =   "https://www.dateicommander.de"
       Top             =   2400
       Width           =   2265
    End
@@ -201,7 +201,7 @@ Begin VB.Form frmAbout
    Begin VB.Label lblURL 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
-      Caption         =   "http://www.TimoSoft-Software.de"
+      Caption         =   "https://www.TimoSoft-Software.de"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -216,7 +216,7 @@ Begin VB.Form frmAbout
       Left            =   960
       MousePointer    =   99  'Benutzerdefiniert
       TabIndex        =   4
-      ToolTipText     =   "Webseite öffnen / Open website"
+      ToolTipText     =   "Webseite Ã¶ffnen / Open website"
       Top             =   1320
       Width           =   2400
    End
@@ -313,7 +313,7 @@ End Sub
 Private Sub lblBugtracker_Click()
   Const SW_SHOWNORMAL = 1
 
-  ShellExecute hWnd, "open", "http://bugtracker.timosoft-software.de/", "", "", SW_SHOWNORMAL
+  ShellExecute hWnd, "open", "https://bugtracker.timosoft-software.de/", "", "", SW_SHOWNORMAL
 End Sub
 
 Private Sub lblDC_Click()
@@ -325,7 +325,7 @@ End Sub
 Private Sub lblForum_Click()
   Const SW_SHOWNORMAL = 1
 
-  ShellExecute hWnd, "open", "http://www.timosoft-software.de/forum/viewforum.php?f=37", "", "", SW_SHOWNORMAL
+  ShellExecute hWnd, "open", "https://www.timosoft-software.de/forum/viewforum.php?f=37", "", "", SW_SHOWNORMAL
 End Sub
 
 Private Sub lblMail_Click()
@@ -347,7 +347,7 @@ Private Sub lblURL_Click()
 End Sub
 
 
-' öffentliche Methoden
+' Ã¶ffentliche Methoden
 
 Public Sub showIt(ByVal ControlType As String, ByVal ResID As Long)
   CtlType = ControlType
@@ -366,7 +366,7 @@ Private Sub SubClass()
   StartListening Me, hWnd
 End Sub
 
-' beendet das Abfangen von Nachrichten für alle Fenster, für die SubClassing aktiviert wurde
+' beendet das Abfangen von Nachrichten fÃ¼r alle Fenster, fÃ¼r die SubClassing aktiviert wurde
 Private Sub UnSubClass()
   StopListening Me, hWnd
 End Sub
@@ -380,7 +380,7 @@ Private Function WinMain(ByVal iListener As Long, ByVal oldWinMain As Long, ByVa
 
   Select Case MSG
     Case WM_SETCURSOR
-      ' Möglichkeit, den Mauszeiger anzupassen
+      ' MÃ¶glichkeit, den Mauszeiger anzupassen
       With lblURL
         rc.Bottom = .Top + .Height
         rc.Left = .Left
