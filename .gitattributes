@@ -8,20 +8,20 @@
 *.txt text
 *.TXT text
 
-*.bas text eol=crlf
+*.bas text eol=crlf encoding=cp1252
 *.bat text eol=crlf
-*.cls text eol=crlf
+*.cls text eol=crlf encoding=cp1252
 *.cmd text eol=crlf
-*.ctl text eol=crlf
-*.frm text eol=crlf
+*.ctl text eol=crlf encoding=cp1252
+*.frm text eol=crlf encoding=cp1252
 *.ini text eol=crlf
 *.INI text eol=crlf
 *.manifest text eol=crlf
-*.pag text eol=crlf
+*.pag text eol=crlf encoding=cp1252
 *.rgs text eol=crlf
-*.vbp text eol=crlf
-*.vbw text eol=crlf
-*.vbg text eol=crlf
+*.vbp text eol=crlf encoding=cp1252
+*.vbw text eol=crlf encoding=cp1252
+*.vbg text eol=crlf encoding=cp1252
 *.xml text eol=crlf
 
 *.avi binary
